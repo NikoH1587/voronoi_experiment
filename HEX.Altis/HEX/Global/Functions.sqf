@@ -194,3 +194,14 @@ HEX_FNC_TURN = {
 HEX_FNC_BRIEFING = {
 	call compile preprocessFile "HEX\Local\Briefing.sqf";
 };
+
+/// Close tactical briefing for clients
+HEX_FNC_CLOSEBRIEFING = {
+	(findDisplay 1400) closedisplay 1;
+};
+
+/// Open slotting menu
+/// Also open this if 
+HEX_FNC_SLOTTING = {
+	call compile preprocessFile "HEX\Local\Slotting.sqf";
+};

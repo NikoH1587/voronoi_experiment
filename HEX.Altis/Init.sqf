@@ -11,6 +11,12 @@ call compile preprocessFile "HEX\Local\Ambient.sqf";
 
 ///[] call BIS_fnc_jukebox; /// maybe add this at start of tactical phase?
 
+/// ToDo:
+/// Add onPLayerKilled event handler
+/// Open slotting / switching menu
+///
+/// Fix stuff if game is loaded from save (This file mostly?)
+
 /// Description;
 ///
 /// HEX is a persistent mission, where real-time battles are generated from hex&counter wargame system.
@@ -35,7 +41,7 @@ call compile preprocessFile "HEX\Local\Ambient.sqf";
 ///
 /// Copyright: Arma Public Licence (APL)
 
-/// TBD: End scenario with casualities list
+/// TBD: End scenario with list of casualities
 
 /// Zero Menu:
 /// Title, Author, Version
@@ -68,8 +74,8 @@ call compile preprocessFile "HEX\Local\Ambient.sqf";
 
 /// Fifth Menu:
 /// Respawn / Slotting screen
-/// strole variable in group with spawning icon
-/// On player dead switch back to ghost unit
+/// store variable in group with spawning icon
+/// On player dead switch back to ghost unit???
 
 /// Spawn reinforcements to slot into (total 10 units) / side ????
 /// if count units _side < 10 then (exc. ghosts) spawn group... ???
@@ -78,11 +84,6 @@ call compile preprocessFile "HEX\Local\Ambient.sqf";
 /// Tactical Debriefing
 /// "Save & Continue" button
 /// "Save & Exit" button
-
-/// Player respawn:
-/// Create respawn west/ respawn east markers
-/// Store loadout locally 
-/// Set loadout from local storage (in mp)
 
 /// Sources used: 
 /// https://www.youtube.com/watch?v=kDFAHoxdL4Y&list=PLrFF_4LjPgISFZ6TzRi82O153ZQp5H-TJ

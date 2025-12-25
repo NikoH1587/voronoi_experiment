@@ -1,6 +1,6 @@
-class HEX_BRIEFING
+class HEX_SLOTTING
 {
-	idd = 1400;
+	idd = 1500;
 
 	class ControlsBackground
 	{
@@ -9,7 +9,7 @@ class HEX_BRIEFING
 			idc = -1;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
-			w = 20 * GUI_GRID_CENTER_W;
+			w = 40 * GUI_GRID_CENTER_W;
 			h = 24 * GUI_GRID_CENTER_H;
 			colorBackground[] = {0.1,0.1,0.1,1};
 		};
@@ -17,63 +17,51 @@ class HEX_BRIEFING
 
 	class Controls
 	{			
-		class Text : RscText
+		class Title : RscText
 		{
-			text = "TACTICAL BRIEFING";
-			idc = 1401;
+			text = "CHOOSE UNIT TO CONTROL:";
+			idc = 1501;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 		};
 		
-		class Info : RscListbox
+		class Groups : RscListbox
 		{
-			idc = 1402;
+			idc = 1502;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;
-			h = 6 * GUI_GRID_CENTER_H;
+			h = 20 * GUI_GRID_CENTER_H;
+			onLBSelChanged = "hint 'update confirm button'";
 			rowHeight = 1 * GUI_GRID_CENTER_H;
-		};		
+		};
 		
-		class List_West : RscListbox
+		class Units : RscListbox
 		{
-			idc = 1403;
+			idc = 1503;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 8 * GUI_GRID_CENTER_H;
-			w = 10 * GUI_GRID_CENTER_W;
-			h = 14 * GUI_GRID_CENTER_H;
-			colorBackground[] = {0, 0.3, 0.6, 0.5};
-			onLBSelChanged = "";
-			rowHeight = 1.5 * GUI_GRID_CENTER_H;
+			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
+			w = 20 * GUI_GRID_CENTER_W;
+			h = 20 * GUI_GRID_CENTER_H;
+			onLBSelChanged = "hint 'update confirm button'";
+			rowHeight = 1 * GUI_GRID_CENTER_H;
 		};
-		
-		class List_East : RscListbox
+
+		class Confirm: RscButton
 		{
-			idc = 1404;
-			x = GUI_GRID_CENTER_X + 10 * GUI_GRID_CENTER_W;
-			y = GUI_GRID_CENTER_Y + 8 * GUI_GRID_CENTER_H;
-			w = 10 * GUI_GRID_CENTER_W;
-			h = 14 * GUI_GRID_CENTER_H;
-			colorBackground[] = {0.5, 0, 0, 0.5};
-			onLBSelChanged = "";
-			rowHeight = 1.5 * GUI_GRID_CENTER_H;
-		};
-		
-		class Start: RscButton
-		{
-			idc = 1405;
+			idc = 1504;
 			x = GUI_GRID_CENTER_X + 5 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 22 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onButtonClick = "[] call LOC_FNC_START;";
+			onButtonClick = "[] call LOC_FNC_CONFIRM;";
 		};
 		
 		class Minimap : RscMapControl
 		{
-			idc = 1406;
+			idc = 1505;
 			x = GUI_GRID_CENTER_X + 20 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 0 * GUI_GRID_CENTER_H;
 			w = 20 * GUI_GRID_CENTER_W;

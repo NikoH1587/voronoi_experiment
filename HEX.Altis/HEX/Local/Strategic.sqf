@@ -4,7 +4,7 @@ waitUntil {!isNil "HEX_GRID" && !isNil "HEX_FNC_COTE"};
 0 spawn HEX_FNC_COTE;
 
 openmap true;
-LOC_MODE = "SELECT"; /// "SELECT", "ORDER";
+LOC_MODE = "SELECT"; /// "SELECT", "ORDER", "NONE";
 LOC_ORDERS = [];
 LOC_SELECT = [];
 LOC_COMMANDER = false;
@@ -192,12 +192,6 @@ LOC_FNC_ENDTURN = {
 		};
 	};
 };
-
-/// Third Menu:
-/// Turn info
-/// End Turn Button
-/// Time /// DAWN / DAY / DUSK / NIGHT
-/// Weather forecast: CLEAR / CLOUDY / STORM / FOGGY
 
 /// TBD: Road +1 move skip:
 /// Origin (1st hex) has to have road hex

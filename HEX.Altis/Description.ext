@@ -2,6 +2,7 @@
 #include "HEX\Global\Import.hpp"
 #include "HEX\Local\Strategic.hpp"
 #include "HEX\Local\Briefing.hpp"
+#include "HEX\Local\Slotting.hpp"
 
 respawn = "BASE";
 respawnDelay = 10;

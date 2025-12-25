@@ -8,7 +8,7 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=1624;
+		nextID=1638;
 	};
 	class MarkerIDProvider
 	{
@@ -16,14 +16,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=132;
+		nextID=138;
 	};
 	class Camera
 	{
 		pos[]={1.508,39.818001,-36.925999};
-		dir[]={-0.19584741,-0.42511421,0.88369787};
-		up[]={-0.091983058,0.90513968,0.41504365};
-		aside[]={0.97631097,7.4505806e-09,0.21637258};
+		dir[]={0.41484621,0.097926348,0.9046067};
+		up[]={-0.040820573,0.99519366,-0.089012653};
+		aside[]={0.90897554,3.7252903e-09,-0.41684973};
 	};
 };
 binarizationWanted=0;
@@ -79,7 +79,7 @@ class ScenarioData
 	class Header
 	{
 		minPlayers=1;
-		maxPlayers=12;
+		maxPlayers=20;
 	};
 };
 class CustomAttributes
@@ -137,7 +137,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=81;
+		items=87;
 		class Item0
 		{
 			dataType="Layer";
@@ -598,7 +598,7 @@ class Mission
 		class Item40
 		{
 			dataType="Marker";
-			position[]={19496.041,0,2526.1406};
+			position[]={17086.09,0,2493.3647};
 			name="marker_325";
 			text="NORMAL";
 			type="b_inf";
@@ -609,7 +609,7 @@ class Mission
 		class Item41
 		{
 			dataType="Marker";
-			position[]={19507.336,0,1555.3035};
+			position[]={17097.385,0,1522.5276};
 			name="marker_326";
 			text="DISORGANIZED ";
 			type="b_inf";
@@ -621,9 +621,9 @@ class Mission
 		class Item42
 		{
 			dataType="Marker";
-			position[]={19484.746,0,482.86743};
+			position[]={17074.795,0,450.09201};
 			name="marker_327";
-			text="DESTROYED (Removed)";
+			text="(Removed)";
 			type="b_inf";
 			colorName="ColorBlack";
 			id=1523;
@@ -632,7 +632,7 @@ class Mission
 		class Item43
 		{
 			dataType="Marker";
-			position[]={19499.625,0,2071.0913};
+			position[]={17089.674,0,2038.3154};
 			name="marker_328";
 			text="Hex captured in combat";
 			type="mil_arrow";
@@ -643,7 +643,7 @@ class Mission
 		class Item44
 		{
 			dataType="Marker";
-			position[]={19513.604,0,974.39642};
+			position[]={17103.652,0,941.62054};
 			name="marker_329";
 			text="Hex captured in combat";
 			type="mil_arrow";
@@ -3019,6 +3019,205 @@ class Mission
 			};
 			id=1612;
 			atlOffset=500;
+		};
+		class Item81
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=8;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={14803.512,17.861794,16607.445};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+						rank="SERGEANT";
+					};
+					id=1625;
+					type="B_Soldier_SL_F";
+				};
+				class Item1
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={14808.512,17.851439,16602.445};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.40000001;
+					};
+					id=1626;
+					type="B_Soldier_F";
+				};
+				class Item2
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={14798.512,17.866617,16602.445};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.44999999;
+						rank="CORPORAL";
+					};
+					id=1627;
+					type="B_soldier_LAT_F";
+				};
+				class Item3
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={14813.512,17.851578,16597.445};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.40000001;
+					};
+					id=1628;
+					type="B_soldier_M_F";
+				};
+				class Item4
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={14793.512,17.866615,16597.445};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						rank="SERGEANT";
+					};
+					id=1629;
+					type="B_Soldier_TL_F";
+				};
+				class Item5
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={14818.512,17.858246,16592.445};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.44999999;
+						rank="CORPORAL";
+					};
+					id=1630;
+					type="B_soldier_AR_F";
+				};
+				class Item6
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={14788.512,17.870583,16592.445};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.40000001;
+					};
+					id=1631;
+					type="B_Soldier_A_F";
+				};
+				class Item7
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={14823.512,17.869595,16587.445};
+					};
+					side="West";
+					flags=5;
+					class Attributes
+					{
+						skill=0.40000001;
+					};
+					id=1632;
+					type="B_medic_F";
+				};
+			};
+			class Attributes
+			{
+			};
+			id=1624;
+		};
+		class Item82
+		{
+			dataType="Marker";
+			position[]={19577.957,0,2522.0569};
+			name="marker_346";
+			text="NORMAL";
+			type="b_plane";
+			colorName="ColorWEST";
+			id=1633;
+			atlOffset=185.97;
+		};
+		class Item83
+		{
+			dataType="Marker";
+			position[]={19589.252,0,1551.22};
+			name="marker_347";
+			text="DESTROYED";
+			type="b_plane";
+			colorName="ColorWEST";
+			alpha=0.5;
+			id=1634;
+			atlOffset=185.97;
+		};
+		class Item84
+		{
+			dataType="Marker";
+			position[]={19566.662,0,478.784};
+			name="marker_348";
+			text="(Removed)";
+			type="b_plane";
+			colorName="ColorBlack";
+			id=1635;
+			atlOffset=185.97;
+		};
+		class Item85
+		{
+			dataType="Marker";
+			position[]={19581.539,0,2067.0081};
+			name="marker_351";
+			text="Units killed in combat";
+			type="mil_arrow";
+			angle=180.64592;
+			id=1636;
+			atlOffset=185.97;
+		};
+		class Item86
+		{
+			dataType="Marker";
+			position[]={19595.52,0,970.31299};
+			name="marker_354";
+			text="Hex captured in combat ?";
+			type="mil_arrow";
+			angle=180.64592;
+			id=1637;
+			atlOffset=185.97;
 		};
 	};
 };

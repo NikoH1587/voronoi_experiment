@@ -3,6 +3,7 @@ HEX_GRID = [];
 HEX_SCENARIO = "W"; // N, E, S, W
 HEX_PHASE = "STRATEGIC"; /// "STRATEGIC", "BRIEFING", "TACTICAL", "DEBRIEFING"
 HEX_TACTICAL = []; /// Counters in combat
+HEX_STRATEGIC = []; /// Counters that spawn, but not in combat
 HEX_TIME = ["NIGHT", "DAWN", "DAY1", "DAY2", "DAY3", "DUSK"];
 HEX_WEATHER = ["CLEAR", "CLOUDS", "STORM", "CLOUDS", "FOG", "CLEAR"];
 HEX_ALLWEATHER = ["CLEAR", "CLEAR", "CLEAR", "CLEAR", "CLOUDS", "CLOUDS", "STORM", "FOG"];

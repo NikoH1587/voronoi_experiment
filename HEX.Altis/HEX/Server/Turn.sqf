@@ -1,4 +1,5 @@
 /// Find counter in combat
+private _tactical = [];
 {
 	private _hex = _x;
 	private _row = _x select 0;
@@ -13,15 +14,41 @@
 	}forEach _near;
 	
 	if (_sid != civilian && west in _sides && east in _sides) then {
-		HEX_TACTICAL pushback _hex;
+		_tactical pushback _hex;
+	};
+}forEach HEX_GRID;
+
+private _strategic = [];
+
+{
+	private _hex = _x;
+	private _row = _x select 0;
+	private _col = _x select 1;
+	private _pos = _x select 2;
+	private _cfg = _x select 3;
+	private _sid = _x select 4;
+	private _org = _x select 5;
+	
+	private _isStrat = false;
+	if (_cfg in ["b_art", "b_support", "b_air", "b_plane", "b_antiair"]) then {_isStrat = true};
+	if (_cfg in ["o_art", "o_support", "o_air", "o_plane", "o_antiair"]) then {_isStrat = true};
+	
+	private _noTac = true;
+	if (_hex in _tactical) then {_noTac = false};
+	
+	if (_org == 1 && _isStrat && _noTac) then {
+		_strategic pushback _hex;
 	};
 }forEach HEX_GRID;
 
 /// Start tactical phase
-if (count HEX_TACTICAL > 0) then {
+if (count _tactical > 0) then {
+	HEX_TACTICAL = _tactical;
+	HEX_STRATEGIC = _strategic;
 	HEX_PHASE = "BRIEFING";
 	publicVariable "HEX_PHASE";
 	publicVariable "HEX_TACTICAL";
+	publicVariable "HEX_STRATEGIC";
 	
 	/// Open briefing locally for all
 	remoteExec ["HEX_FNC_BRIEFING", 0, false];
