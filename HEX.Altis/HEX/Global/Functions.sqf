@@ -1,5 +1,18 @@
-/// Find hexes in grid next to hex, server/local
+/// start campaign on server and strategic locally
+HEX_FNC_CAMPAIGN = {
+	call compile preprocessFile "HEX\Server\Config.sqf";
+	call compile preprocessFile "HEX\Server\Grid.sqf";
+	
+	remoteExec ["HEX_FNC_STRATEGIC", 0, false];
+};
 
+/// start strategic on local
+HEX_FNC_STRATEGIC = {
+	call compile preprocessFile "HEX\Local\Strategic.sqf";
+	call compile preprocessFile "HEX\Local\Ambient.sqf";
+};
+
+/// Find hexes in grid next to hex, server/local
 HEX_FNC_NEAR = {
 	private _hex = _this;
 	private _row = _hex select 0;
@@ -185,6 +198,11 @@ HEX_FNC_ZOCO = {
 	publicVariable "HEX_INTENSITY";
 };
 
+/// Start tactical on server
+HEX_FNC_TACTICAL = {
+	call compile preprocessFile "HEX\Server\Tactical.sqf"
+};
+
 /// End turn on server
 HEX_FNC_TURN = {
 	call compile preprocessFile "HEX\Server\Turn.sqf";
@@ -204,4 +222,13 @@ HEX_FNC_CLOSEBRIEFING = {
 /// Also open this if 
 HEX_FNC_SLOTTING = {
 	call compile preprocessFile "HEX\Local\Slotting.sqf";
+};
+
+/// gets all HEX groups of specific side
+HEX_FNC_GROUPS = {
+	private _side = _this;
+	private _groups = allGroups select {
+		side _x == _side && _x isNil "HEX_ICON" == false;
+	};
+	_groups
 };

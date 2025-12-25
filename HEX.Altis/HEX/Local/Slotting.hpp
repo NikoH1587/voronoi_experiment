@@ -32,31 +32,32 @@ class HEX_SLOTTING
 			idc = 1502;
 			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
-			w = 20 * GUI_GRID_CENTER_W;
+			w = 10 * GUI_GRID_CENTER_W;
 			h = 20 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "hint 'update confirm button'";
-			rowHeight = 1 * GUI_GRID_CENTER_H;
+			onLBSelChanged = "(_this select 1) call LOC_FNC_UNITS";
+			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 		};
 		
 		class Units : RscListbox
 		{
 			idc = 1503;
-			x = GUI_GRID_CENTER_X + 0 * GUI_GRID_CENTER_W;
+			x = GUI_GRID_CENTER_X + 10 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
-			w = 20 * GUI_GRID_CENTER_W;
+			w = 10 * GUI_GRID_CENTER_W;
 			h = 20 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "hint 'update confirm button'";
-			rowHeight = 1 * GUI_GRID_CENTER_H;
+			onLBSelChanged = "(_this select 1) call LOC_FNC_UNIT";
+			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 		};
 
-		class Confirm: RscButton
+		class Switch: RscButton
 		{
+			text = "SWITCH";
 			idc = 1504;
 			x = GUI_GRID_CENTER_X + 5 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 22 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onButtonClick = "[] call LOC_FNC_CONFIRM;";
+			onButtonClick = "[] call LOC_FNC_SWITCH;";
 		};
 		
 		class Minimap : RscMapControl

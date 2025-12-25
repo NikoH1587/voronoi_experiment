@@ -124,7 +124,7 @@ openmap false;
 			ctrlMapAnimCommit _map;
 			
 			/// Start button text
-			if (isServer) then {
+			if (HEX_ADMIN) then {
 				_start ctrlSetText "COMMENCE BATTLE";
 			} else {
 				_start ctrlSetText "WAITING FOR HOST...";
@@ -136,7 +136,8 @@ openmap false;
 
 /// Start tactical combat
 LOC_FNC_START = {
-	if (isServer) then {
-		call compile preprocessFile "HEX\Server\Tactical.sqf";
+	if (HEX_ADMIN) then {
+	
+    [] remoteExec [HEX_FNC_TACTICAL, 2, false]
 	};
 };

@@ -45,7 +45,7 @@ class HEX_BRIEFING
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 14 * GUI_GRID_CENTER_H;
 			colorBackground[] = {0, 0.3, 0.6, 0.5};
-			onLBSelChanged = "";
+			onLBSelChanged = "hint 'change minimap position to show unit'";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 		};
 		
@@ -57,7 +57,7 @@ class HEX_BRIEFING
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 14 * GUI_GRID_CENTER_H;
 			colorBackground[] = {0.5, 0, 0, 0.5};
-			onLBSelChanged = "";
+			onLBSelChanged = "hint 'change minimap position to show unit'";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 		};
 		

@@ -1,21 +1,83 @@
+/// get all functions
 call compile preprocessFile "HEX\Global\Functions.sqf";
 
-if (isServer) then {
-	call compile preprocessFile "HEX\Server\Config.sqf";
-	call compile preprocessFile "HEX\Server\Grid.sqf";
+HEX_ADMIN = false;
+HEX_SINGLEPLAYER = false;
+private _netMode = call BIS_fnc_getNetMode;
+if (_netMode == "SinglePlayer") then {
+
+	/// Use SP menu with selection to choose to be commander???
+	
+	removeSwitchableUnit SL2_WEST;
+	removeSwitchableUnit SL3_WEST;
+	removeSwitchableUnit SOLDIER2_WEST;
+	removeSwitchableUnit SOLDIER3_WEST;
+	removeSwitchableUnit SOLDIER4_WEST;
+	removeSwitchableUnit SOLDIER5_WEST;
+	removeSwitchableUnit SOLDIER6_WEST;
+	removeSwitchableUnit OFFICER_EAST;
+	removeSwitchableUnit SL1_EAST;
+	removeSwitchableUnit SL2_EAST;
+	removeSwitchableUnit SL3_EAST;
+	removeSwitchableUnit SOLDIER1_EAST;
+	removeSwitchableUnit SOLDIER2_EAST;
+	removeSwitchableUnit SOLDIER3_EAST;
+	removeSwitchableUnit SOLDIER4_EAST;
+	removeSwitchableUnit SOLDIER5_EAST;
+	removeSwitchableUnit SOLDIER6_EAST;
+	
+	sleep 1;
+
+	/// Instead of this: 
+	/// Use SP menu with selection to choose to be commander???
+	/// In SP slotting menu is replaced by teamswitch
+	
+	hint "Keep current unit to be Commander";
+	HEX_SINGLEPLAYER = true; 
+	teamSwitch;
+	
+	sleep 2;
+	removeSwitchableUnit OFFICER_WEST;
+	removeSwitchableUnit SL1_WEST;
+	removeSwitchableUnit SOLDIER1_WEST;
+	
+	HEX_ADMIN = true;
+	sleep 1;
+	remoteExec ["HEX_FNC_CAMPAIGN", 2, false];
 };
 
-///teamSwitch;
-call compile preprocessFile "HEX\Local\Strategic.sqf";
-call compile preprocessFile "HEX\Local\Ambient.sqf";
+/// Start campaign on dedicated
+if (_netMode == "Dedicated") then {
+	if (player == OFFICER_WEST) then {
+	HEX_ADMIN = true;
+	remoteExec ["HEX_FNC_CAMPAIGN", 2, false];	
+	};
+};
+
+/// start campaign on hosted
+if (_netMode == "Server") then {
+	HEX_ADMIN = true;
+	remoteExec ["HEX_FNC_CAMPAIGN", 2, false];
+};
+
+(group test1) setVariable ["HEX_ICON", "b_inf", true];
+
+
+/// Singleplayer / dedicated support
+/// Singleplayer - disable slotting screen - use teamswitch instead
+/// Dedicated - multiple admins?
+/// Dedicated - just exit??
 
 ///[] call BIS_fnc_jukebox; /// maybe add this at start of tactical phase?
 
 /// ToDo:
-/// Add onPLayerKilled event handler
+/// make changes to onPLayerKilled event handler
 /// Open slotting / switching menu
 ///
 /// Fix stuff if game is loaded from save (This file mostly?)
+///
+/// Add texture to menus, oversized texture of a map case, with some kind of grided paper + stains?
+
 
 /// Description;
 ///
