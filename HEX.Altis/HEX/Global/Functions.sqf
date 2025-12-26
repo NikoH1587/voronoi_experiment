@@ -1,9 +1,66 @@
-/// start campaign on server and strategic locally
-HEX_FNC_CAMPAIGN = {
-	call compile preprocessFile "HEX\Server\Config.sqf";
-	call compile preprocessFile "HEX\Server\Grid.sqf";
+/// start loading screen on local
+HEX_FNC_LOAD = {
+	call compile preprocessFile "HEX\Local\Loading.sqf";
+};
+
+/// update locally if player has been chosen as commander
+HEX_FNC_COMMANDER = {
+	if (name player == ADM_WEST_COMMANDER) then {
+		LOC_COMMANDER = true;
+
+		systemChat "You have been chosen as BLUFOR Commander!";
+		systemChat "In strategic phase: Move units on hex board by clicking them.";
+		systemChat "In tactical battle: Open High Command module with ctrl+space.";
+		systemChat "Good luck commander!";
+	};
+
+	if (name player == ADM_EAST_COMMANDER) then {
+		LOC_COMMANDER = true;
+
+		systemChat "You have been chosen as OPFOR Commander!";
+		systemChat "In strategic phase: Move units on hex board by clicking them.";
+		systemChat "In tactical battle: Open High Command module with ctrl+space.";
+		systemChat "Good luck commander!";
+	};
+};
+
+/// generate default campaign on server
+HEX_FNC_DEFAULTS = {
+	/// set new commander
+	remoteExec ["HEX_FNC_COMMANDER", 0, false];
 	
+	/// Load settings variables
+	call compile preprocessFile "HEX\Global\Default.sqf";
+	/// generate grid, counters & weather
+	call compile preprocessFile "HEX\Server\Generation.sqf";
+	
+	/// create grid overlay
+	0 call HEX_FNC_GRID;
+	
+	/// update zone of control
+	0 call HEX_FNC_ZOCO;
+	
+	/// update commanders
+	remoteExec ["HEX_FNC_STRATEGIC", 0, false];	
+	
+	/// begin strategic phase
 	remoteExec ["HEX_FNC_STRATEGIC", 0, false];
+};
+
+/// Create grid overlay on server
+HEX_FNC_GRID = {
+	{
+		private _row = _x select 0;
+		private _col = _x select 1;
+		private _pos = _x select 2;
+		private _sid = _x select 4;
+		private _name = format ["HEX_%1_%2", _row, _col];
+		private _marker = createMarker [_name, _pos];
+		_marker setMarkerShape "HEXAGON";
+		_marker setMarkerBrush "Border";
+		_marker setMarkerDir 90;
+		_marker setMarkerSize [HEX_SIZE, HEX_SIZE];
+	}forEach HEX_GRID;
 };
 
 /// start strategic on local
@@ -219,7 +276,6 @@ HEX_FNC_CLOSEBRIEFING = {
 };
 
 /// Open slotting menu
-/// Also open this if 
 HEX_FNC_SLOTTING = {
 	call compile preprocessFile "HEX\Local\Slotting.sqf";
 };

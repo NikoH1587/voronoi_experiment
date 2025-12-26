@@ -68,7 +68,7 @@ class HEX_BRIEFING
 			y = GUI_GRID_CENTER_Y + 22 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onButtonClick = "[] call LOC_FNC_START;";
+			onButtonClick = "[] call ADM_FNC_START;";
 		};
 		
 		class Minimap : RscMapControl

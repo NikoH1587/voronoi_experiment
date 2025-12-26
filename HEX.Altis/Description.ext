@@ -1,5 +1,7 @@
 #include "\a3\ui_f\hpp\defineCommonGrids.inc"
 #include "HEX\Global\Import.hpp"
+#include "HEX\Local\Loading.hpp"
+#include "HEX\Local\Custom.hpp"
 #include "HEX\Local\Strategic.hpp"
 #include "HEX\Local\Briefing.hpp"
 #include "HEX\Local\Slotting.hpp"

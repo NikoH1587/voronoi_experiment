@@ -8,5 +8,5 @@ publicVariable "HEX_PHASE";
 /// Close tactical briefing locally
 remoteExec ["HEX_FNC_CLOSEBRIEFING", 2, false];
 
-/// Open Slotting menu locally
-remoteExec ["HEX_FNC_SLOTTING", 0, false];
+/// Open Slotting menu locally with JIP
+remoteExec ["HEX_FNC_SLOTTING", 0, true];

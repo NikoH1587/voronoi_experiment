@@ -1,72 +1,40 @@
 /// get all functions
 call compile preprocessFile "HEX\Global\Functions.sqf";
 
-HEX_ADMIN = false;
-HEX_SINGLEPLAYER = false;
+LOC_ADMIN = false;
+LOC_SINGLEPLAYER = false;
+LOC_COMMANDER = false;
+
 private _netMode = call BIS_fnc_getNetMode;
 if (_netMode == "SinglePlayer") then {
+	LOC_ADMIN = true;
+	HEX_PHASE = "LOADING";
+	publicVariable "HEX_PHASE";
+	remoteExec ["HEX_FNC_LOAD", 0, true];
+	{deleteVehicle _x}ForEach units HEX_ADMIN; /// delete west slotting units
+	{deleteVehicle _x}ForEach units HEX_OFFICER; /// delete east slotting units
+	removeSwitchableUnit HEX_ADMIN; /// remove slotting to ghost unit
+};
 
-	/// Use SP menu with selection to choose to be commander???
-	
-	removeSwitchableUnit SL2_WEST;
-	removeSwitchableUnit SL3_WEST;
-	removeSwitchableUnit SOLDIER2_WEST;
-	removeSwitchableUnit SOLDIER3_WEST;
-	removeSwitchableUnit SOLDIER4_WEST;
-	removeSwitchableUnit SOLDIER5_WEST;
-	removeSwitchableUnit SOLDIER6_WEST;
-	removeSwitchableUnit OFFICER_EAST;
-	removeSwitchableUnit SL1_EAST;
-	removeSwitchableUnit SL2_EAST;
-	removeSwitchableUnit SL3_EAST;
-	removeSwitchableUnit SOLDIER1_EAST;
-	removeSwitchableUnit SOLDIER2_EAST;
-	removeSwitchableUnit SOLDIER3_EAST;
-	removeSwitchableUnit SOLDIER4_EAST;
-	removeSwitchableUnit SOLDIER5_EAST;
-	removeSwitchableUnit SOLDIER6_EAST;
-	
-	sleep 1;
-
-	/// Instead of this: 
-	/// Use SP menu with selection to choose to be commander???
-	/// In SP slotting menu is replaced by teamswitch
-	
-	hint "Keep current unit to be Commander";
-	HEX_SINGLEPLAYER = true; 
-	teamSwitch;
-	
-	sleep 2;
-	removeSwitchableUnit OFFICER_WEST;
-	removeSwitchableUnit SL1_WEST;
-	removeSwitchableUnit SOLDIER1_WEST;
-	
-	HEX_ADMIN = true;
-	sleep 1;
-	remoteExec ["HEX_FNC_CAMPAIGN", 2, false];
+/// start campaign on hosted
+if (_netMode != "Dedicated" && _netMode != "SinglePlayer" && isServer) then {
+	LOC_ADMIN = true;
+	HEX_PHASE = "LOADING";
+	publicVariable "HEX_PHASE";
+	remoteExec ["HEX_FNC_LOAD", 0, true];
 };
 
 /// Start campaign on dedicated
 if (_netMode == "Dedicated") then {
-	if (player == OFFICER_WEST) then {
-	HEX_ADMIN = true;
-	remoteExec ["HEX_FNC_CAMPAIGN", 2, false];	
+	if (player == HEX_ADMIN) then {
+		LOC_ADMIN = true;
+		HEX_PHASE = "LOADING";
+		publicVariable "HEX_PHASE";
+		remoteExec ["HEX_FNC_LOAD", 0, true];
 	};
 };
 
-/// start campaign on hosted
-if (_netMode == "Server") then {
-	HEX_ADMIN = true;
-	remoteExec ["HEX_FNC_CAMPAIGN", 2, false];
-};
-
 (group test1) setVariable ["HEX_ICON", "b_inf", true];
-
-
-/// Singleplayer / dedicated support
-/// Singleplayer - disable slotting screen - use teamswitch instead
-/// Dedicated - multiple admins?
-/// Dedicated - just exit??
 
 ///[] call BIS_fnc_jukebox; /// maybe add this at start of tactical phase?
 
@@ -77,12 +45,14 @@ if (_netMode == "Server") then {
 /// Fix stuff if game is loaded from save (This file mostly?)
 ///
 /// Add texture to menus, oversized texture of a map case, with some kind of grided paper + stains?
+/// 
+/// Replace Strategic layer janky map overlay with just a GUI map? but then no funni markers :<
 
 
 /// Description;
 ///
 /// HEX is a persistent mission, where real-time battles are generated from hex&counter wargame system.
-/// Playable in singleplayer, COOP against HEX_AI, or hosted PVP multiplayer.
+/// Playable in singleplayer or multiplayer up to 20 players.
 /// Customizable factions (DLC or mod) with freedom of forces scale, ratio and composition.
 ///
 /// Players can choose the role of Commander, Leaders or Soldiers.
@@ -105,19 +75,15 @@ if (_netMode == "Server") then {
 
 /// TBD: End scenario with list of casualities
 
-/// Zero Menu:
+/// First Menu: /// "LOADING"
 /// Title, Author, Version
 /// Cool picture
-/// Description List
-/// "WAITING FOR HOST" text?
-
-/// First Menu:
-/// Title, Author, Version
-/// Cool picture
+/// Select West / East Commanders
+/// Commander select 0 == AI commander
 /// Continue Campaign / Default Campaign
 /// New Campaign
 
-/// Second Menu:
+/// Second Menu (new campaign): /// "NEWSAVE"
 /// West / East faction
 /// Current West / Selectable West
 /// Current East / Selectable East
@@ -126,23 +92,21 @@ if (_netMode == "Server") then {
 /// Experimental toggle
 /// "START CAMPAIGN"
 
-/// Third Menu:
+/// Third Menu: /// "STRATEGIC"
 /// Turn info
 /// End Turn
 
-/// Fourth menu:
+/// Fourth menu: /// "BRIEFING"
 /// Tactical Briefing
 /// "To battle!" button
 
-/// Fifth Menu:
+/// Fifth Menu: /// "TACTICAL"
 /// Respawn / Slotting screen
-/// store variable in group with spawning icon
-/// On player dead switch back to ghost unit???
 
 /// Spawn reinforcements to slot into (total 10 units) / side ????
 /// if count units _side < 10 then (exc. ghosts) spawn group... ???
 
-/// Sixth menu:
+/// Sixth menu: /// "DEBRIEFING"
 /// Tactical Debriefing
 /// "Save & Continue" button
 /// "Save & Exit" button

@@ -27,7 +27,8 @@ private _strategic = [];
 	private _pos = _x select 2;
 	private _cfg = _x select 3;
 	private _sid = _x select 4;
-	private _org = _x select 5;
+	private _act = _x select 5;
+	private _org = _x select 6;
 	
 	private _isStrat = false;
 	if (_cfg in ["b_art", "b_support", "b_air", "b_plane", "b_antiair"]) then {_isStrat = true};
@@ -54,8 +55,6 @@ if (count _tactical > 0) then {
 	remoteExec ["HEX_FNC_BRIEFING", 0, false];
 };
 
-/// publicVariable "HEX_PHASE";
-
 /// Switch turn globally
 private _turn = civilian;
 if (HEX_TURN == west) then {_turn = east};
@@ -70,8 +69,9 @@ _time append [_oldTime];
 HEX_TIME = _time;
 
 /// Create new weather array
+private _allWeather = ["CLEAR", "CLEAR", "CLEAR", "CLEAR", "CLOUDS", "CLOUDS", "STORM", "FOG"];
 private _weather = HEX_WEATHER;
-private _newWeather = HEX_ALLWEATHER select floor random count HEX_ALLWEATHER;
+private _newWeather = _allWeather  select floor random count _allWeather ;
 _weather deleteAt 0;
 _weather append [_newWeather];
 HEX_WEATHER = _weather;

@@ -124,10 +124,10 @@ openmap false;
 			ctrlMapAnimCommit _map;
 			
 			/// Start button text
-			if (HEX_ADMIN) then {
+			if (LOC_ADMIN) then {
 				_start ctrlSetText "COMMENCE BATTLE";
 			} else {
-				_start ctrlSetText "WAITING FOR HOST...";
+				_start ctrlSetText "WAITING FOR ADMIN...";
 			};
 		};
 		sleep 1;
@@ -135,9 +135,9 @@ openmap false;
 };
 
 /// Start tactical combat
-LOC_FNC_START = {
-	if (HEX_ADMIN) then {
+ADM_FNC_START = {
+	if (LOC_ADMIN) then {
 	
-    [] remoteExec [HEX_FNC_TACTICAL, 2, false]
+    [] remoteExec ["HEX_FNC_TACTICAL", 2, false]
 	};
 };

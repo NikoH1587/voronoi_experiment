@@ -1,16 +1,15 @@
-waitUntil {!isNil "HEX_GRID" && !isNil "HEX_FNC_COTE"};
-
+waitUntil {!isNil "HEX_GRID" && !isNil "HEX_FNC_COTE" && !isNIl "HEX_PHASE"};
 /// Update counters locally
 0 spawn HEX_FNC_COTE;
 
+/// close loading menu
+(findDisplay 1100) closedisplay 1;
+(findDisplay 1200) closedisplay 1;
 openmap true;
+
 LOC_MODE = "SELECT"; /// "SELECT", "ORDER", "NONE";
 LOC_ORDERS = [];
 LOC_SELECT = [];
-LOC_COMMANDER = false;
-
-if (player == OFFICER_WEST) then {LOC_COMMANDER = true};
-if (player == OFFICER_EAST) then {LOC_COMMANDER = true};
 
 LOC_SOUNDS = [
 "a3\dubbing_radio_f\sfx\in2a.ogg",
@@ -168,10 +167,10 @@ LOC_FNC_ENDTURN = {
 			
 			if (HEX_TURN == west) then {
 				_info ctrlSetBackgroundColor [0, 0.3, 0.6, 0.5];
-				_info ctrlSetText "BLUFOR TURN";
+				_info ctrlSetText "BLUFOR COMMANDER TURN";
 			} else {
 				_info ctrlSetBackgroundColor [0.5, 0, 0, 0.5];
-				_info ctrlSetText "OPFOR TURN";
+				_info ctrlSetText "OPFOR COMMANDER TURN";
 			};
 			
 			private _timeTEXT = HEX_TIME select 1;
@@ -181,6 +180,9 @@ LOC_FNC_ENDTURN = {
 			if (side player == HEX_TURN && LOC_COMMANDER) then {
 				_turn ctrlSetText "END TURN";
 			} else {
+				if (HEX_TURN == west) then {
+				
+				};
 				_turn ctrlSetText "WAITING...";	
 			};
 		};
