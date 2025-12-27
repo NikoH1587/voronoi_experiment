@@ -47,7 +47,19 @@ if (_netMode == "Dedicated") then {
 /// Add texture to menus, oversized texture of a map case, with some kind of grided paper + stains?
 /// 
 /// Replace Strategic layer janky map overlay with just a GUI map? but then no funni markers :<
+/// 
+/// random reinforcements on every day ?
 
+
+/// Experimental mode:
+/// flee max for groups: https://community.bistudio.com/wiki/setSkill
+/// skillName: String - available sub-skills are: "courage" 0
+/// Bigger hexes (1000)
+/// aircraft / helo on airbases
+/// fullmap by Default
+
+
+/// random reinforcements on every day (1x support, 2x inf, 2x rando
 
 /// Description;
 ///

@@ -8,7 +8,7 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=1672;
+		nextID=1677;
 	};
 	class MarkerIDProvider
 	{
@@ -16,14 +16,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=150;
+		nextID=154;
 	};
 	class Camera
 	{
-		pos[]={1.508,39.818001,-36.925999};
-		dir[]={0.41484621,0.097926348,0.9046067};
-		up[]={-0.040820573,0.99519366,-0.089012653};
-		aside[]={0.90897554,3.7252903e-09,-0.41684973};
+		pos[]={16106.457,25,1294.0643};
+		dir[]={-1.2363449e-07,-0.70710683,0.70710683};
+		up[]={-1.2363449e-07,0.70710671,0.70710683};
+		aside[]={1,0,1.7484557e-07};
 	};
 };
 binarizationWanted=0;
@@ -153,7 +153,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=88;
+		items=91;
 		class Item0
 		{
 			dataType="Layer";
@@ -211,7 +211,7 @@ class Mission
 		class Item6
 		{
 			dataType="Marker";
-			position[]={2339.5659,2.6800001,1661.77};
+			position[]={2351.0454,2.6799927,1528.6926};
 			name="marker_57";
 			text="3x support - ""support"" waypoint. exc. isMan 1 3act";
 			type="b_support";
@@ -469,7 +469,7 @@ class Mission
 		class Item27
 		{
 			dataType="Marker";
-			position[]={11462.206,147.07939,2944.3267};
+			position[]={11494.981,147.07938,2950.1001};
 			name="marker_13";
 			text="(COMBAT)";
 			type="b_unknown";
@@ -505,7 +505,7 @@ class Mission
 		class Item30
 		{
 			dataType="Marker";
-			position[]={13515.972,1.5412903,3014.3022};
+			position[]={13503.919,1.5412903,2964.3604};
 			name="marker_257";
 			text="(COMBAT)";
 			type="o_unknown";
@@ -614,7 +614,7 @@ class Mission
 		class Item40
 		{
 			dataType="Marker";
-			position[]={17086.09,0,2493.3647};
+			position[]={17144.789,0,2544.0381};
 			name="marker_325";
 			text="NORMAL";
 			type="b_inf";
@@ -625,9 +625,9 @@ class Mission
 		class Item41
 		{
 			dataType="Marker";
-			position[]={17097.385,0,1522.5276};
+			position[]={17097.385,0,1522.528};
 			name="marker_326";
-			text="DISORGANIZED ";
+			text="ROUT! (50%)";
 			type="b_inf";
 			colorName="ColorWEST";
 			alpha=0.5;
@@ -637,7 +637,7 @@ class Mission
 		class Item42
 		{
 			dataType="Marker";
-			position[]={17074.795,0,450.09201};
+			position[]={17117.252,0,388.10669};
 			name="marker_327";
 			text="(Removed)";
 			type="b_inf";
@@ -648,9 +648,9 @@ class Mission
 		class Item43
 		{
 			dataType="Marker";
-			position[]={17089.674,0,2038.3154};
+			position[]={17089.674,0,2038.3149};
 			name="marker_328";
-			text="Hex captured in combat";
+			text="Areas captured in combat";
 			type="mil_arrow";
 			angle=180.64592;
 			id=1524;
@@ -659,9 +659,9 @@ class Mission
 		class Item44
 		{
 			dataType="Marker";
-			position[]={17103.652,0,941.62054};
+			position[]={17103.652,0,941.62097};
 			name="marker_329";
-			text="Hex captured in combat";
+			text="Areas captured in combat";
 			type="mil_arrow";
 			angle=180.64592;
 			id=1525;
@@ -929,7 +929,7 @@ class Mission
 		class Item69
 		{
 			dataType="Marker";
-			position[]={2345.384,225.26968,862.69775};
+			position[]={2331.833,225.26968,510.99426};
 			name="marker_29";
 			text="plane 1x- Used with support module Xact";
 			type="b_plane";
@@ -959,7 +959,7 @@ class Mission
 		class Item72
 		{
 			dataType="Marker";
-			position[]={13515.972,54.455978,2955.9888};
+			position[]={13501.228,54.455978,2991.2603};
 			name="marker_350";
 			text="Spawn";
 			type="mil_dot";
@@ -1036,7 +1036,7 @@ class Mission
 		class Item79
 		{
 			dataType="Marker";
-			position[]={19577.957,0,2522.0569};
+			position[]={18388.943,0,2490.103};
 			name="marker_346";
 			text="NORMAL";
 			type="b_plane";
@@ -1047,9 +1047,9 @@ class Mission
 		class Item80
 		{
 			dataType="Marker";
-			position[]={19589.252,0,1551.22};
+			position[]={18400.238,0,1519.2664};
 			name="marker_347";
-			text="DESTROYED";
+			text="DESTROYED (50%)";
 			type="b_plane";
 			colorName="ColorWEST";
 			alpha=0.5;
@@ -1059,7 +1059,7 @@ class Mission
 		class Item81
 		{
 			dataType="Marker";
-			position[]={19566.662,0,478.784};
+			position[]={18377.648,0,446.83032};
 			name="marker_348";
 			text="(Removed)";
 			type="b_plane";
@@ -1070,7 +1070,7 @@ class Mission
 		class Item82
 		{
 			dataType="Marker";
-			position[]={19581.539,0,2067.0081};
+			position[]={18392.525,0,2035.0544};
 			name="marker_351";
 			text="Units killed in combat";
 			type="mil_arrow";
@@ -1081,9 +1081,9 @@ class Mission
 		class Item83
 		{
 			dataType="Marker";
-			position[]={19595.52,0,970.31299};
+			position[]={18406.506,0,938.35931};
 			name="marker_354";
-			text="Hex captured in combat ?";
+			text="Units killed in combat again";
 			type="mil_arrow";
 			angle=180.64592;
 			id=1637;
@@ -3341,6 +3341,39 @@ class Mission
 				};
 				nAttributes=1;
 			};
+		};
+		class Item88
+		{
+			dataType="Marker";
+			position[]={19595.666,0,2502.3857};
+			name="marker_355";
+			text="NORMAL";
+			type="b_mech_inf";
+			colorName="ColorWEST";
+			id=1672;
+			atlOffset=185.97;
+		};
+		class Item89
+		{
+			dataType="Marker";
+			position[]={19598.715,0,1530.6207};
+			name="marker_357";
+			text="(Removed)";
+			type="b_mech_inf";
+			colorName="ColorBlack";
+			id=1674;
+			atlOffset=185.97;
+		};
+		class Item90
+		{
+			dataType="Marker";
+			position[]={19599.248,0,2047.337};
+			name="marker_358";
+			text="Killed & Captured";
+			type="mil_arrow";
+			angle=180.64592;
+			id=1675;
+			atlOffset=185.97;
 		};
 	};
 };

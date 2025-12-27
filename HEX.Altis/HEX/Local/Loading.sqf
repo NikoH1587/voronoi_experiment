@@ -1,5 +1,7 @@
+/// TBD: make a save system
 ADM_SAVE = false;
 
+/// Gee I sure do hope nobody picks "AI Commander" as their profileName! ;3
 ADM_FNC_GETPLAYERS = {
 	ADM_WEST_PLAYERS = ["AI Commander"];
 	ADM_EAST_PLAYERS = ["AI Commander"];
@@ -16,13 +18,17 @@ ADM_FNC_CONTINUE = {
 		if (ADM_SAVE) then {
 			/// load save from client onto server
 		} else {
-			remoteExec ["HEX_FNC_DEFAULTS", 2, false];
+			/// start new default campaign on server
+			"DEFAULT" remoteExec ["HEX_FNC_CAMPAIGN", 2, false];
 		};
 	};
 };
 
 ADM_FNC_NEWSAVE = {
 	if (LOC_ADMIN) then {
+		/// Set phase locally for admin
+		HEX_PHASE == "CUSTOM";
+		/// Open custom menu locally for admin
 		call compile preprocessFile "HEX\Local\Custom.sqf"
 	};
 };
@@ -37,7 +43,7 @@ ADM_FNC_CMDE = {
 	publicVariable "ADM_EAST_COMMANDER";
 };
 
-/// Open slotting menu if player is ghost unit
+/// Open loading menu
 [] spawn {
 	while {HEX_PHASE == "LOADING"} do {
 		
@@ -52,6 +58,7 @@ ADM_FNC_CMDE = {
 			private _easttext = _menu displayCtrl 1106;
 			private _eastCMD = _menu displayCtrl 1107;
 			
+			/// Show setting if player is admin
 			if (LOC_ADMIN) then {
 				if (ADM_SAVE) then {
 					_continue ctrlSetText "CONTINUE CAMPAIGN";		
@@ -63,6 +70,7 @@ ADM_FNC_CMDE = {
 				
 				0 call ADM_FNC_GETPLAYERS;
 				
+				/// Selection of commanders
 				{_westCMD lbAdd _x}forEach ADM_WEST_PLAYERS;
 				{_eastCMD lbAdd _x}forEach ADM_EAST_PLAYERS;
 				

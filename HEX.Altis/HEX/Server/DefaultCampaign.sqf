@@ -1,14 +1,12 @@
-HEX_SIZE = 750; /// DEFAULT or Customized 1000 for fullmap
-HEX_PHASE = "STRATEGIC"; /// DEFAULT
-HEX_SCENARIO = ["W", "E", "N", "S"] select floor random 4; // customized
-HEX_TIME = ["NIGHT", "DAWN", "DAY1", "DAY2", "DAY3", "DUSK"] select floor random 6; /// loaded from save / customized
-HEX_DAY = 0; /// default or loaded from save
-HEX_TURN = [west, east] select floor random 2; /// loaded from save / customized
-HEX_WEST = "BLU_F"; /// loaded from save / customized
-HEX_EAST = "OPF_F"; /// loaded from save /customized
-
-/// Default or customized
-/// TODO: make randomized factions when loading defaults
+/// Default variables
+HEX_SIZE = 750;
+HEX_PHASE = "STRATEGIC";
+HEX_SCENARIO = ["W", "E", "N", "S"] select floor random 4;
+HEX_TIME = ["NIGHT", "DAWN", "DAY1", "DAY2", "DAY3", "DUSK"] select floor random 6;
+HEX_DAY = 0;
+HEX_TURN = [west, east] select floor random 2;
+HEX_WEST = "BLU_F";
+HEX_EAST = "OPF_F";
 
 /// Create random west counters
 private _allAux = ["b_art", "b_support", "b_air", "b_plane", "b_antiair"];
@@ -43,3 +41,19 @@ publicVariable "HEX_SIZE";
 publicVariable "HEX_TIME";
 publicVariable "HEX_TURN";
 publicVariable "HEX_PHASE";
+
+/// generate grid, counters & weather
+call compile preprocessFile "HEX\Server\Generation.sqf";
+
+/// create grid overlay
+0 call HEX_FNC_GRID;
+
+/// update zone of control
+0 call HEX_FNC_ZOCO;
+
+/// update time and weather
+call compile preprocessFile "HEX\Server\Time.sqf";	
+
+/// begin strategic phase
+remoteExec ["HEX_FNC_STRATEGIC", 0, false];
+

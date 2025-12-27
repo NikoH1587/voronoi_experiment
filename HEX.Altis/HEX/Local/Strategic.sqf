@@ -1,4 +1,5 @@
 waitUntil {!isNil "HEX_GRID" && !isNil "HEX_FNC_COTE" && !isNIl "HEX_PHASE"};
+
 /// Update counters locally
 0 spawn HEX_FNC_COTE;
 
@@ -173,9 +174,9 @@ LOC_FNC_ENDTURN = {
 				_info ctrlSetText "OPFOR COMMANDER TURN";
 			};
 			
-			private _timeTEXT = HEX_TIME select 1;
+			private _timeTEXT = HEX_TIME;
 			if (_timeTEXT in ["DAY1", "DAY2", "DAY3"]) then {_timeTEXT = "DAY"};
-			_time ctrlSetText ("D+" + str HEX_DAY + " - " + _timeTEXT + " - " + (HEX_WEATHER select 1));
+			_time ctrlSetText ("D+" + str HEX_DAY + " - " + _timeTEXT + " - " + HEX_WEATHER);
 			
 			if (side player == HEX_TURN && LOC_COMMANDER) then {
 				_turn ctrlSetText "END TURN";

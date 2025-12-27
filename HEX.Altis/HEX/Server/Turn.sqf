@@ -1,4 +1,5 @@
 /// Find counter in combat
+/// counters tounching are in tactical array
 private _tactical = [];
 {
 	private _hex = _x;
@@ -18,6 +19,7 @@ private _tactical = [];
 	};
 }forEach HEX_GRID;
 
+/// counters that are of strategic type, not in tactical already go in strategic array
 private _strategic = [];
 
 {
@@ -53,81 +55,63 @@ if (count _tactical > 0) then {
 	
 	/// Open briefing locally for all
 	remoteExec ["HEX_FNC_BRIEFING", 0, false];
-};
-
-/// Switch turn globally
-private _turn = civilian;
-if (HEX_TURN == west) then {_turn = east};
-if (HEX_TURN == east) then {_turn = west};
-HEX_TURN = _turn;
-
-/// Create new time array
-private _time = HEX_TIME;
-private _oldTime = _time select 0;
-_time deleteat 0;
-_time append [_oldTime];
-HEX_TIME = _time;
-
-/// Create new weather array
-private _allWeather = ["CLEAR", "CLEAR", "CLEAR", "CLEAR", "CLOUDS", "CLOUDS", "STORM", "FOG"];
-private _weather = HEX_WEATHER;
-private _newWeather = _allWeather  select floor random count _allWeather ;
-_weather deleteAt 0;
-_weather append [_newWeather];
-HEX_WEATHER = _weather;
-
-/// Set new weather
-private _overcast = 0;
-private _fog = 0;
-if (_weather select 0 == "CLOUDS") then {_overcast = 0.5};
-if (_weather select 0 == "STORM") then {_overcast = 1};
-if (_weather select 0 == "FOG") then {_fog = 0.33};
-0 setOverCast _overcast;
-0 setFog _fog;
-forceWeatherChange;
-
-/// Set date
-private _now = date;
-private _year = _now select 0;
-private _month = _now select 1;
-
-if (_oldTime == "DUSK") then {HEX_DAY = HEX_DAY + 1};
-private _day = HEX_DAY;	
-
-private _hour = 0;
-if (HEX_TIME select 0 == "NIGHT") then {_hour = -3 + (floor (random 9))};
-if (HEX_TIME select 0 == "DAWN") then {_hour = 6 + (floor (random 3))}; 
-if (HEX_TIME select 0 == "DAY1") then {_hour = 9 + (floor (random 3))};
-if (HEX_TIME select 0 == "DAY2") then {_hour = 12 + (floor (random 3))};
-if (HEX_TIME select 0 == "DAY3") then {_hour = 15 + (floor (random 3))};
-if (HEX_TIME select 0 == "DUSK") then {_hour = 18 + (floor (random 3))};
-
-private _date = [_year, _month, _day, _hour, 0] call BIS_fnc_fixDate;
-setDate _date;
-
-/// Update grid counter moves;
-{
-	private _index = _forEachIndex;
-	private _hex = _x;
-	private _cfg = _x select 3;
-	private _sid = _x select 4;
 	
-	private _act = 1;
-	if (HEX_TURN == _sid) then {
-		if (_cfg in ["b_mech_inf", "b_armor", "o_mech_inf", "o_armor", "b_antiair", "o_antiair"]) then {_act = 2};
-		if (_cfg in ["b_motor_inf", "b_recon", "o_motor_inf", "o_recon", "b_support", "o_support"]) then {_act = 3};
-		_hex set [5, _act];
-		HEX_GRID set [_index, _hex];
-	};
-}forEach HEX_GRID;
+/// Changes current state only if still in strategic phase
+} else {
 
-publicVariable "HEX_TURN";
-publicVariable "HEX_TIME";
-publicVariable "HEX_WEATHER";
-publicVariable "HEX_GRID";
+	/// Switch turn globally
+	private _turn = civilian;
+	if (HEX_TURN == west) then {_turn = east};
+	if (HEX_TURN == east) then {_turn = west};
+	HEX_TURN = _turn;
 
-/// Clear local orders, markers and sound
-remoteExec ["HEX_FNC_CLIC", 0, false];
+	/// Create new weather
+	HEX_WEATHER = ["CLEAR", "CLEAR", "CLEAR", "CLEAR", "CLOUDS", "CLOUDS", "STORM", "FOG"] select floor random 8;
 
-/// Update counters globally
-remoteExec ["HEX_FNC_COTE", 0, false];
+	/// Create new time
+	private _time = "NONE";
+	if (HEX_TIME == "NIGHT") then {_time = "DAWN"};
+	if (HEX_TIME == "DAWN") then {_time = "DAY1"};
+	if (HEX_TIME == "DAY1") then {_time = "DAY2"};
+	if (HEX_TIME == "DAY2") then {_time = "DAY3"};
+	if (HEX_TIME == "DAY3") then {_time = "DUSK"};
+	if (HEX_TIME == "DUSK") then {_time = "NIGHT"};
+
+	HEX_TIME = _time;
+
+	/// Set new day
+	if (_time == "NIGHT") then {HEX_DAY = HEX_DAY + 1};
+
+	/// Update grid counter moves;
+	{
+		private _index = _forEachIndex;
+		private _hex = _x;
+		private _cfg = _x select 3;
+		private _sid = _x select 4;
+	
+		private _act = 0;
+		if (HEX_TURN == _sid) then {
+			if (_cfg in ["b_inf", "b_hq", "b_art", "o_inf", "o_hq", "o_art"]) then {_act = 1};
+			if (_cfg in ["b_mech_inf", "b_armor", "o_mech_inf", "o_armor", "b_antiair", "o_antiair"]) then {_act = 2};
+			if (_cfg in ["b_motor_inf", "b_recon", "o_motor_inf", "o_recon", "b_support", "o_support"]) then {_act = 3};
+			_hex set [5, _act];
+			HEX_GRID set [_index, _hex];
+		};
+	}forEach HEX_GRID;
+
+	/// update variables globally
+	publicVariable "HEX_DAY";
+	publicVariable "HEX_TURN";
+	publicVariable "HEX_TIME";
+	publicVariable "HEX_WEATHER";
+	publicVariable "HEX_GRID";
+
+	/// update time and weather 
+	call compile preprocessFile "HEX\Server\Time.sqf";
+
+	/// Clear local orders, markers and sound
+	remoteExec ["HEX_FNC_CLIC", 0, false];
+
+	/// Update counters globally
+	remoteExec ["HEX_FNC_COTE", 0, false];
+}

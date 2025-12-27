@@ -3,6 +3,17 @@ HEX_FNC_LOAD = {
 	call compile preprocessFile "HEX\Local\Loading.sqf";
 };
 
+/// start campaign on server
+HEX_FNC_CAMPAIGN = {
+	/// set new commander
+	remoteExec ["HEX_FNC_COMMANDER", 0, false];
+	
+	/// Generate default/custom new campaign or load saved campaign
+	if (_this == "DEFAULT") then {call compile preprocessFile "HEX\Server\DefaultCampaign.sqf"};
+	if (_this == "CUSTOM") then {call compile preprocessFile "HEX\Server\CustomCampaign.sqf"};
+	if (_this == "SAVED") then {call compile preprocessFile "HEX\Server\SavedCampaign.sqf"};
+};
+
 /// update locally if player has been chosen as commander
 HEX_FNC_COMMANDER = {
 	if (name player == ADM_WEST_COMMANDER) then {
@@ -22,29 +33,6 @@ HEX_FNC_COMMANDER = {
 		systemChat "In tactical battle: Open High Command module with ctrl+space.";
 		systemChat "Good luck commander!";
 	};
-};
-
-/// generate default campaign on server
-HEX_FNC_DEFAULTS = {
-	/// set new commander
-	remoteExec ["HEX_FNC_COMMANDER", 0, false];
-	
-	/// Load settings variables
-	call compile preprocessFile "HEX\Global\Default.sqf";
-	/// generate grid, counters & weather
-	call compile preprocessFile "HEX\Server\Generation.sqf";
-	
-	/// create grid overlay
-	0 call HEX_FNC_GRID;
-	
-	/// update zone of control
-	0 call HEX_FNC_ZOCO;
-	
-	/// update commanders
-	remoteExec ["HEX_FNC_STRATEGIC", 0, false];	
-	
-	/// begin strategic phase
-	remoteExec ["HEX_FNC_STRATEGIC", 0, false];
 };
 
 /// Create grid overlay on server
@@ -204,13 +192,10 @@ HEX_FNC_COTE = {
 			private _marker = createMarkerLocal [_name, _pos];
 			_marker setMarkerTypeLocal _cfg;
 			if (_org == 2) then {_marker setMarkerAlphaLocal 0.5};
-			private _sup = false;
-			if (_cfg in ["b_air", "b_plane"]) then {_sup = true};
-			if (_cfg in ["o_air", "o_plane"]) then {_sup = true};
-			if (_sid == side player && _act > 0 && _sup == false) then {
+			if (_sid == side player && _act > 0) then {
 				if (_act == 1) then {_marker setMarkerTextLocal ("I")};
-				if (_act == 2) then {_marker setMarkerTextLocal ("II")};	
-				if (_act == 3) then {_marker setMarkerTextLocal ("III")};	
+				if (_act == 2) then {_marker setMarkerTextLocal ("II")};
+				if (_act == 3) then {_marker setMarkerTextLocal ("III")};
 			};
 		};
 	}forEach HEX_GRID;

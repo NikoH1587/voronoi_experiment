@@ -27,12 +27,13 @@ for "_col" from 0 to round(_hexS / _hexX) do {
     };
 };
 
-/// Select positon and restrict grid with fill;
-HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL;
+/// Select positon and restrict grid with fill, ignore if fullmap mode is on;
+if (HEX_SIZE == 750) then {HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL};
 
 {
 	private _counter = _x;
-	private _act = 1;
+	private _act = 0;
+	if (_x in ["b_inf", "b_hq", "b_art"]) then {_act = 1};
 	if (_x in ["b_mech_inf", "b_armor", "b_antiair"]) then {_act = 2};
 	if (_x in ["b_motor_inf", "b_recon", "b_support"]) then {_act = 3};
 	private _sorted = [
@@ -61,7 +62,8 @@ HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL;
 
 {
 	private _counter = _x;
-	private _act = 1;
+	private _act = 0;
+	if (_x in ["o_inf", "o_hq", "o_art"]) then {_act = 1};
 	if (_x in ["o_mech_inf", "o_armor", "o_antiair"]) then {_act = 2};
 	if (_x in ["o_motor_inf", "o_recon", "o_support"]) then {_act = 3};
 	private _sorted = [
@@ -89,13 +91,7 @@ HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL;
 }forEach HEX_CFG_EAST;
 
 /// Randomize Weather
-
-private _allWeather = ["CLEAR", "CLEAR", "CLEAR", "CLEAR", "CLOUDS", "CLOUDS", "STORM", "FOG"];
-HEX_WEATHER = [];
-for "_i" from 1 to 6 do {
-	private _newWeather = _allWeather select floor random count _allWeather;
-	HEX_WEATHER append [_newWeather];
-};
+HEX_WEATHER = ["CLEAR", "CLEAR", "CLEAR", "CLEAR", "CLOUDS", "CLOUDS", "STORM", "FOG"] select floor random 8;
 
 publicVariable "HEX_GRID";
 publicVariable "HEX_WEATHER";
