@@ -111,7 +111,6 @@ class HEX_CUSTOM
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
 			onLBSelChanged = "HEX_SCENARIO = ['W','N','E','S'] select (_this select 1);";
-			tooltip = "Set BLUFOR starting position, OPFOR is opposite.";
 		};
 		
 		class Time: RscCombo

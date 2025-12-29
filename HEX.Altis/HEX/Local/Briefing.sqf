@@ -50,16 +50,16 @@ openmap false;
 				private _icon = "\A3\ui_f\data\map\markers\nato\" + _type + ".paa";
 				private _text = "Infantry 6x";
 				switch (_type select [2]) do {
-					case "hq": {_text = "Headquarters 1x"};
-					case "art": {_text = "Artillery 1x"};
-					case "support": {_text = "Support 3x"};
-					case "air": {_text = "Helicopter 1x"};
-					case "plane": {_text = "Plane 1x"};
-					case "antiair": {_text = "Anti-Air 1x"};
-					case "recon": {_text = "Recon 3x"};
-					case "motor_inf": {_text = "Motorized 3x"};
-					case "mech_inf": {_text = "Mechanized 3x"};
-					case "armor": {_text = "Armor 3x"};
+					case "hq": {_text = "Headquarters"};
+					case "art": {_text = "Artillery"};
+					case "support": {_text = "Support"};
+					case "air": {_text = "Helicopter"};
+					case "plane": {_text = "Plane"};
+					case "antiair": {_text = "Anti-Air"};
+					case "recon": {_text = "Recon"};
+					case "motor_inf": {_text = "Motorized"};
+					case "mech_inf": {_text = "Mechanized"};
+					case "armor": {_text = "Armor"};
 				};
 				
 				private _alpha = 1;

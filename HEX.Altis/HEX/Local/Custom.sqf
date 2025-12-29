@@ -25,8 +25,6 @@ ADM_FNC_FACTIONS = {
 			
 			/// get if has infantry
 			private _infantry = (_cfgName call ADM_FNC_GROUPS) select 0;
-			// add faction to list if has infantry
-			
 			if (_infantry) then {
 				_factions pushback [_cfgName, _name, _icon];
 			};
@@ -63,7 +61,7 @@ ADM_FNC_VEHICLES = {
 			if (_sup > 0) then {_support = true};
 			if (_art > 0) then {_arty = true};
 			if (_cat == "EdSubcat_AAs") then {_antiair = true};
-			if (_sim == "helicopterrtd") then {_helo = true};
+			if (_sim == "helicopterrtd" or _sim == "helicopterx") then {_helo = true};
 			if (_sim == "airplanex" or _sim == "airplane") then {_plane = true};
 		};
 	} forEach ("true" configClasses (configFile >> "CfgVehicles"));
@@ -132,17 +130,17 @@ ADM_FNC_FACWEST = {
 	lbClear _selWest;
 	HEX_CFG_WEST = ["b_hq"];
 	
-	if (_vehicles select 0) then {ADM_CFG_WEST pushBack ["Support 3x", "b_support"]};
-	if (_vehicles select 1) then {ADM_CFG_WEST pushBack ["Artillery 1x", "b_art"]};
-	if (_vehicles select 2) then {ADM_CFG_WEST pushBack ["Anti-Air 1x", "b_antiair"]};
-	if (_vehicles select 3) then {ADM_CFG_WEST pushBack ["Plane 1x", "b_plane"]};
-	if (_vehicles select 4) then {ADM_CFG_WEST pushBack ["Helicopter 1x", "b_air"]};
+	if (_vehicles select 0) then {ADM_CFG_WEST pushBack ["Support", "b_support"]};
+	if (_vehicles select 1) then {ADM_CFG_WEST pushBack ["Artillery", "b_art"]};
+	if (_vehicles select 2) then {ADM_CFG_WEST pushBack ["Anti-Air", "b_antiair"]};
+	if (_vehicles select 3) then {ADM_CFG_WEST pushBack ["Plane", "b_plane"]};
+	if (_vehicles select 4) then {ADM_CFG_WEST pushBack ["Helicopter", "b_air"]};
 	
-	if (_groups select 0) then {ADM_CFG_WEST pushBack ["Infantry 6x", "b_inf"]};
-	if (_groups select 1) then {ADM_CFG_WEST pushBack ["Recon 3x", "b_recon"]};
-	if (_groups select 2) then {ADM_CFG_WEST pushBack ["Motorized 3x", "b_motor_inf"]};
-	if (_groups select 3) then {ADM_CFG_WEST pushBack ["Mechanized 3x", "b_mech_inf"]};
-	if (_groups select 4) then {ADM_CFG_WEST pushBack ["Armor 3x", "b_armor"]};
+	if (_groups select 0) then {ADM_CFG_WEST pushBack ["Infantry", "b_inf"]};
+	if (_groups select 1) then {ADM_CFG_WEST pushBack ["Recon", "b_recon"]};
+	if (_groups select 2) then {ADM_CFG_WEST pushBack ["Motorized", "b_motor_inf"]};
+	if (_groups select 3) then {ADM_CFG_WEST pushBack ["Mechanized", "b_mech_inf"]};
+	if (_groups select 4) then {ADM_CFG_WEST pushBack ["Armor", "b_armor"]};
 	
 	{
 		private _added = _listWest lbAdd (_x select 0);
@@ -150,6 +148,11 @@ ADM_FNC_FACWEST = {
 		_listWest lbSetPicture [_added, _icon];
 		_listWest lbSetPictureColor [_added, [0, 0.3, 0.6, 1]];
 	}forEach ADM_CFG_WEST;
+	
+	/// add HQ to selected list
+	private _addHQ = _selWest lbAdd "Headquarters";
+	_selWest lbSetPicture [_addHQ, "\A3\ui_f\data\map\markers\nato\b_hq.paa"];
+	_selWest lbSetPictureColor [_addHQ, [0, 0.3, 0.6, 1]];
 };
 
 ADM_FNC_FACEAST = {
@@ -169,17 +172,17 @@ ADM_FNC_FACEAST = {
 	lbClear _selEast;
 	HEX_CFG_EAST = ["o_hq"];
 	
-	if (_vehicles select 0) then {ADM_CFG_EAST pushBack ["Support 3x", "o_support"]};
-	if (_vehicles select 1) then {ADM_CFG_EAST pushBack ["Artillery 1x", "o_art"]};
-	if (_vehicles select 2) then {ADM_CFG_EAST pushBack ["Anti-Air 1x", "o_antiair"]};
-	if (_vehicles select 3) then {ADM_CFG_EAST pushBack ["Plane 1x", "o_plane"]};
-	if (_vehicles select 4) then {ADM_CFG_EAST pushBack ["Helicopter 1x", "o_air"]};
+	if (_vehicles select 0) then {ADM_CFG_EAST pushBack ["Support", "o_support"]};
+	if (_vehicles select 1) then {ADM_CFG_EAST pushBack ["Artillery", "o_art"]};
+	if (_vehicles select 2) then {ADM_CFG_EAST pushBack ["Anti-Air", "o_antiair"]};
+	if (_vehicles select 3) then {ADM_CFG_EAST pushBack ["Plane", "o_plane"]};
+	if (_vehicles select 4) then {ADM_CFG_EAST pushBack ["Helicopter", "o_air"]};
 	
-	if (_groups select 0) then {ADM_CFG_EAST pushBack ["Infantry 6x", "o_inf"]};
-	if (_groups select 1) then {ADM_CFG_EAST pushBack ["Recon 3x", "o_recon"]};
-	if (_groups select 2) then {ADM_CFG_EAST pushBack ["Motorized 3x", "o_motor_inf"]};
-	if (_groups select 3) then {ADM_CFG_EAST pushBack ["Mechanized 3x", "o_mech_inf"]};
-	if (_groups select 4) then {ADM_CFG_EAST pushBack ["Armor 3x", "o_armor"]};
+	if (_groups select 0) then {ADM_CFG_EAST pushBack ["Infantry", "o_inf"]};
+	if (_groups select 1) then {ADM_CFG_EAST pushBack ["Recon", "o_recon"]};
+	if (_groups select 2) then {ADM_CFG_EAST pushBack ["Motorized", "o_motor_inf"]};
+	if (_groups select 3) then {ADM_CFG_EAST pushBack ["Mechanized", "o_mech_inf"]};
+	if (_groups select 4) then {ADM_CFG_EAST pushBack ["Armor", "o_armor"]};
 	
 	{
 		private _added = _listEast lbAdd (_x select 0);
@@ -187,21 +190,85 @@ ADM_FNC_FACEAST = {
 		_listEast lbSetPicture [_added, _icon];
 		_listEast lbSetPictureColor [_added, [0.5, 0, 0, 1]];
 	}forEach ADM_CFG_EAST;
+	
+	/// add HQ to selected list
+	private _addHQ = _selEast lbAdd "Headquarters";
+	_selEast lbSetPicture [_addHQ, "\A3\ui_f\data\map\markers\nato\o_hq.paa"];
+	_selEast lbSetPictureColor [_addHQ, [0.5, 0, 0, 1]];
 };
 
+/// adds clicked counter from list to selections
 ADM_FNC_ADDWEST = {
-	/// if -1 ignore
-	/// Add to selected
-	/// update current array
-	/// set cursel -1
+	if (_this != -1) then {
+		private _selection = ADM_CFG_WEST select _this;
+		private _name = _selection select 0;
+		private _icon = _selection select 1;
+
+		private _menu = findDisplay 1200;
+		private _selWest = _menu displayCtrl 1204;
+		private _listWest = _menu displayCtrl 1203;
+	
+		HEX_CFG_WEST pushback _icon;	
+	
+		private _added = _selWest lbAdd _name;
+		private _icon = "\A3\ui_f\data\map\markers\nato\" + _icon + ".paa";
+		_selWest lbSetPicture [_added, _icon];
+		_selWest lbSetPictureColor [_added, [0, 0.3, 0.6, 1]];
+		
+		_listWest lbSetCurSel -1;
+	}
+};
+
+/// Remove clicked counter
+ADM_FNC_DELETEWEST = {
+	
+	private _selection = _this;
+	/// Ignore HQ deletion and -1
+	if (_selection > 0) then {
+		
+		private _menu = findDisplay 1200;
+		private _selWest = _menu displayCtrl 1204;	
+		_selWest lbDelete _selection;
+		
+		HEX_CFG_WEST deleteAt _selection;
+		_selWest lbSetCurSel -1;
+	};
+};
+
+ADM_FNC_ADDEAST = {
+	if (_this != -1) then {
+		private _selection = ADM_CFG_EAST select _this;
+		private _name = _selection select 0;
+		private _icon = _selection select 1;
+
+		private _menu = findDisplay 1200;
+		private _selEast = _menu displayCtrl 1205;
+		private _listEast = _menu displayCtrl 1206;	
+	
+		HEX_CFG_EAST pushback _icon;	
+	
+		private _added = _selEast lbAdd _name;
+		private _icon = "\A3\ui_f\data\map\markers\nato\" + _icon + ".paa";
+		_selEast lbSetPicture [_added, _icon];
+		_selEast lbSetPictureColor [_added, [0.5, 0, 0, 1]];
+		
+		_listEast lbSetCurSel -1;
+	}
 };
 
 ADM_FNC_DELETEWEST = {
-	/// if -1 ignore
-	/// Delete selected entry
-	/// Exclude HQ!
-	/// Update selected array
-	/// set cursel -1
+	
+	private _selection = _this;
+	/// Ignore HQ deletion and -1
+	if (_selection > 0) then {
+		
+		private _menu = findDisplay 1200;
+		private _selEast = _menu displayCtrl 1205;
+		_selEast lbDelete _selection;
+		
+		HEX_CFG_EAST deleteAt _selection;
+		_selEast lbSetCurSel -1;
+	};
 };
 
 ADM_FNC_START = {

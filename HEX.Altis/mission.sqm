@@ -16,14 +16,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=166;
+		nextID=168;
 	};
 	class Camera
 	{
-		pos[]={11587.088,25.458254,11959.455};
-		dir[]={-0.081245795,-0.94610173,0.31351346};
-		up[]={-0.23733863,0.32386959,0.91584873};
-		aside[]={0.96802354,0,0.25085953};
+		pos[]={11767.719,83.010323,11993.999};
+		dir[]={-0.81784564,-0.41311339,-0.4005819};
+		up[]={-0.37100092,0.91067958,-0.18171674};
+		aside[]={-0.43987137,-1.4901161e-08,0.8980608};
 	};
 };
 binarizationWanted=0;
@@ -2311,7 +2311,7 @@ class Mission
 				class Attribute0
 				{
 					property="groupID";
-					expression="                            if (isNil 'CBA_fnc_setCallsign') then {                                _this setGroupID [_value];                            } else {                                [_this, _value] call CBA_fnc_setCallsign;                            };";
+					expression="_this setGroupIdGlobal [_value];";
 					class Value
 					{
 						class data
@@ -3329,7 +3329,7 @@ class Mission
 				class Attribute0
 				{
 					property="groupID";
-					expression="                            if (isNil 'CBA_fnc_setCallsign') then {                                _this setGroupID [_value];                            } else {                                [_this, _value] call CBA_fnc_setCallsign;                            };";
+					expression="_this setGroupIdGlobal [_value];";
 					class Value
 					{
 						class data
