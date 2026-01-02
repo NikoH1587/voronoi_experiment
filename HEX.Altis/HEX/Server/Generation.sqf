@@ -28,7 +28,7 @@ for "_col" from 0 to round(_hexS / _hexX) do {
 };
 
 /// Select positon and restrict grid with fill, ignore if fullmap mode is on;
-if (HEX_SIZE == 750) then {HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_FNC_FILL};
+if (HEX_SIZE == 750) then {HEX_GRID = [selectRandom HEX_GRID, _count] call HEX_GLO_FNC_FILL};
 
 {
 	private _counter = _x;

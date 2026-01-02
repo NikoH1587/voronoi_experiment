@@ -7,6 +7,9 @@ onMapSingleClick "";
 (findDisplay 1300) closedisplay 1;
 openmap false;
 
+/// Todo:
+/// Clear / Update map markers
+
 /// Open briefing menu
 [] spawn {
 	while {HEX_PHASE == "BRIEFING"} do {
@@ -29,7 +32,7 @@ openmap false;
 			
 			/// Info text
 			_info lbAdd ("D+" + str HEX_DAY + " " + ([dayTime, "HH:MM"] call BIS_fnc_timeToString));
-			_info lbAdd (HEX_WEATHER select 0);
+			_info lbAdd HEX_WEATHER;
 			_info lbAdd "";
 			_info lbAdd "Description 2";
 			_info lbAdd "Description 3";
@@ -40,7 +43,7 @@ openmap false;
 			private _posY = 0;
 			
 			_west lbAdd "PRIMARY:";
-			_east lbAdd "PRIMARY:";			
+			_east lbAdd "PRIMARY:";
 			
 			{
 				private _pos = _x select 2;
@@ -92,11 +95,11 @@ openmap false;
 				private _icon = "\A3\ui_f\data\map\markers\nato\" + _type + ".paa";
 				private _text = "Headquarters";
 				switch (_type select [2]) do {
-					case "art": {_text = "Artillery 1x"};
-					case "support": {_text = "Support 3x"};
-					case "air": {_text = "Helicopter 1x"};
-					case "plane": {_text = "Plane 1x"};
-					case "antiair": {_text = "Anti-Air 1x"};
+					case "art": {_text = "Artillery"};
+					case "support": {_text = "Support"};
+					case "air": {_text = "Helicopter"};
+					case "plane": {_text = "Plane"};
+					case "antiair": {_text = "Anti-Air"};
 				};
 				
 				if (_state == 0) then {_text = _text + "(ERROR1)"};
@@ -124,20 +127,12 @@ openmap false;
 			ctrlMapAnimCommit _map;
 			
 			/// Start button text
-			if (LOC_ADMIN) then {
+			if (HEX_LOC_ADMIN) then {
 				_start ctrlSetText "COMMENCE BATTLE";
 			} else {
 				_start ctrlSetText "WAITING FOR ADMIN...";
 			};
 		};
 		sleep 1;
-	};
-};
-
-/// Start tactical combat
-ADM_FNC_START = {
-	if (LOC_ADMIN) then {
-	
-    [] remoteExec ["HEX_FNC_TACTICAL", 2, false]
 	};
 };

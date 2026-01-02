@@ -1,40 +1,24 @@
-/// get all functions
+/// Load local functions
 call compile preprocessFile "HEX\Global\Functions.sqf";
+call compile preprocessFile "HEX\Local\Functions.sqf";
 
-LOC_ADMIN = false;
-LOC_SINGLEPLAYER = false;
-LOC_COMMANDER = false;
+HEX_LOC_ADMIN = false;
+HEX_LOC_COMMANDER = false;
 
-private _netMode = call BIS_fnc_getNetMode;
-if (_netMode == "SinglePlayer") then {
-	LOC_ADMIN = true;
+/// Load server functions
+if (isServer) then {
+	call compile preprocessFile "HEX\Server\Functions.sqf";
+};
+
+/// Load admin functions
+if (player == HEX_ADMIN) then {
+	call compile preprocessFile "HEX\Admin\Functions.sqf";
+	HEX_LOC_ADMIN = true;
 	HEX_PHASE = "LOADING";
 	publicVariable "HEX_PHASE";
-	remoteExec ["HEX_FNC_LOAD", 0, true];
-	{deleteVehicle _x}ForEach units HEX_ADMIN; /// delete west slotting units
-	{deleteVehicle _x}ForEach units HEX_OFFICER; /// delete east slotting units
+	remoteExec ["HEX_LOC_FNC_LOAD", 0, true];
 	removeSwitchableUnit HEX_ADMIN; /// remove slotting to ghost unit
 };
-
-/// start campaign on hosted
-if (_netMode != "Dedicated" && _netMode != "SinglePlayer" && isServer) then {
-	LOC_ADMIN = true;
-	HEX_PHASE = "LOADING";
-	publicVariable "HEX_PHASE";
-	remoteExec ["HEX_FNC_LOAD", 0, true];
-};
-
-/// Start campaign on dedicated
-if (_netMode == "Dedicated") then {
-	if (player == HEX_ADMIN) then {
-		LOC_ADMIN = true;
-		HEX_PHASE = "LOADING";
-		publicVariable "HEX_PHASE";
-		remoteExec ["HEX_FNC_LOAD", 0, true];
-	};
-};
-
-(group test1) setVariable ["HEX_ICON", "b_inf", true];
 
 ///[] call BIS_fnc_jukebox; /// maybe add this at start of tactical phase?
 
@@ -49,6 +33,9 @@ if (_netMode == "Dedicated") then {
 /// Replace Strategic layer janky map overlay with just a GUI map? but then no funni markers :<
 /// 
 /// random reinforcements on every day ?
+///
+/// "AI Commander" places markers on map of enemy units etc on side channel
+/// alternatively: radio sidechat messages?
 
 
 /// Experimental mode:

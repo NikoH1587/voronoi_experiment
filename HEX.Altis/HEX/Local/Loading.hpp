@@ -24,7 +24,7 @@ class HEX_LOADING
 			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onButtonClick = "[] call ADM_FNC_CONTINUE;";
+			onButtonClick = "[] call HEX_ADM_FNC_CONTINUE;";
 		};
 		
 		class NewSave: RscButton
@@ -34,7 +34,7 @@ class HEX_LOADING
 			y = GUI_GRID_CENTER_Y + 6 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onButtonClick = "[] call ADM_FNC_NEWSAVE;";
+			onButtonClick = "[] call HEX_ADM_FNC_NEWSAVE;";
 		};
 	
 		class Import: RscEdit
@@ -64,7 +64,7 @@ class HEX_LOADING
 			y = GUI_GRID_CENTER_Y + 14 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call ADM_FNC_CMDW";
+			onLBSelChanged = "(_this select 1) call HEX_ADM_FNC_CMDW";
 		};		
 	
 		class EastText: RscText
@@ -85,7 +85,7 @@ class HEX_LOADING
 			y = GUI_GRID_CENTER_Y + 20 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call ADM_FNC_CMDE";
+			onLBSelChanged = "(_this select 1) call HEX_ADM_FNC_CMDE";
 		};		
 	
 		class Description : RscHTML

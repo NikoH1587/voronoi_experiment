@@ -34,7 +34,7 @@ class HEX_SLOTTING
 			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 20 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call LOC_FNC_UNITS";
+			onLBSelChanged = "(_this select 1) call HEX_LOC_FNC_UNITS";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 		};
 		
@@ -45,7 +45,7 @@ class HEX_SLOTTING
 			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 20 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "(_this select 1) call LOC_FNC_UNIT";
+			onLBSelChanged = "(_this select 1) call HEX_LOC_FNC_UNIT";
 			rowHeight = 1.5 * GUI_GRID_CENTER_H;
 		};
 
@@ -57,7 +57,7 @@ class HEX_SLOTTING
 			y = GUI_GRID_CENTER_Y + 22 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onButtonClick = "[] call LOC_FNC_SWITCH;";
+			onButtonClick = "[] call HEX_LOC_FNC_SWITCH;";
 		};
 		
 		class Minimap : RscMapControl

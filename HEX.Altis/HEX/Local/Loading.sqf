@@ -1,47 +1,5 @@
 /// TBD: make a save system
-ADM_SAVE = false;
-
-/// Gee I sure do hope nobody picks "AI Commander" as their profileName! ;3
-ADM_FNC_GETPLAYERS = {
-	ADM_WEST_PLAYERS = ["AI Commander"];
-	ADM_EAST_PLAYERS = ["AI Commander"];
-
-	private _allPlayers = call BIS_fnc_listPlayers;
-	_westPlayers = _allPlayers select {side _x == west};
-	_eastPlayers = _allPlayers select {side _x == east};
-	{ADM_WEST_PLAYERS pushback (name _x)}forEach _westPlayers;
-	{ADM_EAST_PLAYERS pushback (name _x)}forEach _eastPlayers;
-};
-
-ADM_FNC_CONTINUE = {
-	if (LOC_ADMIN) then {
-		if (ADM_SAVE) then {
-			/// load save from client onto server
-		} else {
-			/// start new default campaign on server
-			"DEFAULT" remoteExec ["HEX_FNC_CAMPAIGN", 2, false];
-		};
-	};
-};
-
-ADM_FNC_NEWSAVE = {
-	if (LOC_ADMIN) then {
-		/// Set phase locally for admin
-		HEX_PHASE == "CUSTOM";
-		/// Open custom menu locally for admin
-		call compile preprocessFile "HEX\Local\Custom.sqf"
-	};
-};
-
-ADM_FNC_CMDW = {
-	ADM_WEST_COMMANDER = ADM_WEST_PLAYERS select _this;
-	publicVariable "ADM_WEST_COMMANDER";
-};
-
-ADM_FNC_CMDE = {
-	ADM_EAST_COMMANDER = ADM_EAST_PLAYERS select _this;
-	publicVariable "ADM_EAST_COMMANDER";
-};
+HEX_ADM_SAVE = false;
 
 /// Open loading menu
 [] spawn {
@@ -59,8 +17,8 @@ ADM_FNC_CMDE = {
 			private _eastCMD = _menu displayCtrl 1107;
 			
 			/// Show setting if player is admin
-			if (LOC_ADMIN) then {
-				if (ADM_SAVE) then {
+			if (HEX_LOC_ADMIN) then {
+				if (HEX_ADM_SAVE) then {
 					_continue ctrlSetText "CONTINUE CAMPAIGN";		
 					_newsave ctrlSetText "NEW CAMPAIGN";						
 				} else {
@@ -68,11 +26,11 @@ ADM_FNC_CMDE = {
 					_newsave ctrlSetText "CUSTOM CAMPAIGN";
 				};
 				
-				0 call ADM_FNC_GETPLAYERS;
+				0 call HEX_ADM_FNC_GETPLAYERS;
 				
 				/// Selection of commanders
-				{_westCMD lbAdd _x}forEach ADM_WEST_PLAYERS;
-				{_eastCMD lbAdd _x}forEach ADM_EAST_PLAYERS;
+				{_westCMD lbAdd _x}forEach HEX_ADM_WEST_PLAYERS;
+				{_eastCMD lbAdd _x}forEach HEX_ADM_EAST_PLAYERS;
 				
 				_westCMD lbsetCurSel 0;
 				_eastCMD lbsetCurSel 0;

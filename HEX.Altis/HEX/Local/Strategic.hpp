@@ -28,7 +28,7 @@ class HEX_STRATEGIC {
 			y = GUI_GRID_TOPCENTER_Y + 3 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 1.5 * GUI_GRID_CENTER_H;
-			onButtonClick = "[] call LOC_FNC_ENDTURN;";
+			onButtonClick = "[] call HEX_LOC_FNC_ENDTURN;";
 		};
 	};
 };

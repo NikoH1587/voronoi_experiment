@@ -8,7 +8,7 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=1686;
+		nextID=2119;
 	};
 	class MarkerIDProvider
 	{
@@ -16,14 +16,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=168;
+		nextID=174;
 	};
 	class Camera
 	{
-		pos[]={11767.719,83.010323,11993.999};
-		dir[]={-0.81784564,-0.41311339,-0.4005819};
-		up[]={-0.37100092,0.91067958,-0.18171674};
-		aside[]={-0.43987137,-1.4901161e-08,0.8980608};
+		pos[]={11470.514,63.961552,12407.225};
+		dir[]={0.50707006,-0.52977031,-0.67987025};
+		up[]={0.31672868,0.84814107,-0.42466402};
+		aside[]={-0.80160028,-1.4901161e-08,-0.5978604};
 	};
 };
 binarizationWanted=0;
@@ -33,14 +33,13 @@ addons[]=
 	"A3_Ui_F",
 	"A3_Structures_F_Mil_BagBunker",
 	"A3_Characters_F",
-	"A3_Armor_F_Beta_APC_Wheeled_01",
 	"A3_Weapons_F"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=5;
+		items=4;
 		class Item0
 		{
 			className="A3_Ui_F";
@@ -63,13 +62,6 @@ class AddonsMetaData
 			url="https://www.arma3.com";
 		};
 		class Item3
-		{
-			className="A3_Armor_F_Beta";
-			name="Arma 3 Beta - Armored Land Vehicles";
-			author="Bohemia Interactive";
-			url="https://www.arma3.com";
-		};
-		class Item4
 		{
 			className="A3_Weapons_F";
 			name="Arma 3 Alpha - Weapons and Accessories";
@@ -153,7 +145,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=91;
+		items=89;
 		class Item0
 		{
 			dataType="Layer";
@@ -1090,259 +1082,6 @@ class Mission
 			atlOffset=185.97;
 		};
 		class Item84
-		{
-			dataType="Group";
-			side="West";
-			class Entities
-			{
-				items=11;
-				class Item0
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14983.15,17.951439,16513.074};
-					};
-					side="West";
-					flags=4;
-					class Attributes
-					{
-						name="test1D";
-					};
-					id=1661;
-					type="B_crew_F";
-				};
-				class Item1
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14983.15,20.490816,16513.074};
-					};
-					side="West";
-					class Attributes
-					{
-						name="test1G";
-					};
-					id=1662;
-					type="B_crew_F";
-					atlOffset=2.5393772;
-				};
-				class Item2
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14983.15,20.490816,16513.074};
-					};
-					side="West";
-					flags=2;
-					class Attributes
-					{
-						name="test1C";
-					};
-					id=1663;
-					type="B_crew_F";
-					atlOffset=2.5393772;
-				};
-				class Item3
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14988.15,17.951439,16508.074};
-					};
-					side="West";
-					flags=5;
-					class Attributes
-					{
-						rank="SERGEANT";
-					};
-					id=1664;
-					type="B_Soldier_SL_F";
-				};
-				class Item4
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14978.15,17.951439,16508.074};
-					};
-					side="West";
-					flags=5;
-					class Attributes
-					{
-						skill=0.40000001;
-					};
-					id=1665;
-					type="B_Soldier_F";
-				};
-				class Item5
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14993.15,17.949703,16503.074};
-					};
-					side="West";
-					flags=5;
-					class Attributes
-					{
-						skill=0.44999999;
-						rank="CORPORAL";
-					};
-					id=1666;
-					type="B_soldier_LAT_F";
-				};
-				class Item6
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14973.15,17.951439,16503.074};
-					};
-					side="West";
-					flags=5;
-					class Attributes
-					{
-						skill=0.40000001;
-					};
-					id=1667;
-					type="B_soldier_M_F";
-				};
-				class Item7
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14998.15,17.931099,16498.074};
-					};
-					side="West";
-					flags=5;
-					class Attributes
-					{
-						rank="SERGEANT";
-					};
-					id=1668;
-					type="B_Soldier_TL_F";
-				};
-				class Item8
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14968.15,17.951439,16498.074};
-					};
-					side="West";
-					flags=5;
-					class Attributes
-					{
-						skill=0.44999999;
-						rank="CORPORAL";
-					};
-					id=1669;
-					type="B_soldier_AR_F";
-				};
-				class Item9
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={15003.15,17.912834,16493.074};
-					};
-					side="West";
-					flags=5;
-					class Attributes
-					{
-						skill=0.40000001;
-					};
-					id=1670;
-					type="B_Soldier_A_F";
-				};
-				class Item10
-				{
-					dataType="Object";
-					class PositionInfo
-					{
-						position[]={14963.15,17.951439,16493.074};
-					};
-					side="West";
-					flags=5;
-					class Attributes
-					{
-						skill=0.40000001;
-					};
-					id=1671;
-					type="B_medic_F";
-				};
-			};
-			class Attributes
-			{
-			};
-			class CrewLinks
-			{
-				class LinkIDProvider
-				{
-					nextID=3;
-				};
-				class Links
-				{
-					items=3;
-					class Item0
-					{
-						linkID=0;
-						item0=1661;
-						item1=1660;
-						class CustomData
-						{
-							role=1;
-						};
-					};
-					class Item1
-					{
-						linkID=1;
-						item0=1662;
-						item1=1660;
-						class CustomData
-						{
-							role=2;
-							turretPath[]={0};
-						};
-					};
-					class Item2
-					{
-						linkID=2;
-						item0=1663;
-						item1=1660;
-						class CustomData
-						{
-							role=2;
-							turretPath[]={0,0};
-						};
-					};
-				};
-			};
-			id=1659;
-		};
-		class Item85
-		{
-			dataType="Object";
-			class PositionInfo
-			{
-				position[]={14983.15,20.489378,16513.023};
-			};
-			side="West";
-			flags=6;
-			class Attributes
-			{
-				skill=0.55000001;
-				rank="LIEUTENANT";
-				name="test1";
-			};
-			id=1660;
-			type="B_APC_Wheeled_01_cannon_F";
-		};
-		class Item86
 		{
 			dataType="Group";
 			side="East";
@@ -2324,7 +2063,7 @@ class Mission
 				nAttributes=1;
 			};
 		};
-		class Item87
+		class Item85
 		{
 			dataType="Group";
 			side="West";
@@ -3342,7 +3081,7 @@ class Mission
 				nAttributes=1;
 			};
 		};
-		class Item88
+		class Item86
 		{
 			dataType="Marker";
 			position[]={19595.666,0,2502.3857};
@@ -3353,7 +3092,7 @@ class Mission
 			id=1672;
 			atlOffset=185.97;
 		};
-		class Item89
+		class Item87
 		{
 			dataType="Marker";
 			position[]={19598.715,0,1530.6207};
@@ -3364,7 +3103,7 @@ class Mission
 			id=1674;
 			atlOffset=185.97;
 		};
-		class Item90
+		class Item88
 		{
 			dataType="Marker";
 			position[]={19599.248,0,2047.337};

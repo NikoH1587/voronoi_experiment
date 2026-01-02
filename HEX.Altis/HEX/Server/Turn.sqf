@@ -7,7 +7,7 @@ private _tactical = [];
 	private _col = _x select 1;
 	private _sid = _x select 4;
 	
-	private _near = _hex call HEX_FNC_NEAR;
+	private _near = _hex call HEX_GLO_FNC_NEAR;
 	private _sides = [_sid];
 		
 	{
@@ -54,7 +54,7 @@ if (count _tactical > 0) then {
 	publicVariable "HEX_STRATEGIC";
 	
 	/// Open briefing locally for all
-	remoteExec ["HEX_FNC_BRIEFING", 0, false];
+	remoteExec ["HEX_LOC_FNC_BRIEFING", 0, false];
 	
 /// Changes current state only if still in strategic phase
 } else {
@@ -110,8 +110,8 @@ if (count _tactical > 0) then {
 	call compile preprocessFile "HEX\Server\Time.sqf";
 
 	/// Clear local orders, markers and sound
-	remoteExec ["HEX_FNC_CLIC", 0, false];
+	remoteExec ["HEX_LOC_FNC_CLIC", 0, false];
 
 	/// Update counters globally
-	remoteExec ["HEX_FNC_COTE", 0, false];
+	remoteExec ["HEX_LOC_FNC_COTE", 0, false];
 }

@@ -4,13 +4,13 @@
 call compile preprocessFile "HEX\Server\Generation.sqf";
 
 /// create grid overlay
-0 call HEX_FNC_GRID;
+0 call HEX_SRV_FNC_GRID;
 
 /// update zone of control
-0 call HEX_FNC_ZOCO;
+0 call HEX_SRV_FNC_ZOCO;
 
 /// update time and weather
 call compile preprocessFile "HEX\Server\Time.sqf";
 
 /// begin strategic phase
-remoteExec ["HEX_FNC_STRATEGIC", 0, false];	
+remoteExec ["HEX_LOC_FNC_STRATEGIC", 0, false];	
