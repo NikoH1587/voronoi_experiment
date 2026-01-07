@@ -316,6 +316,7 @@ HEX_ADM_FNC_START = {
 	publicVariable "HEX_CFG_WEST";
 	publicVariable "HEX_CFG_EAST";
 	
+	publicVariable "HEX_FULLMAP";
 	publicVariable "HEX_SIZE";
 	publicVariable "HEX_TIME";
 	publicVariable "HEX_TURN";

@@ -32,7 +32,7 @@ HEX_LOC_UNIT = player;
 			};
 			
 			_text ctrlSetBackgroundColor _color;
-			HEX_LOC_GROUPS = LOC_SIDE call HEX_LOC_FNC_GROUPS;
+			HEX_LOC_GROUPS = HEX_LOC_SIDE call HEX_LOC_FNC_GROUPS;
 			
 			{
 				private _type = _x getVariable "HEX_ICON";

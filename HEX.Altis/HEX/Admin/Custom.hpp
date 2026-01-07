@@ -153,8 +153,8 @@ class HEX_CUSTOM
 			y = GUI_GRID_CENTER_Y + 20 * GUI_GRID_CENTER_H;
 			w = 2 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onCheckedChanged = "HEX_SIZE = [750, 1000] select (_this select 1);";
-			tooltip = "Turn on experimental mode w/ 1000m grid size";
+			onCheckedChanged = "HEX_FULLMAP = [false, true] select (_this select 1);";
+			tooltip = "Turn on experimental full map mode";
 		};
 		
 		class Export: RscEdit

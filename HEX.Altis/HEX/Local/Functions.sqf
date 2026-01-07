@@ -255,6 +255,7 @@ HEX_LOC_FNC_UNITS = {
 		
 		if (isPlayer _x) then {_name = "(PLAYER) " + _name};
 		if (leader _x == _x) then {_name = "(LEADER) " + _name};
+		/// add check if unit is "autonomous"
 		private _added = _unitsList lbAdd _name;		
 	}forEach HEX_LOC_UNITS;
 };

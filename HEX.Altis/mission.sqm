@@ -16,11 +16,11 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=174;
+		nextID=180;
 	};
 	class Camera
 	{
-		pos[]={11470.514,63.961552,12407.225};
+		pos[]={11433.125,108.1343,12441.012};
 		dir[]={0.50707006,-0.52977031,-0.67987025};
 		up[]={0.31672868,0.84814107,-0.42466402};
 		aside[]={-0.80160028,-1.4901161e-08,-0.5978604};
@@ -165,7 +165,7 @@ class Mission
 			dataType="Marker";
 			position[]={373.64801,172.192,2544.7471};
 			name="marker_11";
-			text="6x ""_inf"" Groups 1act (Bigger squads more likely)";
+			text="9x  ""_inf"" Groups 1act (Bigger squads more likely)";
 			type="b_inf";
 			id=291;
 			atlOffset=358.16199;
@@ -175,7 +175,7 @@ class Mission
 			dataType="Marker";
 			position[]={339.78201,322.74399,1518.647};
 			name="marker_18";
-			text="3x ""_motor_inf"" groups 3act";
+			text="6x  ""_motor_inf"" groups 3act";
 			type="b_motor_inf";
 			id=292;
 			atlOffset=508.71399;
@@ -185,7 +185,7 @@ class Mission
 			dataType="Marker";
 			position[]={339.78201,279.40601,1024.7629};
 			name="marker_19";
-			text="3x ""_mech_inf"" groups, 2act";
+			text="3x  ""_mech_inf"" groups, 2act";
 			type="b_mech_inf";
 			id=293;
 			atlOffset=465.37601;
@@ -203,7 +203,7 @@ class Mission
 		class Item6
 		{
 			dataType="Marker";
-			position[]={2351.0454,2.6799927,1528.6926};
+			position[]={2351.0449,2.6800001,1528.693};
 			name="marker_57";
 			text="3x support - ""support"" waypoint. exc. isMan 1 3act";
 			type="b_support";
@@ -267,7 +267,7 @@ class Mission
 			dataType="Marker";
 			position[]={361.56201,184.90199,2000.125};
 			name="marker_28";
-			text="3x ""_recon"" + Groups 3act";
+			text="6x  ""_recon"" + Groups 3act";
 			type="b_recon";
 			id=298;
 			atlOffset=370.87201;
@@ -277,7 +277,7 @@ class Mission
 			dataType="Marker";
 			position[]={334.10199,278.71701,530.87903};
 			name="marker_24";
-			text="3x ""_armor"" groups - 2act (Only 1 vehicle spawns)";
+			text="3x  ""_armor"" groups - 2act (Only 1 vehicle spawns)";
 			type="b_armor";
 			id=500;
 			atlOffset=464.68701;

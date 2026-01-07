@@ -4,9 +4,10 @@ call compile preprocessFile "HEX\Local\Functions.sqf";
 
 HEX_LOC_ADMIN = false;
 HEX_LOC_COMMANDER = false;
-
+HEX_SINGLEPLAYER = false;
 /// Load server functions
 if (isServer) then {
+	{removeSwitchableUnit _x}forEach allUnits;
 	call compile preprocessFile "HEX\Server\Functions.sqf";
 };
 
@@ -18,6 +19,10 @@ if (player == HEX_ADMIN) then {
 	publicVariable "HEX_PHASE";
 	remoteExec ["HEX_LOC_FNC_LOAD", 0, true];
 	removeSwitchableUnit HEX_ADMIN; /// remove slotting to ghost unit
+};
+
+if ((call BIS_fnc_getNetMode) == "SinglePlayer") then {
+	HEX_SINGLEPLAYER = true;
 };
 
 ///[] call BIS_fnc_jukebox; /// maybe add this at start of tactical phase?
