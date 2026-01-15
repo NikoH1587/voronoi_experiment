@@ -8,7 +8,7 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=2119;
+		nextID=2129;
 	};
 	class MarkerIDProvider
 	{
@@ -16,14 +16,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=180;
+		nextID=192;
 	};
 	class Camera
 	{
-		pos[]={11433.125,108.1343,12441.012};
-		dir[]={0.50707006,-0.52977031,-0.67987025};
-		up[]={0.31672868,0.84814107,-0.42466402};
-		aside[]={-0.80160028,-1.4901161e-08,-0.5978604};
+		pos[]={11916.896,86.194313,13813.435};
+		dir[]={0.42307225,-0.5194782,0.74239641};
+		up[]={0.25720423,0.85448366,0.45133543};
+		aside[]={0.86882454,-1.4901161e-08,-0.49512035};
 	};
 };
 binarizationWanted=0;
@@ -606,7 +606,7 @@ class Mission
 		class Item40
 		{
 			dataType="Marker";
-			position[]={17144.789,0,2544.0381};
+			position[]={17955.912,13.903778,4020.9023};
 			name="marker_325";
 			text="NORMAL";
 			type="b_inf";
@@ -617,7 +617,7 @@ class Mission
 		class Item41
 		{
 			dataType="Marker";
-			position[]={17097.385,0,1522.528};
+			position[]={17908.508,0,2999.3921};
 			name="marker_326";
 			text="ROUT! (50%)";
 			type="b_inf";
@@ -629,7 +629,7 @@ class Mission
 		class Item42
 		{
 			dataType="Marker";
-			position[]={17117.252,0,388.10669};
+			position[]={17928.375,0,1864.9709};
 			name="marker_327";
 			text="(Removed)";
 			type="b_inf";
@@ -640,20 +640,20 @@ class Mission
 		class Item43
 		{
 			dataType="Marker";
-			position[]={17089.674,0,2038.3149};
+			position[]={17900.799,1.9739075,3515.1787};
 			name="marker_328";
-			text="Areas captured in combat";
+			text="Area captured in combat";
 			type="mil_arrow";
 			angle=180.64592;
 			id=1524;
-			atlOffset=185.97;
+			atlOffset=185.97002;
 		};
 		class Item44
 		{
 			dataType="Marker";
-			position[]={17103.652,0,941.62097};
+			position[]={17914.775,0,2418.4849};
 			name="marker_329";
-			text="Areas captured in combat";
+			text="Area captured in combat";
 			type="mil_arrow";
 			angle=180.64592;
 			id=1525;
@@ -941,9 +941,9 @@ class Mission
 		class Item71
 		{
 			dataType="Marker";
-			position[]={11501.36,0,2996.1309};
+			position[]={11501.36,0,2996.1311};
 			name="marker_349";
-			text="Spawn";
+			text="Spawn / Capture point";
 			type="mil_dot";
 			id=1580;
 			atlOffset=185.97;
@@ -951,12 +951,12 @@ class Mission
 		class Item72
 		{
 			dataType="Marker";
-			position[]={13501.228,54.455978,2991.2603};
+			position[]={13501.228,54.456001,2991.26};
 			name="marker_350";
-			text="Spawn";
+			text="Spawn / Capture point";
 			type="mil_dot";
 			id=1581;
-			atlOffset=240.42598;
+			atlOffset=240.42599;
 		};
 		class Item73
 		{
@@ -1026,62 +1026,6 @@ class Mission
 			atlOffset=205.843;
 		};
 		class Item79
-		{
-			dataType="Marker";
-			position[]={18388.943,0,2490.103};
-			name="marker_346";
-			text="NORMAL";
-			type="b_plane";
-			colorName="ColorWEST";
-			id=1633;
-			atlOffset=185.97;
-		};
-		class Item80
-		{
-			dataType="Marker";
-			position[]={18400.238,0,1519.2664};
-			name="marker_347";
-			text="DESTROYED (50%)";
-			type="b_plane";
-			colorName="ColorWEST";
-			alpha=0.5;
-			id=1634;
-			atlOffset=185.97;
-		};
-		class Item81
-		{
-			dataType="Marker";
-			position[]={18377.648,0,446.83032};
-			name="marker_348";
-			text="(Removed)";
-			type="b_plane";
-			colorName="ColorBlack";
-			id=1635;
-			atlOffset=185.97;
-		};
-		class Item82
-		{
-			dataType="Marker";
-			position[]={18392.525,0,2035.0544};
-			name="marker_351";
-			text="Units killed in combat";
-			type="mil_arrow";
-			angle=180.64592;
-			id=1636;
-			atlOffset=185.97;
-		};
-		class Item83
-		{
-			dataType="Marker";
-			position[]={18406.506,0,938.35931};
-			name="marker_354";
-			text="Units killed in combat again";
-			type="mil_arrow";
-			angle=180.64592;
-			id=1637;
-			atlOffset=185.97;
-		};
-		class Item84
 		{
 			dataType="Group";
 			side="East";
@@ -2063,7 +2007,7 @@ class Mission
 				nAttributes=1;
 			};
 		};
-		class Item85
+		class Item80
 		{
 			dataType="Group";
 			side="West";
@@ -3081,38 +3025,92 @@ class Mission
 				nAttributes=1;
 			};
 		};
+		class Item81
+		{
+			dataType="Marker";
+			position[]={16722.348,149.98474,621.56238};
+			name="marker_17";
+			text="(COMBAT)";
+			type="b_unknown";
+			id=2120;
+			atlOffset=335.95474;
+		};
+		class Item82
+		{
+			dataType="Marker";
+			position[]={18731.285,4.44664,635.82263};
+			name="marker_265";
+			text="(COMBAT)";
+			type="o_unknown";
+			id=2122;
+			atlOffset=190.41664;
+		};
+		class Item83
+		{
+			dataType="Marker";
+			position[]={16728.727,2.9053497,667.59338};
+			name="marker_351";
+			text="Spawn / Capture point";
+			type="mil_dot";
+			id=2123;
+			atlOffset=188.87535;
+		};
+		class Item84
+		{
+			dataType="Marker";
+			position[]={18728.594,57.361343,662.72229};
+			name="marker_354";
+			text="Spawn / Capture point";
+			type="mil_dot";
+			id=2124;
+			atlOffset=243.33134;
+		};
+		class Item85
+		{
+			dataType="Marker";
+			position[]={18731.67,1.6505737,662.44275};
+			name="marker_266";
+			markerType="ELLIPSE";
+			type="";
+			colorName="ColorEAST";
+			a=500;
+			b=500;
+			id=2125;
+			atlOffset=187.62057;
+		};
 		class Item86
 		{
 			dataType="Marker";
-			position[]={19595.666,0,2502.3857};
-			name="marker_355";
-			text="NORMAL";
-			type="b_mech_inf";
+			position[]={16730.566,2.1490021,667.82745};
+			name="marker_267";
+			markerType="ELLIPSE";
+			type="";
 			colorName="ColorWEST";
-			id=1672;
-			atlOffset=185.97;
+			a=500;
+			b=500;
+			id=2126;
+			atlOffset=188.119;
 		};
 		class Item87
 		{
 			dataType="Marker";
-			position[]={19598.715,0,1530.6207};
-			name="marker_357";
-			text="(Removed)";
-			type="b_mech_inf";
-			colorName="ColorBlack";
-			id=1674;
-			atlOffset=185.97;
+			position[]={17917.545,-3.4510193,672.94714};
+			name="marker_355";
+			text="1000m";
+			type="mil_arrow";
+			angle=90.515953;
+			id=2127;
+			atlOffset=182.51898;
 		};
 		class Item88
 		{
 			dataType="Marker";
-			position[]={19599.248,0,2047.337};
-			name="marker_358";
-			text="Killed & Captured";
+			position[]={17589.369,-4.8814392,672.25659};
+			name="marker_356";
 			type="mil_arrow";
-			angle=180.64592;
-			id=1675;
-			atlOffset=185.97;
+			angle=268.70691;
+			id=2128;
+			atlOffset=181.08856;
 		};
 	};
 };

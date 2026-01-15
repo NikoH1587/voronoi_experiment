@@ -22,7 +22,7 @@ for "_col" from 0 to round(_hexS / _hexX) do {
 		private _landT = !(surfaceisWater [_x, _y + (HEX_SIZE / 2)]);
 		{if (_x == true) then {_land = true}}forEach [_landL, _landR, _landB, _landT];
         if (_land) then {
-			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 0];
+			HEX_GRID pushBack [_row, _col, [_x,_y], "hd_dot", civilian, 0, 0, "colorBLACK"];
 		};
     };
 };

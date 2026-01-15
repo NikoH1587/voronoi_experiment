@@ -3,7 +3,7 @@ private _overcast = 0;
 private _fog = 0;
 if (HEX_WEATHER == "CLOUDS") then {_overcast = 0.5};
 if (HEX_WEATHER == "STORM") then {_overcast = 1};
-if (HEX_WEATHER == "FOG") then {_fog = 0.33};
+if (HEX_WEATHER == "FOG") then {_fog = 0.2};
 0 setOverCast _overcast;
 0 setFog _fog;
 forceWeatherChange;

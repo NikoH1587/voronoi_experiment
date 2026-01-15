@@ -167,17 +167,17 @@ HEX_ADM_FNC_FACWEST = {
 	lbClear _selWest;
 	HEX_CFG_WEST = ["b_hq"];
 	
-	if (_vehicles select 0) then {HEX_ADM_CFG_WEST pushBack ["Support", "b_support"]};
-	if (_vehicles select 1) then {HEX_ADM_CFG_WEST pushBack ["Artillery", "b_art"]};
-	if (_vehicles select 2) then {HEX_ADM_CFG_WEST pushBack ["Anti-Air", "b_antiair"]};
-	if (_vehicles select 3) then {HEX_ADM_CFG_WEST pushBack ["Plane", "b_plane"]};
-	if (_vehicles select 4) then {HEX_ADM_CFG_WEST pushBack ["Helicopter", "b_air"]};
+	if (_vehicles select 0) then {HEX_ADM_CFG_WEST pushBack ["Support 3x", "b_support"]};
+	if (_vehicles select 1) then {HEX_ADM_CFG_WEST pushBack ["Artillery 1x", "b_art"]};
+	if (_vehicles select 2) then {HEX_ADM_CFG_WEST pushBack ["Anti-Air 1x", "b_antiair"]};
+	if (_vehicles select 3) then {HEX_ADM_CFG_WEST pushBack ["Plane 1x", "b_plane"]};
+	if (_vehicles select 4) then {HEX_ADM_CFG_WEST pushBack ["Helicopter 1x", "b_air"]};
 	
-	if (_groups select 0) then {HEX_ADM_CFG_WEST pushBack ["Infantry", "b_inf"]};
-	if (_groups select 1) then {HEX_ADM_CFG_WEST pushBack ["Recon", "b_recon"]};
-	if (_groups select 2) then {HEX_ADM_CFG_WEST pushBack ["Motorized", "b_motor_inf"]};
-	if (_groups select 3) then {HEX_ADM_CFG_WEST pushBack ["Mechanized", "b_mech_inf"]};
-	if (_groups select 4) then {HEX_ADM_CFG_WEST pushBack ["Armor", "b_armor"]};
+	if (_groups select 0) then {HEX_ADM_CFG_WEST pushBack ["Infantry 9x", "b_inf"]};
+	if (_groups select 1) then {HEX_ADM_CFG_WEST pushBack ["Recon 6x", "b_recon"]};
+	if (_groups select 2) then {HEX_ADM_CFG_WEST pushBack ["Motorized 6x", "b_motor_inf"]};
+	if (_groups select 3) then {HEX_ADM_CFG_WEST pushBack ["Mechanized 3x", "b_mech_inf"]};
+	if (_groups select 4) then {HEX_ADM_CFG_WEST pushBack ["Armor 3x", "b_armor"]};
 	
 	{
 		private _added = _listWest lbAdd (_x select 0);
@@ -209,17 +209,17 @@ HEX_ADM_FNC_FACEAST = {
 	lbClear _selEast;
 	HEX_CFG_EAST = ["o_hq"];
 	
-	if (_vehicles select 0) then {HEX_ADM_CFG_EAST pushBack ["Support", "o_support"]};
-	if (_vehicles select 1) then {HEX_ADM_CFG_EAST pushBack ["Artillery", "o_art"]};
-	if (_vehicles select 2) then {HEX_ADM_CFG_EAST pushBack ["Anti-Air", "o_antiair"]};
-	if (_vehicles select 3) then {HEX_ADM_CFG_EAST pushBack ["Plane", "o_plane"]};
-	if (_vehicles select 4) then {HEX_ADM_CFG_EAST pushBack ["Helicopter", "o_air"]};
+	if (_vehicles select 0) then {HEX_ADM_CFG_EAST pushBack ["Support 3x", "o_support"]};
+	if (_vehicles select 1) then {HEX_ADM_CFG_EAST pushBack ["Artillery 1x", "o_art"]};
+	if (_vehicles select 2) then {HEX_ADM_CFG_EAST pushBack ["Anti-Air 1x", "o_antiair"]};
+	if (_vehicles select 3) then {HEX_ADM_CFG_EAST pushBack ["Plane 1x", "o_plane"]};
+	if (_vehicles select 4) then {HEX_ADM_CFG_EAST pushBack ["Helicopter 1x", "o_air"]};
 	
-	if (_groups select 0) then {HEX_ADM_CFG_EAST pushBack ["Infantry", "o_inf"]};
-	if (_groups select 1) then {HEX_ADM_CFG_EAST pushBack ["Recon", "o_recon"]};
-	if (_groups select 2) then {HEX_ADM_CFG_EAST pushBack ["Motorized", "o_motor_inf"]};
-	if (_groups select 3) then {HEX_ADM_CFG_EAST pushBack ["Mechanized", "o_mech_inf"]};
-	if (_groups select 4) then {HEX_ADM_CFG_EAST pushBack ["Armor", "o_armor"]};
+	if (_groups select 0) then {HEX_ADM_CFG_EAST pushBack ["Infantry 9x", "o_inf"]};
+	if (_groups select 1) then {HEX_ADM_CFG_EAST pushBack ["Recon 6x", "o_recon"]};
+	if (_groups select 2) then {HEX_ADM_CFG_EAST pushBack ["Motorized 6x", "o_motor_inf"]};
+	if (_groups select 3) then {HEX_ADM_CFG_EAST pushBack ["Mechanized 3x", "o_mech_inf"]};
+	if (_groups select 4) then {HEX_ADM_CFG_EAST pushBack ["Armor 3x", "o_armor"]};
 	
 	{
 		private _added = _listEast lbAdd (_x select 0);

@@ -40,3 +40,6 @@ HEX_GLO_FNC_FILL = {
 	
 	_seen
 };
+
+/// Find path between hexes
+HEX_GLO_FNC_PATH = {};

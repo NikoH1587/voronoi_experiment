@@ -51,7 +51,7 @@ openmap false;
 				private _side = _x select 4;
 				private _state = _x select 6;
 				private _icon = "\A3\ui_f\data\map\markers\nato\" + _type + ".paa";
-				private _text = "Infantry 6x";
+				private _text = "Infantry";
 				switch (_type select [2]) do {
 					case "hq": {_text = "Headquarters"};
 					case "art": {_text = "Artillery"};
@@ -66,8 +66,7 @@ openmap false;
 				};
 				
 				private _alpha = 1;
-				if (_state == 0) then {_text = _text + "(ERROR)"};		
-				if (_state == 2) then {_text = _text + "(DISORGANIZED)"; _alpha = 0.5};
+				if (_state < 0.5) then {_text = _text + "(ROUT!)"; _alpha = 0.5};
 				
 				if (_side == west) then {
 					private _added = _west lbAdd _text;
@@ -102,8 +101,7 @@ openmap false;
 					case "antiair": {_text = "Anti-Air"};
 				};
 				
-				if (_state == 0) then {_text = _text + "(ERROR1)"};
-				if (_state == 2) then {_text = _text + "(ERROR2)"};
+				if (_state < 0.5) then {_text = _text + "(ERROR)"};
 				
 				if (_side == west) then {
 					private _added = _west lbAdd _text;

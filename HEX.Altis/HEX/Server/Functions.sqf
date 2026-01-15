@@ -36,11 +36,11 @@ HEX_SRV_FNC_MOVE = {
 	private _indexEND = HEX_GRID find _end;	
 	
 	/// Replace origin with "hd_dot", civilian, 0
-	_newORG = [_org select 0, _org select 1, _org select 2, "hd_dot", civilian, 0, 1];
+	_newORG = [_org select 0, _org select 1, _org select 2, "hd_dot", civilian, 0, 1, "colorBLACK"];
 	HEX_GRID set [_indexORG, _newORG];
 	
 	/// Replace destination with origin
-	_newEND = [_end select 0, _end select 1, _end select 2, _org select 3, _org select 4, (_org select 5) - 1, _org select 6];
+	_newEND = [_end select 0, _end select 1, _end select 2, _org select 3, _org select 4, (_org select 5) - 1, _org select 6, _org select 7];
 	HEX_GRID set [_indexEND, _newEND];
 	
 	/// Update grid information globally
@@ -75,6 +75,9 @@ HEX_SRV_FNC_ZOCO = {
 		if (east in _sides) then {_color = "colorOPFOR"};
 		if (west in _sides && east in _sides) then {_color = "ColorCIV"; _Intensity = _Intensity + 1};
 	
+		private _newHEX = [_x select 0, _x select 1, _x select 2, _x select 3, _x select 4, _x select 5, _x select 6, _color];
+		HEX_GRID set [_forEachIndex, _newhex];
+	
 		private _marker = format ["HEX_%1_%2", _row, _col];
 		_marker setMarkerColor _color;
 		if (_color != "ColorBLACK") then {
@@ -90,6 +93,7 @@ HEX_SRV_FNC_ZOCO = {
 	if (_intensity > 3) then {_ambience = 1};
 	if (_intensity > 6) then {_ambience = 2};
 	HEX_INTENSITY = _ambience;
+	publicVariable "HEX_GRID";
 	publicVariable "HEX_INTENSITY";
 };
 
@@ -139,13 +143,17 @@ HEX_SRV_FNC_GROUPS = {
 					if (_GRPname == "Tank Destroyer Section (UP)" && _icons select 0 == "\A3\ui_f\data\map\markers\nato\b_armor.paa") then {_ARMnoskip = true};
 					
 					if (_fac in _factions && (_ico in _icons or _RECnoskip or _ARMnoskip) && _INFnoskip && _SUPnoskip && (_GRPname in _blacklist == false)) then {
-						_groups append [_x];
+						private _group = _x;
+						private _size = (count _x) min 8;
+						_grpAndSize = [_size, _group];
+						_groups append [_grpAndSize];
 					};
 				}forEach _grps;
 			}forEach _cats;
 		}forEach _facs;
 	}forEach [(configFile >> "CfgGroups" >> "West"), (configFile >> "CfgGroups" >> "East"), (configFile >> "CfgGroups" >> "Indep")];
 	
+	_groups sort false;
 	_groups
 };
 
@@ -155,6 +163,9 @@ HEX_SRV_FNC_VEHICLES = {
 	private _type = _this select 1;
 	private _men = [];
 	private _configs = [];
+	private _reammo = [];
+	private _repair = [];
+	private _refuel = [];
 	
 	private _typ = 0;
 	if (_type in ["b_art", "o_art"]) then {_typ = 1};
@@ -176,8 +187,8 @@ HEX_SRV_FNC_VEHICLES = {
 			private _amo = getNumber (_veh >> "transportAmmo");
 			private _plo = getNumber (_veh >> "transportFuel");
 			private _rep = getNumber (_veh >> "transportRepair");
-			private _sup = _amo + _plo + _rep;
 			private _art = getNumber (_veh >> "artilleryScanner");
+			private _sup = _amo + _plo + _rep;
 			private _sim = toLower getText (_veh >> "simulation");
 			private _cat = getText (_veh >> "editorSubcategory");
 			private _dsp = getText (_veh >> "displayName");
@@ -185,16 +196,108 @@ HEX_SRV_FNC_VEHICLES = {
 			if (_sim == "soldier") then {_men pushback _cfg};
 			if (_typ == 0 && _dsp == "Officer") then {_configs pushback _cfg};	
 			if (_typ == 1 && _art > 0) then {_configs pushback _cfg};			
-			if (_typ == 2 && _sup > 0) then {_configs pushback _cfg};
+			if (_typ == 2 && _amo > 0) then {_reammo pushbackUnique _cfg};
+			if (_typ == 2 && _rep > 0) then {_repair pushbackUnique _cfg};
+			if (_typ == 2 && _plo > 0) then {_refuel pushbackUnique _cfg};
+			
 			if (_typ == 3 && _cat == "EdSubcat_AAs") then {_configs pushback _cfg};
-			if (_typ == 4 && _sim == "helicopterrtd" or _sim == "helicopterx") then {_configs pushback _cfg};
+			if (_typ == 4 && _sup == 0 && _sim == "helicopterrtd" or _sim == "helicopterx") then {_configs pushback _cfg};
 			if (_typ == 5 && _sim == "airplanex" or _sim == "airplane") then {_configs pushback _cfg};
 		};
 	} forEach ("true" configClasses (configFile >> "CfgVehicles"));
 
-	/// not configs, pick random man
+	private _icons = ["b_support", "b_maint", "b_service"];
+	if (_side == east) then {_icons = ["o_support", "o_maint", "o_service"]};
+	/// add 3 random support vehicles
+	if (_typ == 2) then {
+		_configs = [];
+		
+		private _reammoVeh = _reammo select floor random count _reammo;
+		private _repairVeh = _repair select floor random count _repair;
+		private _refuelVeh = _refuel select floor random count _refuel;
+		
+		_configs pushBackUnique _reammoVeh;
+		_configs pushBackUnique _repairVeh;
+		_configs pushBackUnique _refuelVeh;
+	};
+
+	/// if no configs, pick random man
 	if (count _configs == 0) then {_configs = [_men select floor random count _men]};
 
 	/// return array
 	_configs
 };
+
+HEX_FNC_SRV_SPAWNGROUP = {
+	private _hexpos = _this select 0;
+	private _side = _this select 1;
+	private _config = _this select 2;
+
+	private _group = createGroup _side;
+	private _pos = [[[_hexpos, HEX_SIZE / 2]], ["water"]] call BIS_fnc_randomPos;
+	
+	private _infantry = [];
+	private _vehicles = [];
+		
+	{
+		private _veh = getText (_x >> "vehicle");
+		private _rank = getText (_x >> "rank");
+		private _cfg = (configFile >> "CfgVehicles" >> _veh);
+		private _isMan = getNumber (_cfg >> "isMan");
+			
+		if (_isMan == 1) then {
+			_infantry pushback [_rank, _veh];
+		} else {
+			_vehicles pushback [_rank, _veh];				
+		};
+	}forEach _config;
+	
+	/// Limit excessive groups
+	_infantry deleteRange [8, 16];
+	_vehicles deleteRange [2, 4];
+	
+	{
+		(_x select 1) createUnit [_pos, _group, "", 1, (_x select 0)];	
+	}forEach _infantry;
+	
+	{
+		private _pos2 = [_pos, 0, 50, 5, 0, 0, 0, [], _pos] call BIS_fnc_findSafePos;
+		private _spawned = [_pos2, 0, (_x select 1), _group] call BIS_fnc_spawnVehicle;
+		private _crew = _spawned select 1;
+		{_x setSkill 1}forEach _crew;
+		(_crew select 0) setRank "PRIVATE";
+		if (count _crew > 0) then {(_crew select 1) setRank "CORPORAL"};
+		if (count _crew > 1) then {(_crew select 2) setRank "SERGEANT"};
+	}forEach _vehicles;
+	
+	if (count _infantry > 0) then {
+		/// set inf/mixed group leader as inf SL
+		_group selectLeader ((units _group) select 0);
+	} else {
+		/// set veh group leader as commander
+		private _count = count units _group;
+		_group selectLeader ((units _group) select (_count - 1));
+	};	
+	
+	/// return group
+	_group
+};
+
+HEX_FNC_SRV_SPAWNVEHICLE = {
+	private _hexpos = _this select 0;
+	private _side = _this select 1;
+	private _config = _this select 2;
+
+	private _pos = [_pos, 0, HEX_SIZE / 2, 5, 0, 0, 0, [], _pos] call BIS_fnc_findSafePos;
+	private _spawned = [_pos, 0, _config, _side] call BIS_fnc_spawnVehicle;	
+	private _crew = _spawned select 1;
+	private _group = _spawned select 2;
+	{_x setSkill 1}forEach _crew;
+	(_crew select 0) setRank "CORPORAL";
+	if (count _crew > 0) then {(_crew select 1) setRank "SERGEANT"};
+	if (count _crew > 1) then {(_crew select 2) setRank "LIEUTENANT"};
+	
+	_group
+};
+
+HEX_FNC_SRV_SPAWNSUPPORT = {};

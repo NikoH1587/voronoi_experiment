@@ -28,6 +28,9 @@ if ((call BIS_fnc_getNetMode) == "SinglePlayer") then {
 ///[] call BIS_fnc_jukebox; /// maybe add this at start of tactical phase?
 
 /// ToDo:
+/// Move functions to functions library
+/// https://community.bistudio.com/wiki/Arma_3:_Functions_Library
+///
 /// make changes to onPLayerKilled event handler
 /// Open slotting / switching menu
 ///
@@ -43,7 +46,7 @@ if ((call BIS_fnc_getNetMode) == "SinglePlayer") then {
 /// alternatively: radio sidechat messages?
 
 
-/// Experimental mode:
+/// Experimental mode ??? TBD:
 /// flee max for groups: https://community.bistudio.com/wiki/setSkill
 /// skillName: String - available sub-skills are: "courage" 0
 /// Bigger hexes (1000)
