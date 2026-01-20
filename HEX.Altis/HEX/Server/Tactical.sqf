@@ -12,7 +12,11 @@ HEX_OBJECTIVES_EAST = [];
 	if (_sid == resistance) then {HEX_OBJECTIVES_NEUT pushback _hex};
 }forEach HEX_GRID;
 
-/// TODO: remove all other (grid?) markers
+/// remove all other (grid?) markers
+0 call HEX_SRV_FNC_GRIDDELETE;
+
+/// remove all counter markers;
+	remoteExec ["HEX_LOC_FNC_COTEDELETE", 0, true];
 
 {
 	private _hex = _x;
@@ -32,8 +36,6 @@ HEX_OBJECTIVES_EAST = [];
 	
 	/// get platoon size
 	private _size = 3;
-	if (_side == west) then {_size = HEX_PLTW};
-	if (_side == east) then {_size = HEX_PLTE};
 	
 	if (_type in ["b_inf", "o_inf"]) then {_size = 5};
 	
@@ -43,6 +45,7 @@ HEX_OBJECTIVES_EAST = [];
 	if (_type in ["b_motor_inf", "o_motor_inf"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\n_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\o_motor_inf.paa"]};
 	if (_type in ["b_mech_inf", "o_mech_inf"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\n_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\o_mech_inf.paa"]};
 	if (_type in ["b_armor", "o_armor"]) then {_armor = true; _icons = ["\A3\ui_f\data\map\markers\nato\b_armor.paa", "\A3\ui_f\data\map\markers\nato\n_armor.paa", "\A3\ui_f\data\map\markers\nato\o_armor.paa"]};
+	if (_type in ["b_unknown", "o_unknown"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_inf.paa", "\A3\ui_f\data\map\markers\nato\n_inf.paa", "\A3\ui_f\data\map\markers\nato\o_inf.paa", "\A3\ui_f\data\map\markers\nato\b_recon.paa", "\A3\ui_f\data\map\markers\nato\n_recon.paa", "\A3\ui_f\data\map\markers\nato\o_recon.paa", "\A3\ui_f\data\map\markers\nato\b_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\n_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\o_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\b_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\n_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\o_mech_inf.paa"]};		
 	
 	private _groupsAndWeights = [_factions, _icons] call HEX_SRV_FNC_GROUPS;
 	private _weights = [];
@@ -84,6 +87,14 @@ HEX_OBJECTIVES_EAST = [];
 	_group setVariable ["HEX_ICON", _type, true];
 	_group setVariable ["HEX_ID", [_row, _col, 1], true];
 	
+	if (_type == "b_hq") then {
+		HEX_OFFICER_WEST = (units _group) select 0;
+	};
+	
+	if (_type == "o_hq") then {
+		HEX_OFFICER_EAST = (units _group) select 0;
+	};	
+	
 	/// remove unit from pool
 }forEach HEX_STRATEGIC;
 
@@ -91,30 +102,16 @@ HEX_OBJECTIVES_EAST = [];
 
 private _testWest = west call HEX_LOC_FNC_GROUPS;
 {
-	private _rand = ceil random 2;
-
-	private _obj = HEX_OBJECTIVES_WEST select floor random count HEX_OBJECTIVES_WEST;
-
-	if (_rand == 2) then {
-		_obj = HEX_OBJECTIVES_EAST select floor random count HEX_OBJECTIVES_EAST;
-	};
-	
+	private _obj = HEX_OBJECTIVES_NEUT select floor random count HEX_OBJECTIVES_NEUT;
 	private _pos = _obj select 2;
-	private _wp = _x addWaypoint [_pos, HEX_SIZE / 3];
+	private _wp = _x addWaypoint [_pos, HEX_SIZE];
 }forEach _testWest;
 
 private _testEast = east call HEX_LOC_FNC_GROUPS;
 {
-	private _rand = ceil random 2;
-
-	private _obj = HEX_OBJECTIVES_EAST select floor random count HEX_OBJECTIVES_EAST;
-
-	if (_rand == 2) then {
-		_obj = HEX_OBJECTIVES_WEST select floor random count HEX_OBJECTIVES_WEST;
-	};
-	
+	private _obj = HEX_OBJECTIVES_NEUT select floor random count HEX_OBJECTIVES_NEUT;
 	private _pos = _obj select 2;
-	private _wp = _x addWaypoint [_pos, HEX_SIZE / 3];
+	private _wp = _x addWaypoint [_pos, HEX_SIZE];
 }forEach _testEast;
 
 {
@@ -122,37 +119,7 @@ private _testEast = east call HEX_LOC_FNC_GROUPS;
 	if (side _unit == west && HEX_SINGLEPLAYER) then {addSwitchableUnit _unit};
 }forEach AllUnits;
 
-{
-	private _row = _x select 0;
-	private _col = _x select 1;
-	private _pos = _x select 2;
-	private _name = format ["HEX_OBJ_%1_%2", _row, _col];
-	private _marker = createMarker [_name, _pos];
-	_marker setMarkerShape "ELLIPSE";
-	_marker setMarkerColor "ColorBLUFOR";
-	_marker setMarkerSize [HEX_SIZE / 3, HEX_SIZE / 3];
-} forEach HEX_OBJECTIVES_WEST;
-
-{
-	private _row = _x select 0;
-	private _col = _x select 1;
-	private _pos = _x select 2;
-	private _name = format ["HEX_OBJ_%1_%2", _row, _col];
-	private _marker = createMarker [_name, _pos];
-	_marker setMarkerShape "ELLIPSE";
-	_marker setMarkerColor "ColorOPFOR";
-	_marker setMarkerSize [HEX_SIZE / 3, HEX_SIZE / 3];
-} forEach HEX_OBJECTIVES_EAST;
-
-/// Spawn Capture points on server (name after counter)
-/// TODO: CAPTURE points
-/// PRIMARY CAPTURE POINT / SPAWN = 1/2 radius of HEX_SIZE - at centre
-/// SECONDARY CAPTURE POINT(S) = 1/4 radius of HEX_SIZE - on location(s) in HEX_SIZE radius from centre
-
 /// Start 1h counter, call debriefing after
-/// if all groups killed / all points captured:
-/// stop counter short of time
-
 HEX_PHASE = "TACTICAL";
 publicVariable "HEX_PHASE";
 
@@ -161,3 +128,76 @@ remoteExec ["HEX_LOC_FNC_CLOSEBRIEFING", 2, false];
 
 /// Open Slotting menu locally with JIP
 remoteExec ["HEX_LOC_FNC_SLOTTING", 0, true];
+
+private _martaGRP = createGroup sideLogic;
+private _marta = "MartaManager" createUnit [
+	[0, 0, 0],
+	_martaGRP,
+	"setGroupIconsVisible [true, false];"
+];
+
+HEX_REQ_WEST synchronizeObjectsAdd [HEX_OFFICER_WEST];
+private _westGroups = west call HEX_LOC_FNC_GROUPS;
+private _drones = false;
+
+{
+	private _group = _x;
+	private _icon = _group getVariable "HEX_ICON";
+	private _leader = [vehicle leader _group];
+	
+	switch (_icon) do {
+
+		case "b_mortar": {HEX_ART_WEST synchronizeObjectsAdd _leader};	
+		case "b_art": {HEX_ART_WEST synchronizeObjectsAdd _leader};
+		case "b_antiair": {HEX_OFFICER_WEST hcSetGroup [_group]};
+		case "b_air": {HEX_HAT_WEST synchronizeObjectsAdd _leader; HEX_TRA_WEST synchronizeObjectsAdd _leader; HEX_SUP_WEST synchronizeObjectsAdd _leader;};
+		case "b_plane": {HEX_CAS_WEST synchronizeObjectsAdd _leader};
+		case "b_uav": {_drones = true};
+		case "b_support": {HEX_OFFICER_WEST hcSetGroup [_group]};
+		case "b_unknown": {HEX_OFFICER_WEST hcSetGroup [_group]};
+		case "b_inf": {HEX_OFFICER_WEST hcSetGroup [_group]};
+		case "b_recon": {HEX_OFFICER_WEST hcSetGroup [_group]};
+		case "b_motor_inf": {HEX_OFFICER_WEST hcSetGroup [_group]};
+		case "b_mech_inf": {HEX_OFFICER_WEST hcSetGroup [_group]};
+		case "b_armor": {HEX_OFFICER_WEST hcSetGroup [_group]};
+	};
+}forEach _westGroups;
+
+if (_drones) then {
+	HEX_OFFICER_WEST setUnitLoadout "B_soldier_UAV_F";
+	removeBackpack HEX_OFFICER_WEST;
+	};
+HEX_BUNKER_WEST setpos (getPos HEX_OFFICER_WEST);
+
+HEX_REQ_EAST synchronizeObjectsAdd [HEX_OFFICER_EAST];
+private _eastGroups = east call HEX_LOC_FNC_GROUPS;
+private _drones = false;
+
+{
+	private _group = _x;
+	private _icon = _group getVariable "HEX_ICON";
+	private _leader = [vehicle leader _group];
+	
+	switch (_icon) do {
+
+		case "o_mortar": {HEX_ART_EAST synchronizeObjectsAdd _leader};	
+		case "o_art": {HEX_ART_EAST synchronizeObjectsAdd _leader};
+		case "o_antiair": {HEX_OFFICER_EAST hcSetGroup [_group]};
+		case "o_air": {HEX_HAT_EAST synchronizeObjectsAdd _leader; HEX_TRA_EAST synchronizeObjectsAdd _leader; HEX_SUP_EAST synchronizeObjectsAdd _leader;};
+		case "o_plane": {HEX_CAS_EAST synchronizeObjectsAdd _leader};
+		case "o_uav": {_drones = true};
+		case "o_support": {HEX_OFFICER_EAST hcSetGroup [_group]};
+		case "o_unknown": {HEX_OFFICER_EAST hcSetGroup [_group]};
+		case "o_inf": {HEX_OFFICER_EAST hcSetGroup [_group]};
+		case "o_recon": {HEX_OFFICER_EAST hcSetGroup [_group]};
+		case "o_motor_inf": {HEX_OFFICER_EAST hcSetGroup [_group]};
+		case "o_mech_inf": {HEX_OFFICER_EAST hcSetGroup [_group]};
+		case "o_armor": {HEX_OFFICER_EAST hcSetGroup [_group]};
+	};
+}forEach _eastGroups;
+
+if (_drones) then {
+	HEX_OFFICER_EAST setUnitLoadout "O_soldier_UAV_F";
+	removeBackpack HEX_OFFICER_EAST;
+	};
+HEX_BUNKER_EAST setpos (getPos HEX_OFFICER_EAST);

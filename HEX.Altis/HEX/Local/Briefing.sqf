@@ -53,11 +53,14 @@ openmap false;
 				private _icon = "\A3\ui_f\data\map\markers\nato\" + _type + ".paa";
 				private _text = "Infantry Coy";
 				switch (_type select [2]) do {
-					case "hq": {_text = "Bgt Headquarters"};
+					case "hq": {_text = "BDE Headquarters"};
+					case "unknown": {_text = "Mixed Coy"};
 					case "art": {_text = "Artillery Bty"};
-					case "support": {_text = "Support Coy"};
-					case "air": {_text = "Helicopter Sqd"};
-					case "plane": {_text = "Plane Sqd"};
+					case "mortar": {_text = "Mortar Bty"};
+					case "support": {_text = "Support Plt"};
+					case "air": {_text = "Helicopter Flt"};
+					case "plane": {_text = "Plane Flt"};
+					case "uav": {_text = "Drone Flt"};
 					case "antiair": {_text = "Anti-Air Bty"};
 					case "recon": {_text = "Recon Coy"};
 					case "motor_inf": {_text = "Motorized Coy"};
@@ -94,11 +97,13 @@ openmap false;
 				private _icon = "\A3\ui_f\data\map\markers\nato\" + _type + ".paa";
 				private _text = "Reserve";
 				switch (_type select [2]) do {
-					case "hq": {_text = "Bgt Headquarters"};
+					case "hq": {_text = "BDE Headquarters"};
+					case "mortar": {_text = "Mortar Bty"};
 					case "art": {_text = "Artillery Bty"};
-					case "support": {_text = "Support Coy"};
-					case "air": {_text = "Helicopter Sqd"};
-					case "plane": {_text = "Plane Sqd"};
+					case "support": {_text = "Support Plt"};
+					case "air": {_text = "Helicopter Flt"};
+					case "plane": {_text = "Plane Flt"};
+					case "uav": {_text = "Drone Flt"};
 					case "antiair": {_text = "Anti-Air Bty"};
 				};
 				

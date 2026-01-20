@@ -43,3 +43,9 @@ HEX_GLO_FNC_FILL = {
 
 /// Find path between hexes
 HEX_GLO_FNC_PATH = {};
+
+HEX_GLO_FNC_DELETEMARKERS = {
+	{
+	
+	}forEach HEX_GRID;
+};

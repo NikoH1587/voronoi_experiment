@@ -76,10 +76,12 @@ HEX_ADM_FNC_VEHICLES = {
 	private _faction = _this;
 
 	private _support = false;
+	private _mortar = false;
 	private _arty = false;
 	private _antiair = false;
 	private _helo = false;
 	private _plane = false;
+	private _drone = false;
 	
 	/// Scan throught cfgVehicles
 	{
@@ -87,30 +89,39 @@ HEX_ADM_FNC_VEHICLES = {
 		private _fac = getText (_x >> "faction");
 		private _sco = getNumber (_x >> "scope");
 		private _cls = getText (_x >> "vehicleClass");
-		if (_sco == 2 && _fac == _faction && _cls != "Autonomous") then {
+		if (_sco == 2 && _fac == _faction) then {
 			private _amo = getNumber (_veh >> "transportAmmo");
 			private _plo = getNumber (_veh >> "transportFuel");
 			private _rep = getNumber (_veh >> "transportRepair");
-			private _sup = _amo + _plo + _rep;
 			private _art = getNumber (_veh >> "artilleryScanner");
+			private _sup = _amo + _plo + _rep;
+			private _med = getNumber (_veh >> "attendant");
+			private _eng = getNumber (_veh >> "engineer");
+			private _sup2 = _med + _eng;
 			private _sim = toLower getText (_veh >> "simulation");
 			private _cat = getText (_veh >> "editorSubcategory");
+			private _dsp = getText (_veh >> "displayName");
+			private _drv = getNumber (_veh >> "hasDriver");
+			private _cls = getText (_veh >> "vehicleClass");
 			
+			if (_art > 0 && _drv == 0 && _cls != "Autonomous") then {_mortar = true};
+			if (_art > 0 && _drv == 1) then {_arty = true};
+			if (_cat == "EdSubcat_AAs") then {_antiair = true};			
 			if (_sup > 0) then {_support = true};
-			if (_art > 0) then {_arty = true};
-			if (_cat == "EdSubcat_AAs") then {_antiair = true};
-			if (_sim == "helicopterrtd" or _sim == "helicopterx") then {_helo = true};
-			if (_sim == "airplanex" or _sim == "airplane") then {_plane = true};
+			if (_sup == 0 && _sup2 == 0 && (_sim == "helicopterrtd" or _sim == "helicopterx") && _cls != "Autonomous") then {_helo = true};
+			if (_sup == 0 && _sup2 == 0 && (_sim == "airplanex" or _sim == "airplane") && _cls != "Autonomous") then {_plane = true};
+			if (_sup == 0 && _sup2 == 0 && (_sim == "airplanex" or _sim == "airplane" or _sim == "helicopterrtd" or _sim == "helicopterx") && _cls == "Autonomous") then {_drone = true};
 		};
 	} forEach ("true" configClasses (configFile >> "CfgVehicles"));
 
 	/// return array
-	[_support, _arty, _antiair, _helo, _plane]
+	[_support, _mortar, _arty, _antiair, _helo, _plane, _drone]
 };
 
 HEX_ADM_FNC_GROUPS = {
 	private _faction = _this;
 	private _groups = [];
+	private _unk = false;
 	private _inf = false;
 	private _rec = false;
 	private _mot = false;
@@ -122,7 +133,7 @@ HEX_ADM_FNC_GROUPS = {
 	private _motIco = ["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\n_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\o_motor_inf.paa"];
 	private _mecIco = ["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\n_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\o_mech_inf.paa"];
 	private _armIco = ["\A3\ui_f\data\map\markers\nato\b_armor.paa", "\A3\ui_f\data\map\markers\nato\n_armor.paa", "\A3\ui_f\data\map\markers\nato\o_armor.paa"];
-	
+	private _unkIco = _infIco + _recIco + _motIco + _mecIco + _armIco;
 	/// Go throught entire cfgGroups and find groups matching icons and faction
 	{
 		private _facs = "true" configClasses _x;
@@ -135,6 +146,7 @@ HEX_ADM_FNC_GROUPS = {
 					private _ico = getText (_x >> "icon");
 					
 					if (_fac == _faction) then {
+						if (_ico in _unkIco) then {_unk = true};
 						if (_ico in _infIco) then {_inf = true};
 						if (_ico in _recIco) then {_rec = true};
 						if (_ico in _motIco) then {_mot = true};
@@ -147,7 +159,7 @@ HEX_ADM_FNC_GROUPS = {
 	}forEach [(configFile >> "CfgGroups" >> "West"), (configFile >> "CfgGroups" >> "East"), (configFile >> "CfgGroups" >> "Indep")];
 	
 	/// return array
-	[_inf, _rec, _mot, _mec, _arm]
+	[_unk, _inf, _rec, _mot, _mec, _arm]
 };
 
 HEX_ADM_FNC_FACWEST = {
@@ -167,17 +179,22 @@ HEX_ADM_FNC_FACWEST = {
 	lbClear _selWest;
 	HEX_CFG_WEST = ["b_hq"];
 	
-	if (_vehicles select 0) then {HEX_ADM_CFG_WEST pushBack ["Support Comapny", "b_support"]};
-	if (_vehicles select 1) then {HEX_ADM_CFG_WEST pushBack ["Artillery Battery", "b_art"]};
-	if (_vehicles select 2) then {HEX_ADM_CFG_WEST pushBack ["Anti-Air Battery", "b_antiair"]};
-	if (_vehicles select 3) then {HEX_ADM_CFG_WEST pushBack ["Plane Squadron", "b_plane"]};
-	if (_vehicles select 4) then {HEX_ADM_CFG_WEST pushBack ["Helicopter Squadron", "b_air"]};
-	
-	if (_groups select 0) then {HEX_ADM_CFG_WEST pushBack ["Infantry Company", "b_inf"]};
-	if (_groups select 1) then {HEX_ADM_CFG_WEST pushBack ["Recon Company", "b_recon"]};
-	if (_groups select 2) then {HEX_ADM_CFG_WEST pushBack ["Motorized Company", "b_motor_inf"]};
-	if (_groups select 3) then {HEX_ADM_CFG_WEST pushBack ["Mechanized Company", "b_mech_inf"]};
-	if (_groups select 4) then {HEX_ADM_CFG_WEST pushBack ["Armor Company", "b_armor"]};
+	/// [_support, _mortar, _arty, _antiair, _helo, _plane, _drone]
+	if (_vehicles select 0) then {HEX_ADM_CFG_WEST pushBack ["Support Platoon", "b_support"]};
+	if (_vehicles select 1) then {HEX_ADM_CFG_WEST pushBack ["Mortar Battery", "b_mortar"]};
+	if (_vehicles select 2) then {HEX_ADM_CFG_WEST pushBack ["Artillery Battery", "b_art"]};
+	if (_vehicles select 3) then {HEX_ADM_CFG_WEST pushBack ["Anti-Air Battery", "b_antiair"]};
+	if (_vehicles select 4) then {HEX_ADM_CFG_WEST pushBack ["Helicopter Flight", "b_air"]};
+	if (_vehicles select 5) then {HEX_ADM_CFG_WEST pushBack ["Plane Flight", "b_plane"]};
+	if (_vehicles select 5) then {HEX_ADM_CFG_WEST pushBack ["Drone Flight", "b_uav"]};
+
+	/// [_unk, _inf, _rec, _mot, _mec, _arm]
+	if (_groups select 0) then {HEX_ADM_CFG_WEST pushBack ["Mixed Company", "b_unknown"]};	
+	if (_groups select 1) then {HEX_ADM_CFG_WEST pushBack ["Infantry Company", "b_inf"]};
+	if (_groups select 2) then {HEX_ADM_CFG_WEST pushBack ["Recon Company", "b_recon"]};
+	if (_groups select 3) then {HEX_ADM_CFG_WEST pushBack ["Motorized Company", "b_motor_inf"]};
+	if (_groups select 4) then {HEX_ADM_CFG_WEST pushBack ["Mechanized Company", "b_mech_inf"]};
+	if (_groups select 5) then {HEX_ADM_CFG_WEST pushBack ["Armor Company", "b_armor"]};
 	
 	{
 		private _added = _listWest lbAdd (_x select 0);
@@ -209,17 +226,22 @@ HEX_ADM_FNC_FACEAST = {
 	lbClear _selEast;
 	HEX_CFG_EAST = ["o_hq"];
 	
-	if (_vehicles select 0) then {HEX_ADM_CFG_EAST pushBack ["Support Company", "o_support"]};
-	if (_vehicles select 1) then {HEX_ADM_CFG_EAST pushBack ["Artillery Battery", "o_art"]};
-	if (_vehicles select 2) then {HEX_ADM_CFG_EAST pushBack ["Anti-Air Battery", "o_antiair"]};
-	if (_vehicles select 3) then {HEX_ADM_CFG_EAST pushBack ["Plane Squadron", "o_plane"]};
-	if (_vehicles select 4) then {HEX_ADM_CFG_EAST pushBack ["Helicopter Squadron", "o_air"]};
-	
-	if (_groups select 0) then {HEX_ADM_CFG_EAST pushBack ["Infantry Company", "o_inf"]};
-	if (_groups select 1) then {HEX_ADM_CFG_EAST pushBack ["Recon Company", "o_recon"]};
-	if (_groups select 2) then {HEX_ADM_CFG_EAST pushBack ["Motorized Company", "o_motor_inf"]};
-	if (_groups select 3) then {HEX_ADM_CFG_EAST pushBack ["Mechanized Company", "o_mech_inf"]};
-	if (_groups select 4) then {HEX_ADM_CFG_EAST pushBack ["Armor Company", "o_armor"]};
+	/// [_support, _mortar, _arty, _antiair, _helo, _plane, _drone]
+	if (_vehicles select 0) then {HEX_ADM_CFG_EAST pushBack ["Support Platoon", "o_support"]};
+	if (_vehicles select 1) then {HEX_ADM_CFG_EAST pushBack ["Mortar Battery", "o_mortar"]};
+	if (_vehicles select 2) then {HEX_ADM_CFG_EAST pushBack ["Artillery Battery", "o_art"]};
+	if (_vehicles select 3) then {HEX_ADM_CFG_EAST pushBack ["Anti-Air Battery", "o_antiair"]};
+	if (_vehicles select 4) then {HEX_ADM_CFG_EAST pushBack ["Helicopter Flight", "o_air"]};
+	if (_vehicles select 5) then {HEX_ADM_CFG_EAST pushBack ["Plane Flight", "o_plane"]};
+	if (_vehicles select 5) then {HEX_ADM_CFG_EAST pushBack ["Drone Flight", "o_uav"]};
+
+	/// [_unk, _inf, _rec, _mot, _mec, _arm]
+	if (_groups select 1) then {HEX_ADM_CFG_EAST pushBack ["Mixed Company", "o_unknown"]};	
+	if (_groups select 1) then {HEX_ADM_CFG_EAST pushBack ["Infantry Company", "o_inf"]};
+	if (_groups select 2) then {HEX_ADM_CFG_EAST pushBack ["Recon Company", "o_recon"]};
+	if (_groups select 3) then {HEX_ADM_CFG_EAST pushBack ["Motorized Company", "o_motor_inf"]};
+	if (_groups select 4) then {HEX_ADM_CFG_EAST pushBack ["Mechanized Company", "o_mech_inf"]};
+	if (_groups select 5) then {HEX_ADM_CFG_EAST pushBack ["Armor Company", "o_armor"]};
 	
 	{
 		private _added = _listEast lbAdd (_x select 0);
@@ -315,11 +337,6 @@ HEX_ADM_FNC_START = {
 	publicVariable "HEX_EAST";
 	publicVariable "HEX_CFG_WEST";
 	publicVariable "HEX_CFG_EAST";
-	
-	HEX_PLTW = 4; /// 3x respawns (Total 12 groups)
-	HEX_PLTE = 3; /// 4x respawns (Total 12 groups)
-	publicVariable "HEX_PLTW";
-	publicVariable "HEX_PLTE";
 	
 	publicVariable "HEX_FULLMAP";
 	publicVariable "HEX_SIZE";

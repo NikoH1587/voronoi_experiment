@@ -26,6 +26,18 @@ HEX_SRV_FNC_GRID = {
 	}forEach HEX_GRID;
 };
 
+HEX_SRV_FNC_GRIDDELETE = {
+	private _grid = HEX_GRID;
+	
+	private _grid = _grid - HEX_TACTICAL;
+	{
+		private _row = _x select 0;
+		private _col = _x select 1;
+		private _name = format ["HEX_%1_%2", _row, _col];
+		deleteMarker _name;
+	}forEach _grid;
+};
+
 /// Moves one hex into another on server
 HEX_SRV_FNC_MOVE = {
 	private _org = _this select 0;
@@ -68,12 +80,15 @@ HEX_SRV_FNC_ZOCO = {
 		private _sid = _x select 4;
 		private _act = _x select 5;
 		private _org = _x select 6;
+		private _map = _x select 7;
 	
 		private _near = _hex call HEX_GLO_FNC_NEAR;
 		private _sides = [_sid];
 		{
 			_sides pushback (_x select 4);
 		}forEach _near;
+	
+		if (_sid == resistance) then {_sid = civilian};
 	
 		private _color = "colorBLACK";
 		if (west in _sides) then {_color = "colorBLUFOR"};
@@ -84,7 +99,7 @@ HEX_SRV_FNC_ZOCO = {
 			_sid = resistance;
 		};
 	
-		private _newHEX = [_row, _col, _pos, _cfg, _sid, _act, _org];
+		private _newHEX = [_row, _col, _pos, _cfg, _sid, _act, _org, _map];
 		HEX_GRID set [_forEachIndex, _newhex];
 	
 		private _marker = format ["HEX_%1_%2", _row, _col];
@@ -112,7 +127,7 @@ HEX_SRV_FNC_GROUPS = {
 	private _icons = _this select 1;
 	
 	/// blacklist diver squads
-	private _blacklist = ["Diver Team", "Diver Team (Boat)", "Diver Team (SDV)", "Mechanized Air-defense Squad", "Mechanized Support Squad", "Motorized Air-defense Team", "Motorized GMG Team", "Motorized HMG Team", "Motorized Mortar Team", "AWC Air-Defense Platoon", "AWC Platoon (Combined)", "AWC Air-Defense Section", "AWC Recon Section"];
+	private _blacklist = ["Recon UAV Team", "Attack UAV Team", "Diver Team", "Diver Team (Boat)", "Diver Team (SDV)", "Mechanized Air-defense Squad", "Mechanized Support Squad", "Motorized Air-defense Team", "Motorized GMG Team", "Motorized HMG Team", "Motorized Mortar Team", "AWC Air-Defense Platoon", "AWC Platoon (Combined)", "AWC Air-Defense Section", "AWC Recon Section"];
 	
 	/// Go throught entire cfgGroups and find groups matching icons and faction
 	private _groups = [];
@@ -166,39 +181,46 @@ HEX_SRV_FNC_VEHICLES = {
 	private _repair = [];
 	private _refuel = [];
 	
-	private _typ = 0;
-	if (_type in ["b_art", "o_art"]) then {_typ = 1};
-	if (_type in ["b_support", "o_support"]) then {_typ = 2};
-	if (_type in ["b_antiair", "o_antiair"]) then {_typ = 3};
-	if (_type in ["b_air", "o_air"]) then {_typ = 4};
-	if (_type in ["b_plane", "o_plane"]) then {_typ = 5};
+	private _typ = "hq";
+	if (_type in ["b_support", "o_support"]) then {_typ = "support"};
+	if (_type in ["b_mortar", "o_mortar"]) then {_typ = "mortar"};
+	if (_type in ["b_art", "o_art"]) then {_typ = "art"};
+	if (_type in ["b_antiair", "o_antiair"]) then {_typ = "antiair"};
+	if (_type in ["b_air", "o_air"]) then {_typ = "air"};
+	if (_type in ["b_plane", "o_plane"]) then {_typ = "plane"};
+	if (_type in ["b_uav", "o_uav"]) then {_typ = "uav"};
 	
 	/// Scan throught cfgVehicles
 	{
 		private _veh = _x;
 		private _fac = getText (_x >> "faction");
 		private _sco = getNumber (_x >> "scope");
-		private _cls = getText (_x >> "vehicleClass");
-		private _drv = getNumber (_x >> "hasDriver");
 		private _cfg = configName _x;
 
-		if (_sco == 2 && _fac in _factions && _cls != "Autonomous" && _drv == 1) then {
+		if (_sco == 2 && _fac in _factions) then {
 			private _amo = getNumber (_veh >> "transportAmmo");
 			private _plo = getNumber (_veh >> "transportFuel");
 			private _rep = getNumber (_veh >> "transportRepair");
 			private _art = getNumber (_veh >> "artilleryScanner");
 			private _sup = _amo + _plo + _rep;
+			private _med = getNumber (_veh >> "attendant");
+			private _eng = getNumber (_veh >> "engineer");
+			private _sup2 = _med + _eng;
 			private _sim = toLower getText (_veh >> "simulation");
 			private _cat = getText (_veh >> "editorSubcategory");
 			private _dsp = getText (_veh >> "displayName");
+			private _drv = getNumber (_veh >> "hasDriver");
+			private _cls = getText (_veh >> "vehicleClass");
 
 			if (_sim == "soldier") then {_men pushback _cfg};
-			if (_typ == 0 && _dsp == "Officer") then {_configs pushback _cfg};	
-			if (_typ == 1 && _art > 0) then {_configs pushback _cfg};			
-			if (_typ == 2 && _sup > 0) then {_configs pushback _cfg};
-			if (_typ == 3 && _cat == "EdSubcat_AAs") then {_configs pushback _cfg};
-			if (_typ == 4 && _sup == 0 && _sim == "helicopterrtd" or _sim == "helicopterx") then {_configs pushback _cfg};
-			if (_typ == 5 && _sim == "airplanex" or _sim == "airplane") then {_configs pushback _cfg};
+			if (_typ == "hq" && _dsp == "Officer") then {_configs pushback _cfg};	
+			if (_typ == "mortar" && _art > 0 && _drv == 0 && _cls != "Autonomous") then {_configs pushback _cfg};
+			if (_typ == "art" && _art > 0 && _drv == 1) then {_configs pushback _cfg};
+			if (_typ == "antiair" && _cat == "EdSubcat_AAs") then {_configs pushback _cfg};			
+			if (_typ == "support" && _sup > 0) then {_configs pushback _cfg};
+			if (_typ == "air" && _sup == 0 && _sup2 == 0 && (_sim == "helicopterrtd" or _sim == "helicopterx") && _cls != "Autonomous") then {_configs pushback _cfg};
+			if (_typ == "plane" && _sup == 0 && _sup2 == 0 && (_sim == "airplanex" or _sim == "airplane") && _cls != "Autonomous") then {_configs pushback _cfg};
+			if (_typ == "uav" && _sup == 0 && _sup2 == 0 && (_sim == "airplanex" or _sim == "airplane" or _sim == "helicopterrtd" or _sim == "helicopterx") && _cls == "Autonomous") then {_configs pushback _cfg};
 		};
 	} forEach ("true" configClasses (configFile >> "CfgVehicles"));
 
@@ -235,7 +257,7 @@ HEX_FNC_SRV_SPAWNGROUP = {
 	
 	/// Limit excessive groups
 	_infantry deleteRange [12, 20];
-	_vehicles deleteRange [3, 6];
+	_vehicles deleteRange [2, 6];
 	
 	{
 		(_x select 1) createUnit [_pos, _group, "", 1, (_x select 0)];	
@@ -269,7 +291,7 @@ HEX_FNC_SRV_SPAWNVEHICLE = {
 	private _side = _this select 1;
 	private _config = _this select 2;
 
-	private _pos = [_pos, 0, HEX_SIZE / 2, 5, 0, 0, 0, [], _pos] call BIS_fnc_findSafePos;
+	private _pos = [_hexpos, 0, HEX_SIZE / 2, 5, 0, 0, 0, [], _hexpos] call BIS_fnc_findSafePos;
 	private _spawned = [_pos, 0, _config, _side] call BIS_fnc_spawnVehicle;	
 	private _crew = _spawned select 1;
 	private _group = _spawned select 2;

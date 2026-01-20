@@ -32,8 +32,8 @@ private _strategic = [];
 	private _org = _x select 6;
 	
 	private _isStrat = false;
-	if (_cfg in ["b_hq", "b_art", "b_support", "b_air", "b_plane", "b_antiair"]) then {_isStrat = true};
-	if (_cfg in ["o_hq", "o_art", "o_support", "o_air", "o_plane", "o_antiair"]) then {_isStrat = true};
+	if (_cfg in ["b_hq", "b_support", "b_mortar", "b_art", "b_antiair", "b_air", "b_plane", "b_uav"]) then {_isStrat = true};
+	if (_cfg in ["o_hq", "o_support", "o_mortar", "o_art", "o_antiair", "o_air", "o_plane", "o_uav"]) then {_isStrat = true};
 	
 	private _near = _hex call HEX_GLO_FNC_NEAR;
 	if (_isStrat) then {
@@ -88,9 +88,12 @@ if (count _tactical > 0) then {
 	
 		private _act = 0;
 		if (HEX_TURN == _sid) then {
-			if (_cfg in ["b_inf", "b_hq", "b_art", "o_inf", "o_hq", "o_art"]) then {_act = 1};
-			if (_cfg in ["b_mech_inf", "b_armor", "o_mech_inf", "o_armor", "b_antiair", "o_antiair"]) then {_act = 2};
-			if (_cfg in ["b_motor_inf", "b_recon", "o_motor_inf", "o_recon", "b_support", "o_support"]) then {_act = 3};
+				if (_cfg in ["b_hq", "b_inf", "b_unknown", "b_mortar"]) then {_act = 1};
+				if (_cfg in ["b_mech_inf", "b_armor", "b_antiair", "b_art", "b_antiair", "b_support"]) then {_act = 2};
+				if (_cfg in ["b_motor_inf", "b_recon"]) then {_act = 3};
+				if (_cfg in ["o_hq", "o_inf", "o_unknown", "o_mortar"]) then {_act = 1};
+				if (_cfg in ["o_mech_inf", "o_armor", "o_antiair", "o_art", "o_antiair", "o_support"]) then {_act = 2};
+				if (_cfg in ["o_motor_inf", "o_recon"]) then {_act = 3};
 			_hex set [5, _act];
 			HEX_GRID set [_index, _hex];
 		};

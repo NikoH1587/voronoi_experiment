@@ -62,13 +62,22 @@ HEX_LOC_FNC_COTE = {
 			private _orgText = "I";
 
 			if (_org > 4) then {_orgtext = "II"};		
-			if (_org > 8) then {_orgtext = "III"};
+			if (_org > 6) then {_orgtext = "III"};
 
 			if (_act == 0) then {_marker setMarkerTextLocal (_orgtext)};
 			if (_act == 1) then {_marker setMarkerTextLocal (_orgtext + " >")};
 			if (_act == 2) then {_marker setMarkerTextLocal (_orgtext + " >>")};
 			if (_act == 3) then {_marker setMarkerTextLocal (_orgtext + " >>>")};
 			};
+	}forEach HEX_GRID;
+};
+
+HEX_LOC_FNC_COTEDELETE = {
+	{
+		private _row = _x select 0;
+		private _col = _x select 1;
+		private _name = format ["HEX_LOC_%1_%2", _row, _col];
+		deleteMarkerLocal _name;
 	}forEach HEX_GRID;
 };
 

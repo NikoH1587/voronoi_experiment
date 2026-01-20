@@ -41,12 +41,10 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 {
 	private _counter = _x;
 	private _act = 0;
-	if (_x in ["b_inf", "b_hq", "b_art"]) then {_act = 1};
-	if (_x in ["b_mech_inf", "b_armor", "b_antiair"]) then {_act = 2};
-	if (_x in ["b_motor_inf", "b_recon", "b_support"]) then {_act = 3};
+	if (_x in ["b_hq", "b_inf", "b_unknown", "b_mortar"]) then {_act = 1};
+	if (_x in ["b_mech_inf", "b_armor", "b_antiair", "b_art", "b_antiair", "b_support"]) then {_act = 2};
+	if (_x in ["b_motor_inf", "b_recon"]) then {_act = 3};
 	
-	private _org = 12;
-	if (_x in ["b_hq", "b_antiair", "b_support", "b_hq", "b_art", "b_air", "b_plane"]) then {_org = 3};
 	private _sorted = [
 		HEX_GRID, 
 		[], 
@@ -68,18 +66,15 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 	_hex set [3, _counter];
 	_hex set [4, west];
 	_hex set [5, _act];
-	_hex set [6, _org];
+	_hex set [6, 9];
 }forEach HEX_CFG_WEST;
 
 {
 	private _counter = _x;
 	private _act = 0;
-	if (_x in ["o_inf", "o_hq", "o_art"]) then {_act = 1};
-	if (_x in ["o_mech_inf", "o_armor", "o_antiair"]) then {_act = 2};
-	if (_x in ["o_motor_inf", "o_recon", "o_support"]) then {_act = 3};
-	
-	private _org = 12;
-	if (_x in ["o_hq", "o_antiair", "o_support", "o_hq", "o_art", "o_air", "o_plane"]) then {_org = 3};
+	if (_x in ["o_hq", "o_inf", "o_unknown", "o_mortar"]) then {_act = 1};
+	if (_x in ["o_mech_inf", "o_armor", "o_antiair", "o_art", "o_antiair", "o_support"]) then {_act = 2};
+	if (_x in ["o_motor_inf", "o_recon"]) then {_act = 3};
 	
 	private _sorted = [
 		HEX_GRID, 
@@ -102,7 +97,7 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 	_hex set [3, _counter];
 	_hex set [4, east];
 	_hex set [5, _act];
-	_hex set [6, _org];
+	_hex set [6, 9];
 }forEach HEX_CFG_EAST;
 
 /// Randomize Weather

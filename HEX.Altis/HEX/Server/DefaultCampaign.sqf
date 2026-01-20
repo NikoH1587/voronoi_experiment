@@ -7,16 +7,14 @@ HEX_DAY = 0;
 HEX_TURN = [west, east] select floor random 2;
 HEX_WEST = "BLU_F";
 HEX_EAST = "OPF_F";
-HEX_PLTW = 4; /// 3x respawns (Total 12 groups)
-HEX_PLTE = 3; /// 4x respawns (Total 12 groups)
 HEX_FULLMAP = false;
 
 /// Create random west counters
 /// 3 battallion per side (3x + 3x + 3x inf) + 3 supports
 
 /// BLUFOR
-private _allAux = ["b_art", "b_air", "b_plane", "b_antiair"];
-private _allPri = ["b_inf", "b_recon", "b_motor_inf", "b_mech_inf", "b_armor"];
+private _allAux = ["b_mortar", "b_art", "b_antiair", "b_air", "b_plane", "b_uav"];
+private _allPri = ["b_unknown", "b_inf", "b_recon", "b_motor_inf", "b_mech_inf", "b_armor"];
 
 private _aux1 = _allAux select floor random count _allAux;
 _allAux = _allAux - [_aux1];
@@ -31,8 +29,8 @@ private _pri2 = _allPri select floor random count _allPri;
 HEX_CFG_WEST = ["b_hq", "b_support", _aux1, _aux2, _pri1, _pri1, _pri1, _pri2, _pri2, _pri2];
 
 /// OPFOR
-private _allAux = ["o_art", "o_air", "o_plane", "o_antiair"];
-private _allPri = ["o_inf", "o_recon", "o_motor_inf", "o_mech_inf", "o_armor"];
+private _allAux = ["o_mortar", "o_art", "o_antiair", "o_air", "o_plane", "o_uav"];
+private _allPri = ["o_unknown", "o_inf", "o_recon", "o_motor_inf", "o_mech_inf", "o_armor"];
 
 private _aux1 = _allAux select floor random count _allAux;
 _allAux = _allAux - [_aux1];

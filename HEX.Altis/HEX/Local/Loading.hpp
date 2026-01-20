@@ -48,7 +48,7 @@ class HEX_LOADING
 	
 		class WestText: RscText
 		{
-			text = "BLUFOR Commander:"
+			text = "BLUFOR Commander:";
 			idc = 1104;
 			colorBackground[] = {0, 0.3, 0.6, 0.5};
 			x = GUI_GRID_CENTER_X + 5 * GUI_GRID_CENTER_W;
@@ -69,7 +69,7 @@ class HEX_LOADING
 	
 		class EastText: RscText
 		{
-			text = "OPFOR Commander:"
+			text = "OPFOR Commander:";
 			idc = 1106;
 			colorBackground[] = {0.5, 0, 0, 0.5};
 			x = GUI_GRID_CENTER_X + 5 * GUI_GRID_CENTER_W;

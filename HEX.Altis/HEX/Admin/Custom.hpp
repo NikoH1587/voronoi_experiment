@@ -19,7 +19,7 @@ class HEX_CUSTOM
 	{		
 		class WestText: RscText
 		{
-			text = "BLUFOR"
+			text = "BLUFOR";
 			idc = -1;
 			colorBackground[] = {0, 0.3, 0.6, 0.5};
 			x = GUI_GRID_CENTER_X + 10 * GUI_GRID_CENTER_W;
@@ -50,7 +50,7 @@ class HEX_CUSTOM
 		
 		class EastText: RscText
 		{
-			text = "OPFOR"
+			text = "OPFOR";
 			idc = -1;
 			colorBackground[] = {0.5, 0, 0, 0.5};
 			x = GUI_GRID_CENTER_X + 20 * GUI_GRID_CENTER_W;
@@ -137,7 +137,7 @@ class HEX_CUSTOM
 		
 		class SizeText: RscText
 		{
-			text = "WHOLE MAP"
+			text = "WHOLE MAP";
 			idc = -1;
 			x = GUI_GRID_CENTER_X + 32 * GUI_GRID_CENTER_W;
 			y = GUI_GRID_CENTER_Y + 20 * GUI_GRID_CENTER_H;
