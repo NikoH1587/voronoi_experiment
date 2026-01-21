@@ -25,7 +25,8 @@ HEX_OBJECTIVES_EAST = [];
 	private _pos = _x select 2;
 	private _type = _x select 3;
 	private _side = _x select 4;
-	private _state = _x select 6;
+	private _count = _x select 6; /// how many groups are stored
+	private _map = _x select 7;
 	
 	private _factions = [HEX_WEST];
 	if (_side == east) then {_factions = [HEX_EAST]};
@@ -33,11 +34,6 @@ HEX_OBJECTIVES_EAST = [];
 	/// add to objectives
 	if (_side == west) then {HEX_OBJECTIVES_WEST pushback _hex};
 	if (_side == east) then {HEX_OBJECTIVES_EAST pushback _hex};
-	
-	/// get platoon size
-	private _size = 3;
-	
-	if (_type in ["b_inf", "o_inf"]) then {_size = 5};
 	
 	private _armor = false;
 	private _icons = ["\A3\ui_f\data\map\markers\nato\b_inf.paa", "\A3\ui_f\data\map\markers\nato\n_inf.paa", "\A3\ui_f\data\map\markers\nato\o_inf.paa"];	
@@ -56,7 +52,14 @@ HEX_OBJECTIVES_EAST = [];
 		_groups pushback (_x select 1);
 	}ForEach _groupsAndWeights;
 	
-	for "_i" from 1 to _size do {
+	private _maxcount = 3;
+	if (_type in ["b_inf", "o_inf"]) then {_maxcount = 5};
+	private _amount = _count min _maxcount;
+	
+	/// remove groups from pool
+	[_hex, _amount] call HEX_SRV_FNC_SUBTRACT;
+	
+	for "_i" from 1 to _amount do {
 		private _select = _groups selectRandomWeighted _weights;
 		private _config = "true" configClasses _select;
 		if (_armor) then {_config = [_config select 0]};
@@ -64,19 +67,21 @@ HEX_OBJECTIVES_EAST = [];
 		private _group = [_pos, _side, _config, _type] call HEX_FNC_SRV_SPAWNGROUP;
 		_group setVariable ["HEX_ICON", _type, true];
 		_group setVariable ["HEX_ID", [_row, _col, _i], true];
+		_group setVariable ["MARTA_customIcon", [_type], true];
 	};
 
-	/// remove groups from pool
 
 }forEach HEX_TACTICAL;
 
 {
+	private _hex = _x;
 	private _row = _x select 0;
 	private _col = _x select 1;
 	private _pos = _x select 2;
 	private _type = _x select 3;
 	private _side = _x select 4;
-	private _count = 1;
+	private _count = _x select 6; /// how many groups are stored
+	private _map = _x select 7;
 	
 	private _factions = [HEX_WEST];
 	if (_side == east) then {_factions = [HEX_EAST]};
@@ -86,6 +91,7 @@ HEX_OBJECTIVES_EAST = [];
 	private _group = [_pos, _side, _select] call HEX_FNC_SRV_SPAWNVEHICLE;
 	_group setVariable ["HEX_ICON", _type, true];
 	_group setVariable ["HEX_ID", [_row, _col, 1], true];
+	_group setVariable ["MARTA_customIcon", [_type], true];
 	
 	if (_type == "b_hq") then {
 		HEX_OFFICER_WEST = (units _group) select 0;
@@ -95,29 +101,9 @@ HEX_OBJECTIVES_EAST = [];
 		HEX_OFFICER_EAST = (units _group) select 0;
 	};	
 	
-	/// remove unit from pool
+	/// remove groups from pool
+	[_hex, 1] call HEX_SRV_FNC_SUBTRACT;
 }forEach HEX_STRATEGIC;
-
-/// performacne testing
-
-private _testWest = west call HEX_LOC_FNC_GROUPS;
-{
-	private _obj = HEX_OBJECTIVES_NEUT select floor random count HEX_OBJECTIVES_NEUT;
-	private _pos = _obj select 2;
-	private _wp = _x addWaypoint [_pos, HEX_SIZE];
-}forEach _testWest;
-
-private _testEast = east call HEX_LOC_FNC_GROUPS;
-{
-	private _obj = HEX_OBJECTIVES_NEUT select floor random count HEX_OBJECTIVES_NEUT;
-	private _pos = _obj select 2;
-	private _wp = _x addWaypoint [_pos, HEX_SIZE];
-}forEach _testEast;
-
-{
-	private _unit = _x;
-	if (side _unit == west && HEX_SINGLEPLAYER) then {addSwitchableUnit _unit};
-}forEach AllUnits;
 
 /// Start 1h counter, call debriefing after
 HEX_PHASE = "TACTICAL";
@@ -164,9 +150,9 @@ private _drones = false;
 }forEach _westGroups;
 
 if (_drones) then {
-	HEX_OFFICER_WEST setUnitLoadout "B_soldier_UAV_F";
-	removeBackpack HEX_OFFICER_WEST;
-	};
+	HEX_OFFICER_WEST linkItem "B_UavTerminal"; 
+};
+
 HEX_BUNKER_WEST setpos (getPos HEX_OFFICER_WEST);
 
 HEX_REQ_EAST synchronizeObjectsAdd [HEX_OFFICER_EAST];
@@ -197,7 +183,5 @@ private _drones = false;
 }forEach _eastGroups;
 
 if (_drones) then {
-	HEX_OFFICER_EAST setUnitLoadout "O_soldier_UAV_F";
-	removeBackpack HEX_OFFICER_EAST;
-	};
-HEX_BUNKER_EAST setpos (getPos HEX_OFFICER_EAST);
+	HEX_OFFICER_EAST linkItem "O_UavTerminal"; 
+};

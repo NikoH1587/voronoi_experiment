@@ -49,11 +49,11 @@ HEX_SRV_FNC_MOVE = {
 	private _indexEND = HEX_GRID find _end;	
 	
 	/// Replace origin with "hd_dot", civilian, 0
-	_newORG = [_org select 0, _org select 1, _org select 2, "hd_dot", civilian, 0, 0, _org select 7];
+	private _newORG = [_org select 0, _org select 1, _org select 2, "hd_dot", civilian, 0, 0, _org select 7];
 	HEX_GRID set [_indexORG, _newORG];
 	
 	/// Replace destination with origin
-	_newEND = [_end select 0, _end select 1, _end select 2, _org select 3, _org select 4, (_org select 5) - 1, _org select 6, _end select 7];
+	private _newEND = [_end select 0, _end select 1, _end select 2, _org select 3, _org select 4, (_org select 5) - 1, _org select 6, _end select 7];
 	HEX_GRID set [_indexEND, _newEND];
 	
 	/// Update grid information globally
@@ -303,4 +303,18 @@ HEX_FNC_SRV_SPAWNVEHICLE = {
 	_group
 };
 
-HEX_FNC_SRV_SPAWNSUPPORT = {};
+/// Remove group from pool
+HEX_SRV_FNC_SUBTRACT = {
+	private _hex = _this select 0;
+	private _count = _this select 1;
+	
+	/// Find hex index
+	private _index = HEX_GRID find _hex;
+	
+	/// Replace hex in grid with subtracted amount
+	private _newHEX = [_hex select 0, _hex select 1, _hex select 2, _hex select 3, _hex select 4, _hex select 5, _hex select 6, _count];
+	HEX_GRID set [_index, _newHEX];
+	
+	/// Update grid information globally
+	publicVariable "HEX_GRID";
+};

@@ -97,3 +97,24 @@ HEX_SRV_FNC_SUBGRID = {
 	}forEach _posLocs;
 }forEach HEX_GRID;	
 	
+	
+/// performacne testing
+
+private _testWest = west call HEX_LOC_FNC_GROUPS;
+{
+	private _obj = HEX_OBJECTIVES_NEUT select floor random count HEX_OBJECTIVES_NEUT;
+	private _pos = _obj select 2;
+	private _wp = _x addWaypoint [_pos, HEX_SIZE];
+}forEach _testWest;
+
+private _testEast = east call HEX_LOC_FNC_GROUPS;
+{
+	private _obj = HEX_OBJECTIVES_NEUT select floor random count HEX_OBJECTIVES_NEUT;
+	private _pos = _obj select 2;
+	private _wp = _x addWaypoint [_pos, HEX_SIZE];
+}forEach _testEast;
+
+{
+	private _unit = _x;
+	if (side _unit == west && HEX_SINGLEPLAYER) then {addSwitchableUnit _unit};
+}forEach AllUnits;

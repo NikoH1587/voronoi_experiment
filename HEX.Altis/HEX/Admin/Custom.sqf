@@ -21,7 +21,7 @@ HEX_CFG_EAST = ["o_hq"];
 			private _facEast = _menu displayCtrl 1202;
 			
 			HEX_ADM_ALLWEST = [];
-			private _allWest = 1 call HEX_ADM_FNC_FACTIONS;
+			private _allWest = 0 call HEX_ADM_FNC_FACTIONS;
 			{
 				HEX_ADM_ALLWEST pushBack (_x select 0);
 				private _added = _facWest lbAdd (_x select 1);

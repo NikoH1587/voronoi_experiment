@@ -13,36 +13,40 @@ HEX_FULLMAP = false;
 /// 3 battallion per side (3x + 3x + 3x inf) + 3 supports
 
 /// BLUFOR
-private _allAux = ["b_mortar", "b_art", "b_antiair", "b_air", "b_plane", "b_uav"];
+private _allAux = ["b_support", "b_mortar", "b_art", "b_antiair", "b_air", "b_plane", "b_uav"];
 private _allPri = ["b_unknown", "b_inf", "b_recon", "b_motor_inf", "b_mech_inf", "b_armor"];
 
 private _aux1 = _allAux select floor random count _allAux;
 _allAux = _allAux - [_aux1];
 private _aux2 = _allAux select floor random count _allAux;
 _allAux = _allAux - [_aux2];
+private _aux3 = _allAux select floor random count _allAux;
 
 private _pri1 = _allPri select floor random count _allPri;
 _allPri = _allPri - [_pri1];
-
 private _pri2 = _allPri select floor random count _allPri;
+_allPri = _allPri - [_pri2];
+private _pri3 = _allPri select floor random count _allPri;
 
-HEX_CFG_WEST = ["b_hq", "b_support", _aux1, _aux2, _pri1, _pri1, _pri1, _pri2, _pri2, _pri2];
+HEX_CFG_WEST = ["b_hq", _aux1, _aux2, _aux3, _pri1, _pri1, _pri1, _pri2, _pri3];
 
 /// OPFOR
-private _allAux = ["o_mortar", "o_art", "o_antiair", "o_air", "o_plane", "o_uav"];
+private _allAux = ["o_support", "o_mortar", "o_art", "o_antiair", "o_air", "o_plane", "o_uav"];
 private _allPri = ["o_unknown", "o_inf", "o_recon", "o_motor_inf", "o_mech_inf", "o_armor"];
 
 private _aux1 = _allAux select floor random count _allAux;
 _allAux = _allAux - [_aux1];
 private _aux2 = _allAux select floor random count _allAux;
 _allAux = _allAux - [_aux2];
+private _aux3 = _allAux select floor random count _allAux;
 
 private _pri1 = _allPri select floor random count _allPri;
 _allPri = _allPri - [_pri1];
-
 private _pri2 = _allPri select floor random count _allPri;
+_allPri = _allPri - [_pri2];
+private _pri3 = _allPri select floor random count _allPri;
 
-HEX_CFG_EAST = ["o_hq", "o_support", _aux1, _aux2, _pri1, _pri1, _pri1, _pri2, _pri2, _pri2];
+HEX_CFG_EAST = ["o_hq", _aux1, _aux2, _aux3, _pri1, _pri1, _pri1, _pri2, _pri3];
 
 /// Globalize variables
 publicVariable "HEX_SIZE";

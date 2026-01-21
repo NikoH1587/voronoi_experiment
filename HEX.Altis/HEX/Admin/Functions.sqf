@@ -49,23 +49,19 @@ HEX_ADM_FNC_TACTICAL = {
 };
 
 HEX_ADM_FNC_FACTIONS = {
-	private _side = _this;
 	private _factions = [];
 	private _allFacs = (configFile >> "CfgFactionClasses") call BIS_fnc_getCfgSubClasses;
 	{
 		private _cfg = (configFile >> "CfgFactionClasses" >> _x);
 		private _cfgName = _x;
-		private _side2 = getNumber (_cfg >> "side");
-		if (_side == _side2 or _side2 == 2) then {
-			private _name = getText (_cfg >> "displayName");
-			private _icon = getText (_cfg >> "icon");
-			private _name = _name + " - " + _cfgName;
+		private _name = getText (_cfg >> "displayName");
+		private _icon = getText (_cfg >> "icon");
+		private _name = _name + " - " + _cfgName;
 			
-			/// get if has infantry
-			private _infantry = (_cfgName call HEX_ADM_FNC_GROUPS) select 0;
-			if (_infantry) then {
-				_factions pushback [_cfgName, _name, _icon];
-			};
+		/// get if has infantry
+		private _infantry = (_cfgName call HEX_ADM_FNC_GROUPS) select 0;
+		if (_infantry) then {
+			_factions pushback [_cfgName, _name, _icon];
 		};
 	}forEach _allFacs;
 
