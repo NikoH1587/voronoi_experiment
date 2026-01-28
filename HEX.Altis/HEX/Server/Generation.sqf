@@ -2,7 +2,7 @@
 private _hexX = HEX_SIZE * 1.5;
 private _hexY = HEX_SIZE * sqrt 3;
 private _hexS = worldSize;
-private _count = ((count HEX_CFG_WEST) + (count HEX_CFG_EAST)) * 3;
+private _count = ((count HEX_CFG_WEST) + (count HEX_CFG_EAST)) * 4;
 
 HEX_GRID = [];
 
@@ -41,8 +41,8 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 {
 	private _counter = _x;
 	private _act = 0;
-	if (_x in ["b_hq", "b_inf", "b_unknown", "b_mortar"]) then {_act = 1};
-	if (_x in ["b_mech_inf", "b_armor", "b_antiair", "b_art", "b_support"]) then {_act = 2};
+	if (_x in ["b_inf"]) then {_act = 1};
+	if (_x in ["b_mech_inf", "b_armor", "b_antiair", "b_art", "b_support", "b_unknown", "b_mortar", "b_hq"]) then {_act = 2};
 	if (_x in ["b_motor_inf", "b_recon"]) then {_act = 3};
 	private _count = 9;
 	if (_x in ["b_hq", "b_support", "b_mortar", "b_antiair", "b_art", "b_air", "b_plane", "b_uav"]) then {_count = 3};
@@ -64,7 +64,7 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 		"DESCEND", 
 		{(_x select 3) == "hd_dot"}
 	] call BIS_fnc_sortBy;
-	private _hex = selectRandom (_sorted select [0, 3]);
+	private _hex = selectRandom (_sorted select [0, 6]);
 	_hex set [3, _counter];
 	_hex set [4, west];
 	_hex set [5, _act];
@@ -74,8 +74,8 @@ if (HEX_FULLMAP == false) then {HEX_GRID = [selectRandom HEX_GRID, _count] call 
 {
 	private _counter = _x;
 	private _act = 0;
-	if (_x in ["o_hq", "o_inf", "o_unknown", "o_mortar"]) then {_act = 1};
-	if (_x in ["o_mech_inf", "o_armor", "o_antiair", "o_art", "o_support"]) then {_act = 2};
+	if (_x in ["o_inf"]) then {_act = 1};
+	if (_x in ["o_hq", "o_unknown", "o_mortar", "o_mech_inf", "o_armor", "o_antiair", "o_art", "o_support"]) then {_act = 2};
 	if (_x in ["o_motor_inf", "o_recon"]) then {_act = 3};
 	private _count = 9;
 	if (_x in ["o_hq", "o_support", "o_mortar", "o_antiair", "o_art", "o_air", "o_plane", "o_uav"]) then {_count = 3};

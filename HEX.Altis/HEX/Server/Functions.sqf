@@ -121,56 +121,6 @@ HEX_SRV_FNC_TACTICAL = {
 	call compile preprocessFile "HEX\Server\Tactical.sqf"
 };
 
-/// Get cfgGroups configs of groups
-HEX_SRV_FNC_GROUPS = {
-	private _factions = _this select 0;
-	private _icons = _this select 1;
-	
-	/// blacklist diver squads
-	private _blacklist = ["Recon UAV Team", "Attack UAV Team", "Diver Team", "Diver Team (Boat)", "Diver Team (SDV)", "Mechanized Air-defense Squad", "Mechanized Support Squad", "Motorized Air-defense Team", "Motorized GMG Team", "Motorized HMG Team", "Motorized Mortar Team", "AWC Air-Defense Platoon", "AWC Platoon (Combined)", "AWC Air-Defense Section", "AWC Recon Section"];
-	
-	/// Go throught entire cfgGroups and find groups matching icons and faction
-	private _groups = [];
-	{
-		private _facs = "true" configClasses _x;
-		{
-			private _cats = "true" configClasses _x;
-			{
-				private _grps = "true" configClasses _x;
-				
-				/// move "Special Forces" to recon
-				private _CATname = getText (_x >> "name");
-				private _INFnoskip = true;
-				private _RECnoskip = false;
-				private _SUPnoskip = true;
-				if (_CATname == "Special Forces" && (_icons select 0 == "\A3\ui_f\data\map\markers\nato\b_inf.paa")) then {_INFnoskip = false};	
-				if (_CATname == "Special Forces" && (_icons select 0 == "\A3\ui_f\data\map\markers\nato\b_recon.paa")) then {_RECnoskip = true};
-				if (_CATname == "Support Infantry") then {_SUPnoskip = false};
-				if (_CATname == "Guard Infantry") then {_SUPnoskip = false};					
-				{
-					private _fac = getText (_x >> "faction");
-					private _ico = getText (_x >> "icon");
-					private _GRPname = getText (_x >> "name");
-					
-					private _ARMnoskip = false;
-					if (_GRPname == "Tank Destroyer Section" && _icons select 0 == "\A3\ui_f\data\map\markers\nato\b_armor.paa") then {_ARMnoskip = true};
-					if (_GRPname == "Tank Destroyer Section (UP)" && _icons select 0 == "\A3\ui_f\data\map\markers\nato\b_armor.paa") then {_ARMnoskip = true};
-					
-					if (_fac in _factions && (_ico in _icons or _RECnoskip or _ARMnoskip) && _INFnoskip && _SUPnoskip && (_GRPname in _blacklist == false)) then {
-						private _group = _x;
-						private _size = (count _x) min 12;
-						_grpAndSize = [_size, _group];
-						_groups append [_grpAndSize];
-					};
-				}forEach _grps;
-			}forEach _cats;
-		}forEach _facs;
-	}forEach [(configFile >> "CfgGroups" >> "West"), (configFile >> "CfgGroups" >> "East"), (configFile >> "CfgGroups" >> "Indep")];
-	
-	_groups sort false;
-	_groups
-};
-
 /// get cfgVehicles
 HEX_SRV_FNC_VEHICLES = {
 	private _factions = _this select 0;
@@ -231,6 +181,119 @@ HEX_SRV_FNC_VEHICLES = {
 	_configs
 };
 
+HEX_FNC_SRV_SPAWNVEHICLE = {
+	private _hexpos = _this select 0;
+	private _side = _this select 1;
+	private _config = _this select 2;
+
+	private _pos = [_hexpos, 0, HEX_SIZE / 2, 5, 0, 0, 0, [], _hexpos] call BIS_fnc_findSafePos;
+	private _spawned = [_pos, 0, _config, _side] call BIS_fnc_spawnVehicle;	
+	private _crew = _spawned select 1;
+	private _group = _spawned select 2;
+	{_x setSkill 1}forEach _crew;
+	(_crew select 0) setRank "CORPORAL";
+	if (count _crew > 0) then {(_crew select 1) setRank "SERGEANT"};
+	if (count _crew > 1) then {(_crew select 2) setRank "LIEUTENANT"};
+	
+	_group
+};
+
+/// Remove group from pool
+HEX_SRV_FNC_SUBTRACT = {
+	private _hex = _this select 0;
+	private _org = _this select 1;
+	private _sub = _this select 2;
+	/// Find hex index
+	private _index = HEX_TACTICAL find _hex;
+	
+	/// subtract
+	private _count = _org - _sub;
+	
+	/// Replace hex in grid with subtracted amount
+	private _newHEX = [_hex select 0, _hex select 1, _hex select 2, _hex select 3, _hex select 4, _hex select 5, _count, _hex select 7];
+	HEX_TACTICAL set [_index, _newHEX];
+	
+	/// Update grid information globally
+	publicVariable "HEX_TACTICAL";
+};
+
+/// Count how many groups hex has present
+HEX_SRV_HEXIDS = {
+	private _row = _this select 0;
+	private _col = _this select 1;
+	private _side = _this select 2;
+	private _groups = _side call HEX_LOC_FNC_GROUPS;
+	private _amount = 0;
+	
+	{
+		private _id = _x getVariable "HEX_ID";
+		private _rowG = _id select 0;
+		private _colG = _id select 1;
+		if (_rowG == _row && _colG == _col) then {
+			_amount = _amount + 1;
+		};
+	}forEach _groups;
+	
+	_amount
+};
+
+/// Get cfgGroups configs of groups
+HEX_SRV_FNC_GROUPS = {
+	private _factions = _this select 0;
+	private _type = _this select 1;
+
+	private _icons = ["\A3\ui_f\data\map\markers\nato\b_inf.paa", "\A3\ui_f\data\map\markers\nato\n_inf.paa", "\A3\ui_f\data\map\markers\nato\o_inf.paa"];	
+	if (_type in ["b_recon", "o_recon"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_recon.paa", "\A3\ui_f\data\map\markers\nato\n_recon.paa", "\A3\ui_f\data\map\markers\nato\o_recon.paa"]};	
+	if (_type in ["b_motor_inf", "o_motor_inf"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\n_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\o_motor_inf.paa"]};
+	if (_type in ["b_mech_inf", "o_mech_inf"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\n_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\o_mech_inf.paa"]};
+	if (_type in ["b_armor", "o_armor"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_armor.paa", "\A3\ui_f\data\map\markers\nato\n_armor.paa", "\A3\ui_f\data\map\markers\nato\o_armor.paa"]};
+	if (_type in ["b_unknown", "o_unknown"]) then {_icons = ["\A3\ui_f\data\map\markers\nato\b_inf.paa", "\A3\ui_f\data\map\markers\nato\n_inf.paa", "\A3\ui_f\data\map\markers\nato\o_inf.paa", "\A3\ui_f\data\map\markers\nato\b_recon.paa", "\A3\ui_f\data\map\markers\nato\n_recon.paa", "\A3\ui_f\data\map\markers\nato\o_recon.paa", "\A3\ui_f\data\map\markers\nato\b_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\n_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\o_motor_inf.paa", "\A3\ui_f\data\map\markers\nato\b_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\n_mech_inf.paa", "\A3\ui_f\data\map\markers\nato\o_mech_inf.paa"]};		
+	
+	/// blacklist diver squads
+	private _blacklist = ["Recon UAV Team", "Attack UAV Team", "Diver Team", "Diver Team (Boat)", "Diver Team (SDV)", "Mechanized Air-defense Squad", "Mechanized Support Squad", "Motorized Air-defense Team", "Motorized GMG Team", "Motorized HMG Team", "Motorized Mortar Team", "AWC Air-Defense Platoon", "AWC Platoon (Combined)", "AWC Air-Defense Section", "AWC Recon Section"];
+	
+	/// Go throught entire cfgGroups and find groups matching icons and faction
+	private _groups = [];
+	{
+		private _facs = "true" configClasses _x;
+		{
+			private _cats = "true" configClasses _x;
+			{
+				private _grps = "true" configClasses _x;
+				
+				/// move "Special Forces" to recon
+				private _CATname = getText (_x >> "name");
+				private _INFnoskip = true;
+				private _RECnoskip = false;
+				private _SUPnoskip = true;
+				if (_CATname == "Special Forces" && (_icons select 0 == "\A3\ui_f\data\map\markers\nato\b_inf.paa")) then {_INFnoskip = false};	
+				if (_CATname == "Special Forces" && (_icons select 0 == "\A3\ui_f\data\map\markers\nato\b_recon.paa")) then {_RECnoskip = true};
+				if (_CATname == "Support Infantry") then {_SUPnoskip = false};
+				if (_CATname == "Guard Infantry") then {_SUPnoskip = false};					
+				{
+					private _fac = getText (_x >> "faction");
+					private _ico = getText (_x >> "icon");
+					private _GRPname = getText (_x >> "name");
+					
+					private _ARMnoskip = false;
+					if (_GRPname == "Tank Destroyer Section" && _icons select 0 == "\A3\ui_f\data\map\markers\nato\b_armor.paa") then {_ARMnoskip = true};
+					if (_GRPname == "Tank Destroyer Section (UP)" && _icons select 0 == "\A3\ui_f\data\map\markers\nato\b_armor.paa") then {_ARMnoskip = true};
+					
+					if (_fac in _factions && (_ico in _icons or _RECnoskip or _ARMnoskip) && _INFnoskip && _SUPnoskip && (_GRPname in _blacklist == false)) then {
+						private _group = _x;
+						private _size = (count _x) min 12;
+						_grpAndSize = [_size, _group];
+						_groups append [_grpAndSize];
+					};
+				}forEach _grps;
+			}forEach _cats;
+		}forEach _facs;
+	}forEach [(configFile >> "CfgGroups" >> "West"), (configFile >> "CfgGroups" >> "East"), (configFile >> "CfgGroups" >> "Indep")];
+	
+	_groups sort false;
+	_groups
+};
+
 HEX_FNC_SRV_SPAWNGROUP = {
 	private _hexpos = _this select 0;
 	private _side = _this select 1;
@@ -277,44 +340,11 @@ HEX_FNC_SRV_SPAWNGROUP = {
 		/// set inf/mixed group leader as inf SL
 		_group selectLeader ((units _group) select 0);
 	} else {
-		/// set veh group leader as commander
+		/// set veh group leader as gunner -> commander
 		private _count = count units _group;
 		_group selectLeader ((units _group) select (_count - 1));
 	};	
 	
 	/// return group
 	_group
-};
-
-HEX_FNC_SRV_SPAWNVEHICLE = {
-	private _hexpos = _this select 0;
-	private _side = _this select 1;
-	private _config = _this select 2;
-
-	private _pos = [_hexpos, 0, HEX_SIZE / 2, 5, 0, 0, 0, [], _hexpos] call BIS_fnc_findSafePos;
-	private _spawned = [_pos, 0, _config, _side] call BIS_fnc_spawnVehicle;	
-	private _crew = _spawned select 1;
-	private _group = _spawned select 2;
-	{_x setSkill 1}forEach _crew;
-	(_crew select 0) setRank "CORPORAL";
-	if (count _crew > 0) then {(_crew select 1) setRank "SERGEANT"};
-	if (count _crew > 1) then {(_crew select 2) setRank "LIEUTENANT"};
-	
-	_group
-};
-
-/// Remove group from pool
-HEX_SRV_FNC_SUBTRACT = {
-	private _hex = _this select 0;
-	private _count = _this select 1;
-	
-	/// Find hex index
-	private _index = HEX_GRID find _hex;
-	
-	/// Replace hex in grid with subtracted amount
-	private _newHEX = [_hex select 0, _hex select 1, _hex select 2, _hex select 3, _hex select 4, _hex select 5, _hex select 6, _count];
-	HEX_GRID set [_index, _newHEX];
-	
-	/// Update grid information globally
-	publicVariable "HEX_GRID";
 };

@@ -3,6 +3,7 @@
 private _tactical = [];
 {
 	private _hex = _x;
+	private _cfg = _x select 3;
 	private _sid = _x select 4;
 	
 	private _near = _hex call HEX_GLO_FNC_NEAR;
@@ -13,7 +14,7 @@ private _tactical = [];
 		_sides pushback _sid2;
 	}forEach _near;
 
-	if (resistance in _sides) then {
+	if (resistance in _sides && (_cfg != "hd_dot" or _sid == resistance)) then {
 		_tactical pushback _hex;
 	};
 }forEach HEX_GRID;
@@ -88,11 +89,11 @@ if (count _tactical > 0) then {
 	
 		private _act = 0;
 		if (HEX_TURN == _sid) then {
-				if (_cfg in ["b_hq", "b_inf", "b_unknown", "b_mortar"]) then {_act = 1};
-				if (_cfg in ["b_mech_inf", "b_armor", "b_antiair", "b_art", "b_antiair", "b_support"]) then {_act = 2};
+				if (_cfg in ["b_inf"]) then {_act = 1};
+				if (_cfg in ["b_hq", "b_mech_inf", "b_armor", "b_antiair", "b_art", "b_antiair", "b_support", "b_unknown", "b_mortar"]) then {_act = 2};
 				if (_cfg in ["b_motor_inf", "b_recon"]) then {_act = 3};
-				if (_cfg in ["o_hq", "o_inf", "o_unknown", "o_mortar"]) then {_act = 1};
-				if (_cfg in ["o_mech_inf", "o_armor", "o_antiair", "o_art", "o_antiair", "o_support"]) then {_act = 2};
+				if (_cfg in ["o_inf"]) then {_act = 1};
+				if (_cfg in ["o_hq", "o_unknown", "o_mortar", "o_mech_inf", "o_armor", "o_antiair", "o_art", "o_antiair", "o_support"]) then {_act = 2};
 				if (_cfg in ["o_motor_inf", "o_recon"]) then {_act = 3};
 			_hex set [5, _act];
 			HEX_GRID set [_index, _hex];
