@@ -1,24 +1,26 @@
 /// VOX: Operations Generator
 
-VOX_SIZE = 500;
+VOX_SIZE = 250;
 VOX_DEBUG = false;
 VOX_GRID = [];
 
 VOX_CFG_WEST = ["b_inf", "b_motor_inf", "b_mech_inf", "b_naval", "b_air"];
 VOX_CFG_EAST = ["o_inf", "o_motor_inf", "o_mech_inf", "o_naval", "o_air"];
 
-VOX_SCENARIO = "EAST"; /// "WEST", "EAST", "NORTH", "SOUTH"
+VOX_SCENARIO = "WEST"; /// "WEST", "EAST", "NORTH", "SOUTH"
 VOX_TURN = west;
 
 VOX_LOC_COMMANDER = true;
 VOX_PHASE = "STRATEGIC";
+
+VOX_QUEUE = [];
 
 /// global functions
 execVM "vox_functions.sqf";
 
 private _civMarkers = allMapMarkers select {_x select [0, 3] in["CIV", "NAV", "AIR"]};
 
-/// [_pos, _cells, _type, _unit, _border, _hasmoved]
+/// [_pos, _cells, _type, _unit, _border, _morale]
 
 {
 	private _marker = _x;
@@ -199,6 +201,7 @@ _fnc_findSeeds = {
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
 	_selectGrid set [3, _x];
+	_selectGrid set [5, 1];
 }forEach VOX_CFG_WEST;
 
 {
@@ -220,6 +223,7 @@ _fnc_findSeeds = {
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
 	_selectGrid set [3, _x];
+	_selectGrid set [5, 1];
 }forEach VOX_CFG_EAST;
 
 /// draw markers
