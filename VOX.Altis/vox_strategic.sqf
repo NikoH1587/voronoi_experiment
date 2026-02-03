@@ -7,13 +7,16 @@ VOX_LOC_ORDERS = [];
 
 VOX_FNC_SELECTABLE = {
 	private _side = _this;
-	private _counters = VOX_CFG_WEST;
-	if (_side == east) then {_counters = VOX_CFG_EAST};
+	private _config = VOX_CFG_WEST;
+	if (_side == east) then {_config = VOX_CFG_EAST};
+	private _counters = [];
+	{_counters pushback [_x select 0]}forEach _config;
+	
 	VOX_LOC_SELECTABLE = [];
 	{
 		private _seed = _x;
 		private _pos = _x select 0;
-		if (_x select 3 in _counters && _x select 5 > 0.5) then {
+		if (_x select 3 in _counters) then {
 			VOX_LOC_SELECTABLE pushback _seed;
 			if (_side == side player) then {
 				private _marker = createMarkerLocal [format ["LOC_%1", _pos], _pos];
@@ -49,11 +52,14 @@ VOX_FNC_SELECT = {
 VOX_FNC_ORDERS = {
 	private _side = _this;
 	private _selected = VOX_LOC_SELECTED;
-	VOX_LOC_ORDERS = [];
+	VOX_LOC_ORDERS = [_selected];
 	private _neighbors = _selected select 4;
 	
-	private _counters = VOX_CFG_WEST;
-	if (_side == east) then {_counters = VOX_CFG_EAST};	
+	private _config = VOX_CFG_WEST;
+	if (_side == east) then {_config = VOX_CFG_EAST};
+	
+	private _counters = [];
+	{_counters pushback [_x select 0]}forEach _config;
 	
 	private _nav = false;
 	private _air = false;
@@ -83,9 +89,12 @@ VOX_FNC_ORDERS = {
 	
 	{
 		private _pos = _x select 0;
+		private _orderIndex = _forEachIndex;
 		if (_side == side player) then {
 			private _marker = createMarkerLocal [format ["LOC_%1", _pos], _pos];
-			_marker setMarkerTypeLocal "selector_selectedMission";
+			private _markerType = "selector_selectedMission";
+			if (_orderIndex == 0) then {_markerType = "selector_selectedEnemy"};
+			_marker setMarkerTypeLocal _markerType;
 			_marker setMarkerSizeLocal [1.5, 1.5];
 		};
 	}forEach VOX_LOC_ORDERS;
@@ -125,6 +134,7 @@ if (VOX_LOC_COMMANDER) then {
 };
 
 /// ai testing, for now just random
+VOX_LOC_AICOUNT = 0;
 VOX_FNC_AICMD = {
 	private _side = _this;
 	
@@ -133,12 +143,14 @@ VOX_FNC_AICMD = {
 	private _pos = _select select 0;
 	[_pos, _side] call VOX_FNC_SELECT;
 	private _select2 = VOX_LOC_ORDERS select floor random count VOX_LOC_ORDERS;
-	if (count VOX_LOC_ORDERS > 0) then {
+	if (count VOX_LOC_ORDERS > 1 or VOX_LOC_AICOUNT > (count VOX_LOC_ORDERS)) then {
 		sleep 1;
 		private _pos2 = _select2 select 0;
 		_pos2 call VOX_FNC_ORDER;
+		VOX_LOC_AICOUNT = 0;
 	} else {
 		/// if fails to move the current counter, start again
+		VOX_LOC_AICOUNT = VOX_LOC_AICOUNT + 1;
 		_side call VOX_FNC_AICMD;
 	};
 };

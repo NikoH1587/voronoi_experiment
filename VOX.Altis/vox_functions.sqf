@@ -10,7 +10,9 @@ VOX_FNC_DRAWMARKERS = {
 		if (_unit != "hd_dot") then {
 			private _marker = createMarker [_name, _pos];
 			_marker setMarkerType _unit;
-			_marker setMarkerAlpha (_morale max 0.25);
+			private _alpha = 1;
+			if (_morale == 0) then {_alpha = 0.5};
+			_marker setMarkerAlpha _alpha;
 		};
 		
 		/// updade ZOC
@@ -67,17 +69,17 @@ VOX_FNC_MOVE = {
 	private _indexOld = VOX_GRID find _old;
 	private _indexNew = VOX_GRID find _new;
 	
-	if (_new select 3 == "hd_dot") then {
+	/// switch turn
+	private _turn = east;
+	if (VOX_TURN == east) then {_turn = west};
+	VOX_TURN = _turn;
+	publicVariable "VOX_TURN";
+	
+	if (_new select 3 == "hd_dot" or _old IsEqualTo _new) then {
 		/// [_pos, _cells, _type, _unit, _border, _morale]
 		VOX_GRID set [_indexOld, [_old select 0, _old select 1, _old select 2, "hd_dot", _old select 4, 0]];
 		VOX_GRID set [_indexNew, [_new select 0, _new select 1, _new select 2, _old select 3, _new select 4, _old select 5]];	
-		publicVariable "VOX_GRID";
-	
-		/// switch turn
-		private _turn = east;
-		if (VOX_TURN == east) then {_turn = west};
-		VOX_TURN = _turn;
-		publicVariable "VOX_TURN";	
+		publicVariable "VOX_GRID";	
 	
 		/// re-draw markers
 		0 call VOX_FNC_DRAWMARKERS;
@@ -86,10 +88,13 @@ VOX_FNC_MOVE = {
 		remoteExec ["VOX_FNC_UPDATE", 0];
 		
 	} else {
+		/// if attack, start briefing
 		VOX_PHASE = "BRIEFING";
 		publicVariable "VOX_PHASE";
-		VOX_COMBAT = [_old, _new];
-		publicVariable "VOX_COMBAT";
+		VOX_ATTACKER = _old;
+		VOX_DEFENDER = _new;
+		publicVariable "VOX_ATTACKER";
+		publicVariable "VOX_DEFENDER";
 		0 call VOX_FNC_CLEARMARKERS;
 		["vox_briefing.sqf"] remoteExec ["execVM"]
 	};
@@ -128,4 +133,9 @@ VOX_FNC_RADIO = {
 	
 	private _sound = _sounds select floor random count _sounds;
 	playSoundUI [_sound, 1 , 1];
+};
+
+VOX_FNC_CLOSEMAP = {
+	openMap false;
+	(findDisplay 1400) closedisplay 1;
 };

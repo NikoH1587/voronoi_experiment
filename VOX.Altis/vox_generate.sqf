@@ -162,48 +162,35 @@ _fnc_findSeeds = {
 	};
 }forEach VOX_GRID;
 
-/// place counters randomly
+/// place counters
 {
 
 	private _grid = VOX_GRID;
 	private _dir = 0;
 	private _ord = "ASCEND";
-
-	switch (VOX_SCENARIO) do {
-		case "WEST": {_dir = 0};
-		case "EAST": {_dir = 0; _ord = "DESCEND"};
-		case "SOUTH": {_dir = 1};
-		case "NORTH": {_dir = 1; _ord = "DESCEND"};		
-	};
 	
-	private _sorted = [_grid, [], {(_x select 0) select _dir}, _ord, {_x select 3 == "hd_dot"}] call BIS_fnc_sortBy;
+	private _sorted = [_grid, [], {(_x select 0) distance (getMarkerPos "VOX_WEST")}, "ASCEND", {_x select 3 == "hd_dot"}] call BIS_fnc_sortBy;
 	private _select = _sorted select 0;
 	
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
-	_selectGrid set [3, _x];
+	_selectGrid set [3, _x select 0];
 	_selectGrid set [5, 1];
 }forEach VOX_CFG_WEST;
 
+/// place counters
 {
 
 	private _grid = VOX_GRID;
 	private _dir = 0;
-	private _ord = "DESCEND";
-
-	switch (VOX_SCENARIO) do {
-		case "WEST": {_dir = 0};
-		case "EAST": {_dir = 0; _ord = "ASCEND"};
-		case "SOUTH": {_dir = 1};
-		case "NORTH": {_dir = 1; _ord = "ASCEND"};		
-	};
+	private _ord = "ASCEND";
 	
-	private _sorted = [_grid, [], {(_x select 0) select _dir}, _ord, {_x select 3 == "hd_dot"}] call BIS_fnc_sortBy;
+	private _sorted = [_grid, [], {(_x select 0) distance (getMarkerPos "VOX_EAST")}, "ASCEND", {_x select 3 == "hd_dot"}] call BIS_fnc_sortBy;
 	private _select = _sorted select 0;
 	
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
-	_selectGrid set [3, _x];
+	_selectGrid set [3, _x select 0];
 	_selectGrid set [5, 1];
 }forEach VOX_CFG_EAST;
 
