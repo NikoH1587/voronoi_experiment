@@ -32,7 +32,7 @@ _fnc_nearest = {
 
 for "_col" from 0 to round(worldSize / VOX_SIZE) do {
     for "_row" from 0 to round(worldSize / VOX_SIZE) do {
-		private _pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
+		private _pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 		if (surfaceIsWater _pos) then {continue}; /// skip water
 		private _nearest = _pos call _fnc_nearest;
 		
@@ -57,7 +57,7 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 			private _nCol = _col + (_x select 1);
 			private _nPos = [_nCol * VOX_SIZE, _nRow * VOX_SIZE];
 			
-			if (_cells find [_nRow, _nCol] == -1) exitWith {
+			if (_cells find [_nRow, _nCol] == -1 && !(surfaceIsWater _nPos)) exitWith {
 				_isEdge = true;
 			};		
 		}forEach _dirs;
@@ -80,7 +80,7 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 	{
 		_row = _x select 0;
 		_col = _x select 1;
-		_pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
+		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 		
 		_posX = _posX + (_pos select 0);
 		_posY = _posY + (_pos select 1);

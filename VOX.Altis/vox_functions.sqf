@@ -8,7 +8,7 @@ VOX_FNC_DRAWGRID = {
 		{
 			private _row = _x select 0;
 			private _col = _x select 1;
-			_pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
+			_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 
 			private _marker = createMarker [format ["VOX_%1_%2", _row, _col], _pos];
 			_marker setMarkerShape "RECTANGLE";
@@ -49,7 +49,7 @@ VOX_FNC_UPDATEGRID = {
 	{
 		private _row = _x select 0;
 		private _col = _x select 1;
-		_pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
+		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 
 		private _color = "ColorBLACK";
 		if (_unit select [0, 1] == "b") then {_color = "ColorBLUFOR"};
@@ -218,7 +218,7 @@ VOX_FNC_DRAWOBJECTIVES = {
 	{
 		private _row = _x select 0;
 		private _col = _x select 1;
-		private _pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
+		private _pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 		private _marker = createMarker [format ["ATK_%1_%2", _row, _col], _pos];
 		_marker setMarkerShape "RECTANGLE";
 		_marker setMarkerAlpha 0.5;
@@ -234,7 +234,7 @@ VOX_FNC_DRAWOBJECTIVES = {
 	{
 		private _row = _x select 0;
 		private _col = _x select 1;
-		private _pos = [(_col * VOX_SIZE) + VOX_SIZE / 2, (_row * VOX_SIZE) + VOX_SIZE / 2];
+		private _pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 		private _marker = createMarker [format ["ATK_%1_%2", _row, _col], _pos];
 		_marker setMarkerShape "RECTANGLE";
 		_marker setMarkerAlpha 0.5;

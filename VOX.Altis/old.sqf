@@ -19,8 +19,8 @@
 		private _row = _x select 0;
 		private _col = _x select 1;
 		if (_x in _edges) then {
-			private _posX = (_col * VOX_SIZE) + VOX_SIZE / 2;
-			private _posY = (_row * VOX_SIZE) + VOX_SIZE / 2;
+			private _posX = _col * VOX_SIZE;
+			private _posY = _row * VOX_SIZE;
 			private _dir = _pos getDir [_posX, _posY];
 			_cellsDXY pushback [_dir, _posX, _posY];
 		};
@@ -133,8 +133,8 @@ VOX_FNC_DRAWPOLYGONS = {
 			private _row = _x select 0;
 			private _col = _x select 1;
 			
-			private _posX = (_col * VOX_SIZE) + VOX_SIZE / 2;
-			private _posY = (_row * VOX_SIZE) + VOX_SIZE / 2;
+			private _posX = _col * VOX_SIZE;
+			private _posY = _row * VOX_SIZE;
 			
 			private _dir = _pos getDir [_posX, _posY];
 			
