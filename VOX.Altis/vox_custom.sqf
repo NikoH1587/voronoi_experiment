@@ -1,7 +1,5 @@
 VOX_PHASE = "CUSTOM";
 
-/// TBD: add more types, b_recon (recon), b_unknown (militia)
-
 /// [_icon, _name, _config]
 VOX_FACTIONS = [];
 
@@ -28,17 +26,21 @@ VOX_FNC_FACTION = {
 	/// get groups
 	{
 		private _facs = "true" configClasses _x;
+		private _fac = configName _x;
 		{
 			private _cats = "true" configClasses _x;
+			private _cat = configName _x;
 			{
 				private _grps = "true" configClasses _x;
+				private _grp = configName _x;
 				{
+					private _unit = configName _x;
 					private _fact = getText (_x >> "faction");
 					private _icon = getText (_x >> "icon");
 					private _name = getText (_x >> "name");
 					
 					if (_fact == _faction) then {
-						VOX_FACTION pushback [_icon, _facname + " " + _name, _x];
+						VOX_FACTION pushback [_icon, _facname + " " + _name, [_fac, _cat, _grp, _unit]];
 					};
 				}forEach _grps;
 			}forEach _cats;
@@ -80,7 +82,10 @@ VOX_FNC_FACTION = {
 };
 
 /// contains cfgGroups and CfgVehicles entires
-VOX_CONFIG = [[],[],[],[],[],[],[],[],[],[]];
+VOX_CONFIG = [
+	[],[],[],[],[],[],[],[],
+	[],[],[],[],[],[],[],[]
+];
 
 VOX_FNC_FORMATION = {
 	private _for_idx = _this;
@@ -130,8 +135,8 @@ VOX_FNC_ADDCFG = {
 	private _for_idx = lbCurSel _formation;
 	private _for_cfg = VOX_CONFIG select _for_idx;
 	
-	/// block adding over 20 groups
-	if (count _for_cfg == 18) exitWith {};
+	/// block adding over 15 groups
+	if (count _for_cfg == 15) exitWith {};
 	
 	/// update formation list
 	private _icon = _cfg_sel select 0;
@@ -197,20 +202,32 @@ VOX_CFG_WEST = [];
 VOX_CFG_EAST = [];
 
 VOX_FNC_ADDWEST = {	
+
+	private _names = [
+	"Alpha","Bravo","Charlie",
+	"Delta","Echo","Foxtrot",
+	"Golf","Hotel","India",
+	"HHC"
+	];
+	
+	private _name = _names select count VOX_CFG_WEST;
+	
 	private _selected = VOX_FORMATIONS select _this;
 
 	private _marker = _selected select 0;
-	private _name = _selected select 1;
 	private _icon = "\A3\ui_f\data\map\markers\nato\" + _marker + ".paa";
 
 	private _menu = findDisplay 1200;
 	private _blu_list =  _menu displayCtrl 1206;
 	
+	/// block adding over 10 formations
+	if (count VOX_CFG_WEST  == 10) exitWith {};	
+	
 	/// add to config
 	VOX_CFG_WEST pushback _marker;
 	
 	/// add to ui
-	private _added = _blu_list lbAdd (_name + " Formation");
+	private _added = _blu_list lbAdd _name;
 	_blu_list lbSetPicture [_added, _icon];
 	_blu_list lbSetPictureColor [_added, [0, 0.3, 0.6, 1]];
 };
@@ -230,18 +247,30 @@ VOX_FNC_DELWEST = {
 };
 
 VOX_FNC_ADDEAST = {	
-	private _selected = VOX_FORMATIONS select (_this + 6);
+
+	private _names = [
+	"1st 1Bn","2nd 1Bn","3rd 1Bn",
+	"1st 2Bn","2nd 2Bn","3rd 2Bn",
+	"1st 3Bn","2nd 3Bn","3rd 3Bn",
+	"Bde HQ"
+	];
+
+	private _name = _names select count VOX_CFG_EAST;
+
+	private _selected = VOX_FORMATIONS select (_this + 8);
 
 	private _marker = _selected select 0;
-	private _name = _selected select 1;
 	private _icon = "\A3\ui_f\data\map\markers\nato\" + _marker + ".paa";
 
 	private _menu = findDisplay 1200;
 	private _opf_list =  _menu displayCtrl 1208;
 	
+	/// block adding over 10 formations
+	if (count VOX_CFG_EAST  == 10) exitWith {};	
+	
 	VOX_CFG_EAST pushback _marker;
 	
-	private _added = _opf_list lbAdd (_name + " Formation");
+	private _added = _opf_list lbAdd _name;
 	_opf_list lbSetPicture [_added, _icon];
 	_opf_list lbSetPictureColor [_added, [0.5, 0, 0, 1]];
 };
@@ -260,39 +289,46 @@ VOX_FNC_DELEAST = {
 	_opf_list lbSetCurSel -1;
 };
 
-VOX_FNC_MAP = {
-	private _pos = _this;
-	private _nearest = "VOX_NEUT";
-	
-	{
-		private _pos2 = getMarkerPos _x;
-		private _marker = _x;
-		if ((getMarkerPos _nearest) distance _pos > _pos2 distance _pos) then {
-			_nearest = _marker;
-		};
-	}ForEach ["VOX_WEST", "VOX_NEUT", "VOX_EAST"];
-	
-	_nearest setMarkerPos _pos;
-};
-
 /// [_marker, _name]
 VOX_FORMATIONS = [
-	["b_recon", "Militia"],
+	["b_unknown", "Militia"],
+	["b_recon", "Recon"],
 	["b_inf", "Infantry"],
-	["b_mech_inf", "Mechanized"],
 	["b_motor_inf", "Motorized"],
+	["b_mech_inf", "Mechanized"],
+	["b_armor", "Armor"],
 	["b_air", "Airmobile"],
 	["b_naval", "Amphibious"],
-	["o_recon", "Militia"],
+	["o_unknown", "Militia"],
+	["o_recon", "Recon"],
 	["o_inf", "Infantry"],
-	["o_mech_inf", "Mechanized"],
 	["o_motor_inf", "Motorized"],
+	["o_mech_inf", "Mechanized"],
+	["o_armor", "Armor"],
 	["o_air", "Airmobile"],
 	["o_naval", "Amphibious"]
 ];
 
+VOX_FNC_IMPORT = {
+	private _menu = findDisplay 1200;
+	private _importfield = _menu displayCtrl 1209;
+	private _text = ctrlText _importfield;
+	private _array = call compile _text;
+	if (count _array == 16) then {
+		hint "Config imported.";
+		VOX_CONFIG = _array;
+	} else {
+		hint "Config error!";
+	};
+};
+
+VOX_FNC_EXPORT = {
+	copyToClipBoard str VOX_CONFIG;
+	hint "Config copied to clipboard";
+};
+
 VOX_FNC_START = {
-	
+
 };
 
 [] spawn {
@@ -304,9 +340,8 @@ VOX_FNC_START = {
 			private _factions =  _menu displayCtrl 1203;
 			private _blufor =  _menu displayCtrl 1205;
 			private _opfor =  _menu displayCtrl 1207;
-			private _minimap =  _menu displayCtrl 1209;
-			private _side = _menu displayCtrl 1210;
-			private _start =  _menu displayCtrl 1211;
+			private _scenario = _menu displayCtrl 1212;
+			private _start =  _menu displayCtrl 1213;
 			
 			{
 				private _marker = _x select 0;
@@ -316,7 +351,7 @@ VOX_FNC_START = {
 				private _added = _formation lbAdd _name;
 				_formation lbSetPicture [_added, _icon];
 				private _color = [0, 0.3, 0.6, 1];
-				if (_forEachIndex > 4) then {_color = [0.5, 0, 0, 1]};
+				if (_forEachIndex > 7) then {_color = [0.5, 0, 0, 1]};
 				_formation lbSetPictureColor [_added, _color];
 			}forEach VOX_FORMATIONS;
 			_formation lbSetCurSel 0;
@@ -341,7 +376,7 @@ VOX_FNC_START = {
 				_blufor lbSetPicture [_added, _icon];
 				private _color = [0, 0.3, 0.6, 1];
 				_blufor lbSetPictureColor [_added, _color];				
-			}forEach (VOX_FORMATIONS select [0, 6]);
+			}forEach (VOX_FORMATIONS select [0, 8]);
 			
 			{
 				private _marker = _x select 0;
@@ -352,25 +387,13 @@ VOX_FNC_START = {
 				_opfor lbSetPicture [_added, _icon];
 				private _color = [0.5, 0, 0, 1];
 				_opfor lbSetPictureColor [_added, _color];				
-			}forEach (VOX_FORMATIONS select [6, 6]);
+			}forEach (VOX_FORMATIONS select [8, 8]);
 			
-			_minimap ctrlMapAnimAdd [1, 1, [worldSize / 2, worldSize / 2]];
-			ctrlMapAnimCommit _minimap;
-			
-			/// Info text backround
-			private _color = [0, 0.3, 0.6, 0.5];
-			private _text = "PLAYING BLUFOR:";
-			if (playerSide == east) then {
-				_text = "PLAYING OPFOR:";
-				_color = [0.5, 0, 0, 0.5];
-			};
-
-			onMapSingleClick {
-				_pos spawn VOX_FNC_MAP;
-			};
-
-			_side ctrlSetText _text;
-			_side ctrlSetBackgroundColor _color;			
+			_scenario lbAdd "WEST";
+			_scenario lbAdd "EAST";
+			_scenario lbAdd "NORTH";
+			_scenario lbAdd "SOUTH";
+			_scenario lbSetCurSel 0;
 		};
 		
 		sleep 1;

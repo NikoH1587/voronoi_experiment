@@ -479,3 +479,54 @@ VOX_FNC_DRAWGRID = {
 		hint ((str _count) + " markers created");
 	};
 };
+
+
+VOX_FNC_DRAWGRID = {
+	{
+		private _edges = _x select 1;
+		{
+			private _row = _x select 0;
+			private _col = _x select 1;
+			_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
+
+			private _marker = createMarker [format ["VOX_%1_%2", _row, _col], _pos];
+			_marker setMarkerShape "RECTANGLE";
+			_marker setMarkerBrush "Solid";
+			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+			_marker setMarkerAlpha 0.5;
+		}forEach _edges;
+	}forEach VOX_GRID;
+};
+
+VOX_FNC_CLEARGRID = {
+	{
+		private _edges = _x select 1;
+		{
+			private _row = _x select 0;
+			private _col = _x select 1;
+
+			private _name = format ["VOX_%1_%2", _row, _col];
+			deleteMarker _name;
+		}forEach _edges;
+	}forEach VOX_GRID;
+};
+
+VOX_FNC_UPDATEGRID = {
+	private _edges = _this select 1;
+	private _unit = _this select 4;
+
+	_count = count _edges;
+	{
+		private _row = _x select 0;
+		private _col = _x select 1;
+		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
+
+		private _color = "ColorBLACK";
+		if (_unit select [0, 1] == "b") then {_color = "ColorBLUFOR"};
+		if (_unit select [0, 1] == "o") then {_color = "ColorOPFOR"};
+		private _marker = format ["VOX_%1_%2", _row, _col];
+		if (markerColor _marker != _color) then {
+			_marker setMarkerColor _color;;		
+		};
+	}forEach _edges;
+};
