@@ -1,4 +1,4 @@
-/// VOX_GRID = [[_pos0, _edges1, _seeds2, _type3, _unit4, _morale5]];
+/// VOX_GRID = [[_pos0, _cells1, _seeds2, _type3, _unit4, _morale5]];
 VOX_GRID = [];
 /// get pos and start array
 {
@@ -33,12 +33,45 @@ _fnc_nearest = {
 for "_col" from 0 to round(worldSize / VOX_SIZE) do {
     for "_row" from 0 to round(worldSize / VOX_SIZE) do {
 		private _pos = [_col * VOX_SIZE, _row * VOX_SIZE];
-		if (surfaceIsWater _pos) then {continue}; /// skip water
+		private _isWater = (surfaceIsWater _pos);
+		private _isWoods = ((_pos nearRoads (VOX_SIZE * 0.7)) isEqualTo []);
+		if (_isWater or _isWoods) then {continue}; /// skip water
 		private _nearest = _pos call _fnc_nearest;
 		
 		(_nearest select 1) pushback [_row, _col];
     };
 };
+
+/// TODO:
+/// make the actual tarrain cells into temp array here
+/// index == VOX_GRID index
+/// just store the cells to draw markers on load
+/// can be upsampled to be larger?
+
+/// just store so polyline can be drawn?
+/// store just single pos (from center) + radius to nearest obj? ( from center)
+/// store size A (nearest) sizeB, dir and pos?
+
+/// MOTORIZED
+/// Can move twice?
+/// ignore turn swich?
+/// keep internal counter????
+
+/// Add 3rd standard movement formation
+/// Militia / Reservist
+/// extra flavor
+/// "b_recon" marker
+
+/// Logistics constraint -> Militia
+/// Vehicle constraint -> Infantry
+/// Opposition roughness constraint -> Mechanized
+/// Distance constraint -> Motorized
+/// Water constraint -> Amphibious
+/// Complex terrain constraint -> Airmobile
+
+/// Move counter to center!
+/// so that spawn area calculation is easier
+/// and also can have the air/naval markers!
 
 /// set found edges to 1
 {
@@ -61,8 +94,9 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 			
 			private _isEdge = _cells find [_nRow, _nCol] == -1;
 			private _isLand = !(surfaceIsWater _nPos);
+			private _isRoad = !((_nPos nearRoads (VOX_SIZE * 0.7)) isEqualTo []);
 			
-			if (_isEdge && _isLand) exitWith {
+			if (_isEdge && _isRoad && _isLand) exitWith {
 				_edge = true;
 			};		
 		}forEach _dirs;
@@ -72,7 +106,7 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 		};
 	}forEach _cells;
 
-	_x set [1, _edges];
+	/// _x set [1, _edges];
 }forEach VOX_GRID;
 
 /// get neighboring seeds

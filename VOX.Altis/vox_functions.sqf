@@ -1,4 +1,4 @@
-/// VOX_GRID = [[_pos0, _edges1, _seeds2, _type3, _unit4, _morale5]];
+/// VOX_GRID = [[_pos0, _cells1, _seeds2, _type3, _unit4, _morale5]];
 
 VOX_FNC_DRAWGRID = {
 	{
@@ -160,16 +160,35 @@ VOX_FNC_MOVE = {
 	private _new = _this select 1;
 	
 	private _indexOld = VOX_GRID find _old;
-	private _indexNew = VOX_GRID find _new;
+	private _indexNew = VOX_GRID find _new;	
 	
 	/// switch turn
 	private _turn = east;
 	if (VOX_TURN == east) then {_turn = west};
+	
+	/// motorized special handing	
+	private _motoskip = 0;
+	
+	if (VOX_MOTOSKIP == 0) then {
+		_motoskip = 1;
+	};		
+			
+	if (((_old select 4) in  ["b_motor_inf", "o_motor_inf"]) && VOX_MOTOSKIP == 1) then {
+		private _turn2 = _turn;
+			if (_turn2 == west) then {_turn = east};
+			if (_turn2 == east) then {_turn = west};
+		VOX_MOTOSKIP = 0;
+	};
+	
+	if (_motoskip == 1) then {
+		VOX_MOTOSKIP = 1;
+	};	
+	
+	/// next turn
 	VOX_TURN = _turn;
 	publicVariable "VOX_TURN";
 	
 	if (_new select 4 == "hd_dot" or _old IsEqualTo _new) then {
-		/// [_pos, _cells, _type, _unit, _border, _morale]
 
 		private _newold = [_old select 0, _old select 1, _old select 2, _old select 3, "hd_dot", 0];
 		private _newnew = [_new select 0, _new select 1, _new select 2, _new select 3, _old select 4, _old select 5];
@@ -182,12 +201,11 @@ VOX_FNC_MOVE = {
 		remoteExec ["VOX_FNC_DRAWMARKERS", 0];
 		
 		/// update grid
-		
 		///_newold call VOX_FNC_UPDATEGRID;
 		_newnew call VOX_FNC_UPDATEGRID;
 		
 		/// strategic update
-		remoteExec ["VOX_FNC_UPDATE", 0];
+		remoteExec ["VOX_FNC_UPDATE", 0];	
 		
 	} else {
 		/// if attack, start briefing
@@ -202,7 +220,7 @@ VOX_FNC_MOVE = {
 		0 call VOX_FNC_CLEARDIRS;
 		0 call VOX_FNC_SUPPORTS;
 		0 call VOX_FNC_DRAWOBJECTIVES;
-		["vox_briefing.sqf"] remoteExec ["execVM"]
+		["vox_briefing.sqf"] remoteExec ["execVM"];
 	};
 };
 
@@ -280,6 +298,28 @@ VOX_FNC_DRAWOBJECTIVES = {
 	_def_mrk setMarkerType _def_unit;
 	if (_def_morale == 0) then {_def_mrk setMarkerAlphaLocal 0.5};
 	_def_mrk setMarkerSize [1.25, 1.25];
+	
+	private _center = [((_atk_pos select 0) + (_def_pos select 0)) / 2, ((_atk_pos select 1) + (_def_pos select 1)) / 2];
+	private _distance = _atk_pos distance _def_pos;
+	private _locations = nearestLocations [_center, [], _distance];
+	
+	{
+		private _pos = position _x;
+		private _size = size _x;
+		if ((_size select 1) > 50 && surfaceIsWater _pos == false) then {
+			private _marker1 = createMarker [format ["REC_%1", _pos], _pos];
+			_marker1 setMarkerShape "ELLIPSE";
+			_marker1 setMarkerBrush "Cross";
+			_marker1 setMarkerSize [(_size select 0), (_size select 0)];
+			_marker1 setMarkerAlpha 0.33;
+			
+			private _marker2 = createMarker [format ["OBJ_%1", _pos], _pos];
+			_marker2 setMarkerShape "ELLIPSE";
+			_marker2 setMarkerBrush "Cross";
+			_marker2 setMarkerSize [(_size select 1), (_size select 1)];
+			_marker2 setMarkerAlpha 0.33;
+		};
+	}forEach _locations;
 };
 
 VOX_FNC_CLOSEMAP = {

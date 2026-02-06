@@ -64,7 +64,6 @@ VOX_FNC_ORDERS = {
 	private _nav = false;
 	private _air = false;
 	
-	copyToClipboard str _selected;
 	if (_selected select 4 in ["b_naval", "o_naval"] && _selected select 3 == "NAV") then {_nav = true};
 	if (_selected select 4 in ["b_air", "o_air"] && _selected select 3 == "AIR") then {_air = true};
 	
@@ -148,11 +147,16 @@ VOX_FNC_AICMD = {
 		private _pos2 = _select2 select 0;
 		_pos2 call VOX_FNC_ORDER;
 		VOX_LOC_AICOUNT = 0;
+		systemchat ("AI MOVE: " + str _side);
 	} else {
 		/// if fails to move the current counter, start again
 		VOX_LOC_AICOUNT = VOX_LOC_AICOUNT + 1;
 		_side call VOX_FNC_AICMD;
 	};
+};
+
+if (isServer) then {
+	VOX_MOTOSKIP = 1;
 };
 
 /// start strategic phase

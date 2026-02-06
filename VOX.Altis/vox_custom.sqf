@@ -230,7 +230,7 @@ VOX_FNC_DELWEST = {
 };
 
 VOX_FNC_ADDEAST = {	
-	private _selected = VOX_FORMATIONS select (_this + 5);
+	private _selected = VOX_FORMATIONS select (_this + 6);
 
 	private _marker = _selected select 0;
 	private _name = _selected select 1;
@@ -277,14 +277,16 @@ VOX_FNC_MAP = {
 
 /// [_marker, _name]
 VOX_FORMATIONS = [
+	["b_recon", "Militia"],
 	["b_inf", "Infantry"],
-	["b_motor_inf", "Motorized"],
 	["b_mech_inf", "Mechanized"],
+	["b_motor_inf", "Motorized"],
 	["b_air", "Airmobile"],
 	["b_naval", "Amphibious"],
+	["o_recon", "Militia"],
 	["o_inf", "Infantry"],
-	["o_motor_inf", "Motorized"],
 	["o_mech_inf", "Mechanized"],
+	["o_motor_inf", "Motorized"],
 	["o_air", "Airmobile"],
 	["o_naval", "Amphibious"]
 ];
@@ -339,7 +341,7 @@ VOX_FNC_START = {
 				_blufor lbSetPicture [_added, _icon];
 				private _color = [0, 0.3, 0.6, 1];
 				_blufor lbSetPictureColor [_added, _color];				
-			}forEach (VOX_FORMATIONS select [0, 5]);
+			}forEach (VOX_FORMATIONS select [0, 6]);
 			
 			{
 				private _marker = _x select 0;
@@ -350,7 +352,7 @@ VOX_FNC_START = {
 				_opfor lbSetPicture [_added, _icon];
 				private _color = [0.5, 0, 0, 1];
 				_opfor lbSetPictureColor [_added, _color];				
-			}forEach (VOX_FORMATIONS select [5, 5]);
+			}forEach (VOX_FORMATIONS select [6, 6]);
 			
 			_minimap ctrlMapAnimAdd [1, 1, [worldSize / 2, worldSize / 2]];
 			ctrlMapAnimCommit _minimap;
