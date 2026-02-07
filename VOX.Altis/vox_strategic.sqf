@@ -68,7 +68,7 @@ VOX_FNC_ORDERS = {
 	
 	if (_selected select 4 in ["b_naval", "o_naval"] && _selected select 3 == "NAV") then {_nav = true};
 	if (_selected select 4 in ["b_air", "o_air"] && _selected select 3 == "AIR") then {_air = true};
-	if (_selected select 4 in ["b_plane", "o_plane"] && _selected select 3 == "AIR2") then {_air2 = true};
+	if (_selected select 4 in ["b_plane", "o_plane"] && _selected select 3 == "AIR") then {_air2 = true};
 	
 	{
 		private _seed = _x;
@@ -79,7 +79,7 @@ VOX_FNC_ORDERS = {
 		private _isNeighbor = _pos in _neighbors;
 		private _isNavMove = _nav && {_type == "NAV" && _unit == "hd_dot"};
 		private _isAirMove = _air && {_type == "AIR" && _unit == "hd_dot"};
-		private _isAir2Move = _air2 && {_type2 == "AIR" && _unit == "hd_dot"};
+		private _isAir2Move = _air2 && {_type == "AIR" && _unit == "hd_dot"};
 		
 		private _isNotFriend = !(_unit in _counters);
 		

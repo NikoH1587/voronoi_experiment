@@ -54,6 +54,7 @@ VOX_FNC_DRAWMARKERS = {
 	{
 		private _pos = _x select 0;
 		private _color = _x select 1;
+		private _seeds = _x select 2;
 		private _unit = _x select 4;
 		private _morale = _x select 5;
 		
@@ -65,14 +66,23 @@ VOX_FNC_DRAWMARKERS = {
 
 		/// special rule for recon unit
 		/// show unit icon when next to it
+		private _reconed = false;
+		private _recon = "o_recon";
+		if (_side == east) then {_recon = "b_recon"};
+		{
+			private _unit2 = _x select 4;
+			if (_x select 0 in _seeds) then {
+				if (_unit2 == _recon) then {_reconed = true};
+			};
+		}forEach VOX_GRID;
 		
-		if (_unit != "hd_dot" && (side player == _side)) then {
+		if (_unit != "hd_dot" && ((side player == _side) or _reconed)) then {
 			private _marker = createMarkerLocal [_name, _pos];
 			_marker setMarkerTypeLocal _unit;
 			if (_morale == 0) then {_marker setMarkerAlphaLocal 0.5};
 		};
 		
-		if (_unit != "hd_dot" && (side player != _side)) then {
+		if (_unit != "hd_dot" && (side player != _side) && _reconed == false) then {
 			private _marker = createMarkerLocal [_name, _pos];
 			private _type = "o_unknown";
 			if (_side == west) then {_type == "b_unknown"};
@@ -148,8 +158,8 @@ VOX_FNC_MOVE = {
 	
 	if (_new select 4 == "hd_dot" or _old IsEqualTo _new) then {
 
-		private _newold = [_old select 0, _new select 1, _old select 2, _old select 3, "hd_dot", 0, _old select 6];
-		private _newnew = [_new select 0, _new select 1, _new select 2, _new select 3, _old select 4, _old select 5, _new select 6];
+		private _newold = [_old select 0, _old select 1, _old select 2, _old select 3, "hd_dot", 0, _old select 6];
+		private _newnew = [_new select 0, _old select 1, _new select 2, _new select 3, _old select 4, _old select 5, _new select 6];
 		
 		VOX_GRID set [_indexOld, _newold];
 		VOX_GRID set [_indexNew, _newnew];	
