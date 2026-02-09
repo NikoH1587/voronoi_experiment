@@ -664,3 +664,108 @@ VOX_FNC_CLEARDIRS = {
 		}forEach _seeds;
 	}forEach VOX_GRID;
 };
+
+
+/// VOX_GRID = [[_pos0, _color1, _seeds2, _type3, _unit4, _morale5, (_tempcells6)]];
+VOX_GRID = [];
+/// get airfields
+
+private _airfields = [];
+{
+	private _marker = _x;
+	private _name = _x select [0, 3];
+	private _pos = getMarkerPos _x;
+	if (_name == "AIR") then {
+		_airfields pushback _pos;
+	}
+}forEach allMapMarkers;
+
+
+
+/// locations
+private _locations = nearestLocations [getPosATL player, ["NameCityCapital", "NameCity"], worldSize];
+{
+	private _position = position _x;
+	private _posX = round (_position select 0);
+	private _posY = round (_position select 1);
+	private _pos = [_posX, _posY];
+	/// check if there is an airfield
+	/// check if is marine
+	private _marine = false;
+	if (type _x == "NameMarine") then {_marine = true};
+	
+	private _airfield = false;
+	{if (_pos distance _x < VOX_SIZE) then {_airfield = true}}forEach _airfields;
+	
+	private _type = "CIV";
+	if (_airfield) then {_type = "AIR"};
+	if (_marine) then {_type = "NAV"};
+	VOX_GRID pushback [_pos, "colorBLACK", [], _type, "hd_dot", 0, []];
+}forEach _locations;
+
+/// get naval locations;
+
+{
+	private _cell = _x;
+	private _pos = _x select 0;
+	private _type = _x select 3;
+	private _naval = nearestLocation [_pos, "NameMarine", 2500];
+	if (isNull _naval == false) then {
+		if (_type == "CIV") then {_cell set [3, "NAV"]};
+		if (_type == "AIR") then {_cell set [3, "NAVAIR"];};
+	};	
+}forEach VOX_GRID;
+
+/// get locations
+private _locations = nearestLocations [getPosATL player, ["Hill","NameCityCapital", "NameCity"], (worldSize*2)];
+
+{
+	if (VOX_LOCATIONS) then {
+		private _pos = position _x;
+		private _pos = [round (_pos select 0), round (_pos select 1)];
+		private _type = "CIV";
+		VOX_GRID pushback [_pos, "colorBLACK", [], _type, "hd_dot", 0, []];
+	}
+}forEach _locations;
+
+/// get naval locations;
+
+{
+	private _cell = _x;
+	private _pos = _x select 0;
+	private _type = _x select 3;
+	private _naval = nearestLocation [_pos, "NameMarine", 2500];
+	if (isNull _naval == false) then {
+		if (_type == "CIV") then {_cell set [3, "NAV"]};
+		if (_type == "MIL") then {_cell set [3, "NAV"]};
+		if (_type == "AIR") then {_cell set [3, "NAVAIR"];};
+	};	
+}forEach VOX_GRID;
+
+
+VOX_LOC_AICOUNT = 0;
+VOX_FNC_AICMD = {
+	private _side = _this;
+	_side call VOX_FNC_SELECTABLE;
+	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	private _sideCol = "ColorBLUFOR";
+	if (_side == east) then {_sideCol == "ColorOPFOR"};
+	private _attack = VOX_LOC_ORDERS select {_x select 1 != _sideCol};
+	private _defend = VOX_LOC_ORDERS select {_x select 1 == _sideCol};
+
+	private _morale = (VOX_LOC_ORDERS select 0) select 5;
+	
+	if ((VOX_LOC_ORDERS select 0) select 5) in ["b_support", "o_support"]) then {_morale = 0};
+	
+	if (_attack > 0 && _morale == 1) then {
+		private _pos = _attack select floor random count _attack;
+		_pos call VOX_FNC_ORDER;
+	};
+	
+	if (_morale < 1) then {
+		private _pos = _defend select floor random count _defend;
+		_pos call VOX_FNC_ORDER;		
+	}
+};

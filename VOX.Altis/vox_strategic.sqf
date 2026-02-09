@@ -38,7 +38,7 @@ VOX_FNC_SELECT = {
 	private _update = true;
 	{
 		private _seed = _x;
-		if (_pos distance (_seed select 0) < VOX_SIZE * 2) then {
+		if (_pos distance (_seed select 0) < VOX_SIZE) then {
 			VOX_LOC_MODE = "ORDER";
 			VOX_LOC_SELECTED = _seed;
 			_side call VOX_FNC_ORDERS;
@@ -54,6 +54,7 @@ VOX_FNC_ORDERS = {
 	private _side = _this;
 	private _selected = VOX_LOC_SELECTED;
 	VOX_LOC_ORDERS = [_selected];
+	private _pos1 = _selected select 0;
 	private _neighbors = _selected select 2;
 	
 	private _config = VOX_CFG_WEST;
@@ -64,29 +65,44 @@ VOX_FNC_ORDERS = {
 	
 	private _nav = false;
 	private _air = false;
-	private _air2 = false;
+	private _plane = false;
+	private _arty= false;
 	
-	if (_selected select 4 in ["b_naval", "o_naval"] && _selected select 3 == "NAV") then {_nav = true};
-	if (_selected select 4 in ["b_air", "o_air"] && _selected select 3 == "AIR") then {_air = true};
-	if (_selected select 4 in ["b_plane", "o_plane"] && _selected select 3 == "AIR") then {_air2 = true};
+	/// teleporting rules
+	if (_selected select 4 in ["b_naval", "o_naval"] && _selected select 3 in ["NAV", "NAVAIR"]) then {_nav = true};
+	if (_selected select 4 in ["b_air", "o_air"]) then {_air = true};
+	if (_selected select 4 in ["b_plane", "o_plane"]) then {_plane = true};
+	if (_selected select 4 in ["b_art","o_art"]) then {_arty = true};
 	
 	{
 		private _seed = _x;
-		private _pos = _x select 0;
+		private _pos2 = _x select 0;
+		private _seeds = _x select 2;
 		private _type = _x select 3;
 		private _unit = _x select 4;
 		
-		private _isNeighbor = _pos in _neighbors;
-		private _isNavMove = _nav && {_type == "NAV" && _unit == "hd_dot"};
-		private _isAirMove = _air && {_type == "AIR" && _unit == "hd_dot"};
-		private _isAir2Move = _air2 && {_type == "AIR" && _unit == "hd_dot"};
+		private _isNeighbor = _pos2 in _neighbors;
 		
-		private _isNotFriend = !(_unit in _counters);
+		private _isEnemy = !(_unit in _counters);		
 		
-		if (((_isNeighbor && _isAir2Move == false) or _isNavMove or _isAirMove) && _isNotFriend) then {
+		/// airmobile 5km skip rule
+		if (_air && _pos1 distance _pos2 < 5000 && _unit == "hd_dot") then {_isNeighbor = true};
+		
+		/// amphibious 5km skip rule
+		if (_nav && _pos1 distance _pos2 < 5000 && _type in ["NAV", "NAVAIR"] && _unit == "hd_dot") then {_isNeighbor = true};
+		
+		/// plane skip rule
+		if (_plane && _type in ["AIR","NAVAIR"] && _unit == "hd_dot") then {_isNeighbor = true};
+		if (_plane && _type in ["AIR","NAVAIR"] == false) then {_isNeighbor = false};
+		if (_plane && _isEnemy && _unit != "hd_dot") then {_isNeighbor = true}; /// Airstrike!
+		
+		/// artillery skip rule
+		if (_arty && _isEnemy && _unit != "hd_dot") then {_isNeighbor = true}; /// Artillery barrage!
+		
+		if (_isNeighbor && _isEnemy) then {
 			VOX_LOC_ORDERS pushback _seed;
 		} else {
-			private _marker = format ["LOC_%1", _pos];
+			private _marker = format ["LOC_%1", _pos2];
 			deletemarkerLocal _marker;
 		};
 	}forEach VOX_GRID;
@@ -114,7 +130,7 @@ VOX_FNC_ORDER = {
 	{
 		private _seed = _x;
 		private _pos2 = _seed select 0;
-		if (_pos distance _pos2 < VOX_SIZE * 2) then {
+		if (_pos distance _pos2 < VOX_SIZE && _update == true) then {
 			[VOX_LOC_SELECTED, _seed] remoteExec ["VOX_FNC_MOVE", 2];
 			_update = false;
 		};
@@ -141,24 +157,41 @@ if (VOX_LOC_COMMANDER) then {
 VOX_LOC_AICOUNT = 0;
 VOX_FNC_AICMD = {
 	private _side = _this;
-	///if (true) exitwith {VOX_TURN = west; 0 call VOX_FNC_UPDATE};
+	
+	/// ai "delay
+	sleep 1;
+	
 	_side call VOX_FNC_SELECTABLE;
+	/// [[_seed1],[_seed2]]
 	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
-	private _pos = _select select 0;
-	[_pos, _side] call VOX_FNC_SELECT;
-	private _select2 = VOX_LOC_ORDERS select floor random count VOX_LOC_ORDERS;
-	if (count VOX_LOC_ORDERS > 1 or VOX_LOC_AICOUNT > (count VOX_LOC_ORDERS)) then {
-		sleep 1;
-		private _pos2 = _select2 select 0;
-		_pos2 call VOX_FNC_ORDER;
-		VOX_LOC_AICOUNT = 0;
-		systemchat ("AI MOVE: " + str _side);
-	} else {
-		/// if fails to move the current counter, start again
-		VOX_LOC_AICOUNT = VOX_LOC_AICOUNT + 1;
-		sleep 0.1;
-		_side call VOX_FNC_AICMD;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	/// ai "delay
+	sleep random 1;	
+	
+	private _sideCol = "ColorBLUFOR";
+	if (_side == east) then {_sideCol = "ColorOPFOR"};
+	private _attack = VOX_LOC_ORDERS select {_x select 1 != _sideCol};
+	private _defend = VOX_LOC_ORDERS select {_x select 1 == _sideCol};
+
+	private _seed = VOX_LOC_ORDERS select 0;
+	private _unit = _seed select 4;
+	private _morale = _seed select 5;
+	
+	if (_unit in ["b_support", "o_support"]) then {_morale = 0};
+	
+	/// ai "delay
+	sleep random 1;	
+	
+	if (count _attack > 0 && _morale == 1) then {
+		private _pos = (_attack select floor random count _attack) select 0;
+		_pos call VOX_FNC_ORDER;
 	};
+	
+	if (_morale < 1) then {
+		private _pos = (_defend select floor random count _defend) select 0;
+		_pos call VOX_FNC_ORDER;		
+	}
 };
 
 if (isServer) then {

@@ -3,7 +3,7 @@
 /// TODO: make savegame compatible
 
 /// check if player commander
-VOX_LOC_COMMANDER = false;
+VOX_LOC_COMMANDER = true;
 if (player == CMD_WEST) then {VOX_LOC_COMMANDER = true};
 if (player == CMD_EAST) then {VOX_LOC_COMMANDER = true};
 

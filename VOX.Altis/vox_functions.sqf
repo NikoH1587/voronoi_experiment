@@ -1,21 +1,74 @@
 /// VOX_GRID = [[_pos0, _color1, _seeds2, _type3, _unit4, _morale5, _cells6]];
 VOX_FNC_DRAWGRID = 	{
+	private _naval = [];
 	{
+		private _pos = _x select 0;
 		private _color = _x select 1;
+		private _seeds = _x select 2;
+		private _type = _x select 3;
 		private _cells = _x select 6;
+		
+		if (_type in ["NAV","NAVAIR"]) then {
+			_naval pushback _pos;
+		};
+		
+		/// draw cells
 		{
 			private _row = _x select 0;
 			private _col = _x select 1;
-			_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
+			_posC = [_col * VOX_SIZE, _row * VOX_SIZE];
 
-			private _marker = createMarker [format ["VOX_%1_%2", _row, _col], _pos];
+			private _marker = createMarker [format ["VOX_%1_%2", _row, _col], _posC];
 			_marker setMarkerShape "RECTANGLE";
 			_marker setMarkerBrush "Solid";
 			_marker setMarkerColor _color;
 			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
 			_marker setMarkerAlpha 0.5;
 		}forEach _cells;
+		
+		/// draw connection to neighboring
+		
+		{
+			private _posS = _x select 0;
+			private _typeS = _x select 1;
+		}forEach VOX_GRID;
+		
+		{
+			private _posS = _x;
+			private _dir = _pos getDir _posS;
+			private _posCent = [((_pos select 0) + (_posS select 0)) / 2, ((_pos select 1) + (_posS select 1)) / 2];
+			private _markerS = createMarker [format ["VOX_%1", _posCent], _posCent];
+			_markerS setMarkerType "mil_box";
+			_markerS setMarkerDir _dir;
+			_markerS setMarkerSize [0.25, 2];
+			_markerS setMarkerAlpha 0.25;
+		}forEach _seeds;
+		
 	}forEach VOX_GRID;
+	
+	/// draw naval connections;	
+	
+	{
+		private _posN = _x;
+		
+		{
+			private _posN2 = _x;
+			private _dirN = _posN getDir _posN2;
+			if (_posN distance _posN2 < 5000) then {
+				private _posCN = [((_posN select 0) + (_posN2 select 0)) / 2, ((_posN select 1) + (_posN2 select 1)) / 2];
+				private _markerN = createMarker [format ["VOX_%1", _posCN], _posCN];
+				_markerN setMarkerType "mil_box";
+				_markerN setMarkerDir _dirN;
+				_markerN setMarkerSize [0.25, 2];
+				_markerN setMarkerAlpha 0.25;
+				_markerN setMarkerColor "#(0,1,1,1)"
+			};
+		}forEach _naval;
+	}forEach _naval;
+	
+	if (VOX_DEBUG) then {
+		hint ((str (count allMapMarkers)) + " markers created for " + (str (count VOX_GRID)) + " locations");	
+	};
 };
 
 VOX_FNC_CLEARGRID = {
@@ -67,6 +120,8 @@ VOX_FNC_DRAWMARKERS = {
 		/// special rule for recon unit
 		/// show unit icon when next to it
 		private _reconed = false;
+		/// also if unit was previously engaged
+		if (_morale < 1) then {_reconed = true};
 		private _recon = "o_recon";
 		if (_side == east) then {_recon = "b_recon"};
 		{
@@ -79,7 +134,9 @@ VOX_FNC_DRAWMARKERS = {
 		if (_unit != "hd_dot" && ((side player == _side) or _reconed)) then {
 			private _marker = createMarkerLocal [_name, _pos];
 			_marker setMarkerTypeLocal _unit;
-			if (_morale == 0) then {_marker setMarkerAlphaLocal 0.5};
+			private _text = str (_morale * 100);
+			_marker setMarkerText _text + "%";
+			
 		};
 		
 		if (_unit != "hd_dot" && (side player != _side) && _reconed == false) then {
@@ -87,7 +144,9 @@ VOX_FNC_DRAWMARKERS = {
 			private _type = "o_unknown";
 			if (_side == west) then {_type == "b_unknown"};
 			_marker setMarkerTypeLocal _type;
-			if (_morale == 0) then {_marker setMarkerAlphaLocal 0.5};
+			if (VOX_DEBUG) then {
+				_marker setMarkerText str [_unit];
+			};
 		};		
 		
 	}forEach VOX_GRID;
@@ -182,12 +241,44 @@ VOX_FNC_MOVE = {
 		VOX_DEFENDER = _new;
 		publicVariable "VOX_ATTACKER";
 		publicVariable "VOX_DEFENDER";
-		remoteExec ["VOX_FNC_CLEARMARKERS", 0];
+		///remoteExec ["VOX_FNC_CLEARMARKERS", 0];
 		0 call VOX_FNC_CLEARGRID;
+		0 call VOX_FNC_DRAWOBJECTIVES;
 		///0 call VOX_FNC_SUPPORTS;
 		///0 call VOX_FNC_DRAWOBJECTIVES;
 		["vox_briefing.sqf"] remoteExec ["execVM"];
 	};
+};
+
+VOX_FNC_DRAWOBJECTIVES = {
+	private _cellsA = VOX_ATTACKER select 6;
+	private _colorA = VOX_ATTACKER select 1;
+	private _cellsD = VOX_DEFENDER select 6;
+	private _colorD = VOX_DEFENDER select 1;
+	
+	{
+		private _row = _x select 0;
+		private _col = _X select 1;
+		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
+		private _name = "OBJA_" + (str _forEachIndex);
+		private _marker = createMarker [_name, _pos];
+		_marker setMarkerShape "RECTANGLE";
+		_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+		_marker setMarkerAlpha 0.5;
+		_marker setMarkerColor _colorA;
+	}forEach _cellsA;
+	
+	{
+		private _row = _x select 0;
+		private _col = _X select 1;
+		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
+		private _name = "OBJD_" + (str _forEachIndex);
+		private _marker = createMarker [_name, _pos];
+		_marker setMarkerShape "RECTANGLE";
+		_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+		_marker setMarkerAlpha 0.5;
+		_marker setMarkerColor _colorD;
+	}forEach _cellsD;
 };
 
 VOX_FNC_SOUND = {
@@ -218,74 +309,6 @@ VOX_FNC_RADIO = {
 	
 	private _sound = _sounds select floor random count _sounds;
 	playSoundUI [_sound, 0.5, 1];
-};
-
-VOX_FNC_SUPPORTS = {
-	private _atk_cells = VOX_ATTACKER select 2;
-	private _atk_unit = VOX_ATTACKER select 4;
-	private _atk_side = _atk_unit select [0, 1];
-	private _def_cells = VOX_DEFENDER select 2;
-	private _def_unit = VOX_DEFENDER select 4;
-	private _def_side = _def_unit select [0, 1];
-
-	VOX_ATTACK_SUPPORTS = [];
-	VOX_DEFEND_SUPPORTS = [];
-	{
-		private _pos = _x select 0;
-		private _unit = _x select 4;
-		private _side = _unit select [0, 1];
-		if (_pos in _atk_cells && _side == _atk_side) then {
-			VOX_ATTACK_SUPPORTS pushback _x;
-		};
-		
-		if (_pos in _def_cells && _side == _def_side) then {
-			VOX_DEFEND_SUPPORTS pushback _x;
-		};
-	}forEach VOX_GRID;
-	hint str VOX_ATTACK_SUPPORTS;
-};
-
-VOX_FNC_DRAWOBJECTIVES = {
-	private _atk_pos = VOX_ATTACKER select 0;
-	private _atk_edges = VOX_ATTACKER select 1;
-	private _atk_unit = VOX_ATTACKER select 4;
-	private _atk_morale = VOX_ATTACKER select 5;
-	private _def_pos = VOX_DEFENDER select 0;
-	private _def_edges = VOX_DEFENDER select 1;
-	private _def_unit = VOX_DEFENDER select 4;
-	private _def_morale = VOX_DEFENDER select 5;
-	
-	private _atk_mrk = createMarker ["VOX_ATK", _atk_pos];
-	_atk_mrk setMarkerType _atk_unit;
-	if (_atk_morale == 0) then {_atk_mrk setMarkerAlphaLocal 0.5};
-	_atk_mrk setMarkerSize [1.25, 1.25];
-	
-	private _def_mrk = createMarker ["VOX_DEF", _def_pos];
-	_def_mrk setMarkerType _def_unit;
-	if (_def_morale == 0) then {_def_mrk setMarkerAlphaLocal 0.5};
-	_def_mrk setMarkerSize [1.25, 1.25];
-	
-	private _center = [((_atk_pos select 0) + (_def_pos select 0)) / 2, ((_atk_pos select 1) + (_def_pos select 1)) / 2];
-	private _distance = _atk_pos distance _def_pos;
-	private _locations = nearestLocations [_center, [], _distance];
-	
-	{
-		private _pos = position _x;
-		private _size = size _x;
-		if ((_size select 1) > 50 && surfaceIsWater _pos == false) then {
-			private _marker1 = createMarker [format ["REC_%1", _pos], _pos];
-			_marker1 setMarkerShape "ELLIPSE";
-			_marker1 setMarkerBrush "Cross";
-			_marker1 setMarkerSize [(_size select 0), (_size select 0)];
-			_marker1 setMarkerAlpha 0.33;
-			
-			private _marker2 = createMarker [format ["OBJ_%1", _pos], _pos];
-			_marker2 setMarkerShape "ELLIPSE";
-			_marker2 setMarkerBrush "Cross";
-			_marker2 setMarkerSize [(_size select 1), (_size select 1)];
-			_marker2 setMarkerAlpha 0.33;
-		};
-	}forEach _locations;
 };
 
 VOX_FNC_CLOSEMAP = {
