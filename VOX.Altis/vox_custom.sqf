@@ -389,7 +389,6 @@ VOX_FNC_START = {
 			_scenario lbAdd "EAST";
 			_scenario lbAdd "NORTH";
 			_scenario lbAdd "SOUTH";
-			_scenario lbAdd "CENT";
 			_scenario lbSetCurSel 0;
 		};
 		

@@ -149,7 +149,7 @@ class VOX_CUSTOM
 			y = GUI_GRID_CENTER_Y + 2 * GUI_GRID_CENTER_H;
 			w = 10 * GUI_GRID_CENTER_W;
 			h = 2 * GUI_GRID_CENTER_H;
-			onLBSelChanged = "VOX_SCENARIO = ['WEST','EAST','NORTH','SOUTH','CENT'] select (_this select 1)";
+			onLBSelChanged = "VOX_SCENARIO = ['WEST','EAST','NORTH','SOUTH'] select (_this select 1)";
 			tooltip = "Cange scenario.";
 		};		
 		

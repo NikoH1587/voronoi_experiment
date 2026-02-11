@@ -16,11 +16,10 @@ VOX_GRID = [];
 
 /// reduce grid to 40
 VOX_CENTER = [] call BIS_fnc_randomPos;;
-VOX_SCENARIO = "WEST";
 if (VOX_SCENARIO == "WEST") then {VOX_WEST = [0, worldSize / 2]; VOX_EAST = [worldSize, worldSize / 2]};
-///if (VOX_SCENARIO == "EAST") then {VOX_CENTER = [worldSize, worldSize / 2]};
-///if (VOX_SCENARIO == "NORTH") then {VOX_CENTER = [worldSize / 2, worldSize]};
-///if (VOX_SCENARIO == "SOUTH") then {VOX_CENTER = [worldSize / 2, 0]};
+if (VOX_SCENARIO == "EAST") then {VOX_EAST = [0, worldSize / 2]; VOX_WEST = [worldSize, worldSize / 2]};
+if (VOX_SCENARIO == "NORTH") then {VOX_WEST = [worldSize / 2, 0]; VOX_EAST = [worldSize / 2, worldsize]};
+if (VOX_SCENARIO == "SOUTH") then {VOX_EAST = [worldSize / 2, 0]; VOX_WEST = [worldSize / 2, worldsize]};
 	
 _tempgrid = [VOX_GRID, [], {(_x select 0) distance VOX_CENTER}, "ASCEND"] call BIS_fnc_sortBy;
 VOX_GRID = _tempgrid;

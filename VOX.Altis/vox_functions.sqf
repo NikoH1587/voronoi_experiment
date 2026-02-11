@@ -126,26 +126,29 @@ VOX_FNC_DRAWMARKERS = {
 		/// special rule for recon unit
 		/// show unit icon when next to it
 		private _reconed = false;
+		private _seen = false;
 		/// also if unit was previously engaged
 		if (_morale < 1) then {_reconed = true};
-		private _recon = "o_recon";
-		if (_side == east) then {_recon = "b_recon"};
+		private _recon = ["o_recon", "o_air"];
+		if (_side == east) then {_recon = ["b_recon", "b_air"]};
 		{
 			private _unit2 = _x select 4;
+			private _color2 = _x select 1;
 			if (_x select 0 in _seeds) then {
-				if (_unit2 == _recon) then {_reconed = true};
+				if (_unit2 in _recon) then {_reconed = true};
+				if (_color2 == "ColorBLUFOR" && _side == east) then {_seen = true};
+				if (_color2 == "ColorOPFOR" && _side == west) then {_seen = true};
 			};
 		}forEach VOX_GRID;
 		
-		if (_unit != "hd_dot" && ((side player == _side) or _reconed)) then {
+		if (_unit != "hd_dot" && ((side player == _side) or _reconed or VOX_DEBUG)) then {
 			private _marker = createMarkerLocal [_name, _pos];
 			_marker setMarkerTypeLocal _unit;
 			private _text = str (_morale * 100);
 			_marker setMarkerText _text + "%";
-			
 		};
 		
-		if (_unit != "hd_dot" && (side player != _side) && _reconed == false) then {
+		if (_unit != "hd_dot" && (side player != _side) && _reconed == false && _seen) then {
 			private _marker = createMarkerLocal [_name, _pos];
 			private _type = "o_unknown";
 			if (_side == west) then {_type = "b_unknown"};
@@ -353,3 +356,4 @@ VOX_FNC_CLOSEMAP = {
 	openMap false;
 	(findDisplay 1400) closedisplay 1;
 };
+
