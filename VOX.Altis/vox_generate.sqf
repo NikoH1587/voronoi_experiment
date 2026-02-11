@@ -6,23 +6,26 @@ VOX_GRID = [];
 	private _type = _x select [0, 3];
 	private _pos = getMarkerPos _x;
 	private _pos = [round (_pos select 0), round (_pos select 1)];
-	if (_type in ["AIR", "AIRNAV", "MIL", "NAV", "CIV"]) then {
-		VOX_GRID pushback [_pos, "colorBLACK", [], _type, "hd_dot", 0, []];
+	if (_type in ["AIR", "ALT", "MIL", "NAV", "CIV"]) then {
+		VOX_GRID pushback [_pos, "colorBLACK", [], _type, "hd_dot", 1, []];
 		deleteMarker _marker;
 	}
 }forEach allMapMarkers;
 
+/// TODO: Change generation
+
 /// reduce grid to 40
-VOX_CENTER = [worldSize / 2, worldSize / 2];
-if (VOX_SCENARIO == "WEST") then {VOX_CENTER = [0, worldSize / 2]};
-if (VOX_SCENARIO == "EAST") then {VOX_CENTER = [worldSize, worldSize / 2]};
-if (VOX_SCENARIO == "NORTH") then {VOX_CENTER = [worldSize / 2, worldSize]};
-if (VOX_SCENARIO == "SOUTH") then {VOX_CENTER = [worldSize / 2, 0]};
+VOX_CENTER = [] call BIS_fnc_randomPos;;
+VOX_SCENARIO = "WEST";
+if (VOX_SCENARIO == "WEST") then {VOX_WEST = [0, worldSize / 2]; VOX_EAST = [worldSize, worldSize / 2]};
+///if (VOX_SCENARIO == "EAST") then {VOX_CENTER = [worldSize, worldSize / 2]};
+///if (VOX_SCENARIO == "NORTH") then {VOX_CENTER = [worldSize / 2, worldSize]};
+///if (VOX_SCENARIO == "SOUTH") then {VOX_CENTER = [worldSize / 2, 0]};
 	
 _tempgrid = [VOX_GRID, [], {(_x select 0) distance VOX_CENTER}, "ASCEND"] call BIS_fnc_sortBy;
 VOX_GRID = _tempgrid;
-VOX_GRID deleteRange [30, count VOX_GRID];
-
+private _counters = (count (VOX_CFG_WEST + VOX_CFG_EAST))*2;
+VOX_GRID deleteRange [_counters, count VOX_GRID];
 
 /// create AO marker;
 private _furthest = (VOX_GRID select ((count VOX_GRID) - 1)) select 0;
@@ -51,7 +54,7 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
 		private _isWater = (surfaceIsWater _pos);
 		private _isWoods = ((_pos nearRoads (VOX_SIZE * 0.7)) isEqualTo []);
-		private _notAO = (_pos distance VOX_CENTER > (_maxDist + VOX_SIZE));
+		private _notAO = (_pos distance VOX_CENTER > (_maxDist + (VOX_SIZE*2)));
 		if (_isWoods or _notAO) then {continue}; /// skip water and wasteland
 		private _nearest = _pos call _fnc_nearest;
 		
@@ -99,34 +102,65 @@ _fnc_findSeeds = {
 	_x set [2, _seeds];
 }forEach VOX_GRID;
 
-/// reverse configs, so first units in list spawn further
+/// reverse configs, so first units in list spawns further
 reverse VOX_CFG_WEST;
 reverse VOX_CFG_EAST;
 
-/// place BLUFOR formations
-{
+/// TODO: change generation shape
 
-	private _sorted = [VOX_GRID, [], {(_x select 0) distance VOX_CENTER}, "ASCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
+/// place attacker formation
+{
+	private _sorted = [VOX_GRID, [], {(_x select 0) distance VOX_WEST}, "ASCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
 	private _select = selectRandom (_sorted select [0, 2]);
+	
+	private _hasair = false;
+	{
+		if (_x select 3 in ["AIR", "ALT"] && (_x select 4) == "hd_dot") then {_hasair = true};
+	}forEach _sorted;
+	
+	if (_hasair && _x in ["b_plane", "o_plane"]) then {
+		_sorted2 = [VOX_GRID, [], {(_x select 0) distance VOX_WEST}, "ASCEND", {_x select 3 in ["AIR", "ALT"] && _x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
+		_select = _sorted2 select 0;
+	};
 	
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
 	_selectGrid set [1, "ColorBLUFOR"];
 	_selectGrid set [4, _x];
 	_selectGrid set [5, 1];
+	
+	private _pos = (_sorted select 0) select 0;
+	if (_forEachIndex == 0) then {
+		VOX_BASE_WEST = _pos;
+	};
 }forEach VOX_CFG_WEST;
 
-/// place OPFOR formations
+/// place defender formation
 {
-
-	private _sorted = [VOX_GRID, [], {(_x select 0) distance VOX_CENTER}, "DESCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
+	private _sorted = [VOX_GRID, [], {(_x select 0) distance VOX_EAST}, "ASCEND", {_x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
 	private _select = selectRandom (_sorted select [0, 2]);
+	
+	private _hasair = false;
+	{
+		if (_x select 3 in ["AIR", "ALT"] && (_x select 4) == "hd_dot") then {_hasair = true};
+	}forEach _sorted;
+	
+	if (_hasair && _x in ["b_plane", "o_plane"]) then {
+		_sorted2 = [VOX_GRID, [], {(_x select 0) distance VOX_EAST}, "ASCEND", {_x select 3 in ["AIR", "ALT"] && _x select 4 == "hd_dot"}] call BIS_fnc_sortBy;
+		_select = _sorted2 select 0;
+	};
 	
 	private _index = VOX_GRID find _select;
 	private _selectGrid = VOX_GRID select _index;
 	_selectGrid set [1, "ColorOPFOR"];
 	_selectGrid set [4, _x];
 	_selectGrid set [5, 1];
+	
+	private _pos = (_sorted select 0) select 0;
+	if (_forEachIndex == 0) then {
+		VOX_BASE_EAST = _pos;
+	};	
+
 }forEach VOX_CFG_EAST;
 
 /// draw grid;
@@ -142,63 +176,3 @@ publicVariable "VOX_GRID";
 
 /// draw counters
 remoteExec ["VOX_FNC_DRAWMARKERS", 0];
-
-/// count markers and debug connections
-if (VOX_DEBUG) then {
-	private _naval = [];
-	{
-		private _pos = _x select 0;
-		private _seeds = _x select 2;
-		private _type = _x select 3;
-		private _posX = _pos select 0;
-		private _posY = _pos select 1;
-		
-		if (_type in ["NAV","NAVAIR"]) then {
-			_naval pushback _pos;
-		};
-		
-		{
-			private _posX1 = _x select 0;
-			private _posY1 = _x select 1;
-			private _plus = _posX + _posY + _posX1 + _posY1;
-			private _name = format ["VOX_%1", _plus];
-			private _marker = createMarker [_name, _pos];
-			private _polyline = [_posX, _posY, _posX1, _posY1];
-			_marker setMarkerShape "Polyline";
-			_marker setMarkerPolyline _polyline;
-			_marker setMarkerAlpha 0.25;
-			
-			if (false) then {
-				private _posC = [(_posX + _posX1)/2, (_posY + _posY1)/2];
-				private _nameC = format ["VOX_%1", random 10];
-				private _markerC = createMarker [_nameC, _posC];
-				_markerC setMarkerType "mil_dot";
-					private _distance = round (_pos distance [_posX1, _posY1]);
-				_markerC setMarkerText (str _distance);
-				if (_distance < 1500) then {_markerC setMarkerColor "ColorGREEN"};
-				if (_distance > 3000) then {_markerC setMarkerColor "ColorRED"};
-			};
-		}forEach _seeds;
-	}forEach VOX_GRID;
-	
-	/// draw naval connections
-	{
-		private _pos1 = _x;
-		private _posX1 = _pos1 select 0;
-		private _posY1 = _pos1 select 1;
-		{
-			private _pos2 = _x;
-			private _posX2 = _pos2 select 0;
-			private _posY2 = _pos2 select 1;
-			if (_pos1 distance _pos2 < 5000) then {
-				private _name = _posX1 + _posX2 + _posY1 + _posX2;
-				private _marker = createMarker [format ["NAV_%1", _name], _pos2];
-				_marker setMarkerShape "Polyline";
-				_marker setMarkerPolyline [_posX1, _posY1, _posX2, _posY2];
-				_marker setMarkerColor "#(0,0.75,0.75,1)";
-				_marker setMarkerAlpha 0.1;
-			};
-		}forEach _naval;
-	}forEach _naval;	
-};
-

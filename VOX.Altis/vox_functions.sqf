@@ -7,8 +7,11 @@ VOX_FNC_DRAWGRID = 	{
 		private _seeds = _x select 2;
 		private _type = _x select 3;
 		private _cells = _x select 6;
+		private _alpha = 0.5;
+		///if (_pos distance VOX_BASE_WEST < 5000) then {_alpha = 0.75};
+		///if (_pos distance VOX_BASE_EAST < 5000) then {_alpha = 0.75};
 		
-		if (_type in ["NAV","NAVAIR"]) then {
+		if (_type in ["NAV","ALT"]) then {
 			_naval pushback _pos;
 		};
 		
@@ -23,27 +26,27 @@ VOX_FNC_DRAWGRID = 	{
 			_marker setMarkerBrush "Solid";
 			_marker setMarkerColor _color;
 			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
-			_marker setMarkerAlpha 0.5;
+			_marker setMarkerAlpha _alpha;
 		}forEach _cells;
 		
 		/// draw connection to neighboring
+		if (VOX_DEBUG) then {
+			{
+				private _posS = _x select 0;
+				private _typeS = _x select 1;
+			}forEach VOX_GRID;
 		
-		{
-			private _posS = _x select 0;
-			private _typeS = _x select 1;
-		}forEach VOX_GRID;
-		
-		{
-			private _posS = _x;
-			private _dir = _pos getDir _posS;
-			private _posCent = [((_pos select 0) + (_posS select 0)) / 2, ((_pos select 1) + (_posS select 1)) / 2];
-			private _markerS = createMarker [format ["VOX_%1", _posCent], _posCent];
-			_markerS setMarkerType "mil_box";
-			_markerS setMarkerDir _dir;
-			_markerS setMarkerSize [0.25, 2];
-			_markerS setMarkerAlpha 0.25;
-		}forEach _seeds;
-		
+			{
+				private _posS = _x;
+				private _dir = _pos getDir _posS;
+				private _posCent = [((_pos select 0) + (_posS select 0)) / 2, ((_pos select 1) + (_posS select 1)) / 2];
+				private _markerS = createMarker [format ["VOX_%1", _posCent], _posCent];
+				_markerS setMarkerType "mil_box";
+				_markerS setMarkerDir _dir;
+				_markerS setMarkerSize [0.25, 2];
+				_markerS setMarkerAlpha _alpha;
+			}forEach _seeds;
+		};
 	}forEach VOX_GRID;
 	
 	/// draw naval connections;	
@@ -117,6 +120,9 @@ VOX_FNC_DRAWMARKERS = {
 		private _side = west;
 		if (_color == "ColorOPFOR") then {_side = east};	
 
+		/// TODO:
+		/// completly hide eny units that are not next to friendly units?
+
 		/// special rule for recon unit
 		/// show unit icon when next to it
 		private _reconed = false;
@@ -142,7 +148,7 @@ VOX_FNC_DRAWMARKERS = {
 		if (_unit != "hd_dot" && (side player != _side) && _reconed == false) then {
 			private _marker = createMarkerLocal [_name, _pos];
 			private _type = "o_unknown";
-			if (_side == west) then {_type == "b_unknown"};
+			if (_side == west) then {_type = "b_unknown"};
 			_marker setMarkerTypeLocal _type;
 			if (VOX_DEBUG) then {
 				_marker setMarkerText str [_unit];
@@ -178,8 +184,8 @@ VOX_FNC_UPDATE = {
 		onMapSingleClick {true};
 	};
 	
-	if (isServer && isPlayer CMD_WEST == false && VOX_TURN == west) then {west call VOX_FNC_AICMD};
-	if (isServer && isPlayer CMD_EAST == false && VOX_TURN == east) then {east call VOX_FNC_AICMD};
+	if (isServer && isPlayer CMD_WEST == false && VOX_TURN == west) then {west spawn {call VOX_FNC_STRATCMD}};
+	if (isServer && isPlayer CMD_EAST == false && VOX_TURN == east) then {east spawn {call VOX_FNC_STRATCMD}};
 };
 
 VOX_FNC_MOVE = {
@@ -217,7 +223,7 @@ VOX_FNC_MOVE = {
 	
 	if (_new select 4 == "hd_dot" or _old IsEqualTo _new) then {
 
-		private _newold = [_old select 0, _old select 1, _old select 2, _old select 3, "hd_dot", 0, _old select 6];
+		private _newold = [_old select 0, _old select 1, _old select 2, _old select 3, "hd_dot", 1, _old select 6];
 		private _newnew = [_new select 0, _old select 1, _new select 2, _new select 3, _old select 4, _old select 5, _new select 6];
 		
 		VOX_GRID set [_indexOld, _newold];
@@ -241,7 +247,7 @@ VOX_FNC_MOVE = {
 		VOX_DEFENDER = _new;
 		publicVariable "VOX_ATTACKER";
 		publicVariable "VOX_DEFENDER";
-		///remoteExec ["VOX_FNC_CLEARMARKERS", 0];
+		/// remoteExec ["VOX_FNC_CLEARMARKERS", 0];
 		0 call VOX_FNC_CLEARGRID;
 		0 call VOX_FNC_DRAWOBJECTIVES;
 		///0 call VOX_FNC_SUPPORTS;
@@ -302,13 +308,45 @@ VOX_FNC_RADIO = {
 		"a3\sounds_f\sfx\ui\uav\uav_03.wss",
 		"a3\sounds_f\sfx\ui\uav\uav_04.wss",
 		"a3\sounds_f\sfx\ui\uav\uav_05.wss",
-		"a3\sounds_f\sfx\ui\uav\uav_07.wss",
-		"a3\sounds_f\sfx\ui\uav\uav_08.wss",
-		"a3\sounds_f\sfx\ui\uav\uav_09.wss"
+		"a3\sounds_f\sfx\ui\uav\uav_07.wss"
 	];
 	
 	private _sound = _sounds select floor random count _sounds;
-	playSoundUI [_sound, 0.5, 1];
+	playSoundUI [_sound, 1, 1];
+};
+
+VOX_FNC_SFX = {
+	private _soundinf = [
+		"a3\sounds_f\ambient\battlefield\battlefield_firefight1.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_firefight2.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_firefight3.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_firefight4.wss"	
+	];
+
+	private _soundhel = [
+		"a3\sounds_f\ambient\battlefield\battlefield_heli1.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_heli2.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_heli3.wss"	
+	];
+
+	private _soundart = [
+		"a3\sounds_f\ambient\battlefield\battlefield_explosions1.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_explosions2.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_explosions3.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_explosions4.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_explosions5.wss"
+	];
+	
+	private _soundair = [
+		"a3\sounds_f\ambient\battlefield\battlefield_jet1.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_jet2.wss",
+		"a3\sounds_f\ambient\battlefield\battlefield_jet3.wss"	
+	];
+	
+	private _sounds = [_soundinf, _soundhel, _soundart, _soundair] select _this;
+	private _sound = _sounds select floor random count _sounds;
+	sleep 3;
+	playSoundUI [_sound, 1, 1];
 };
 
 VOX_FNC_CLOSEMAP = {

@@ -10,6 +10,16 @@
 /// start objective loop
 /// spawn jukebox
 
+/// if SUP is not present:
+/// random ammo
+/// random fuel
+/// random skill
+
+/// TAC AI:
+/// if arty: alarm sound after delay
+/// if air: air raid siren
+/// option to disable?
+
 /// close map
 /// debug group
 private _group = [[15351.2,17080.1,0], west, 5] call BIS_fnc_spawnGroup;

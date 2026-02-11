@@ -712,7 +712,7 @@ private _locations = nearestLocations [getPosATL player, ["NameCityCapital", "Na
 	private _naval = nearestLocation [_pos, "NameMarine", 2500];
 	if (isNull _naval == false) then {
 		if (_type == "CIV") then {_cell set [3, "NAV"]};
-		if (_type == "AIR") then {_cell set [3, "NAVAIR"];};
+		if (_type == "AIR") then {_cell set [3, "ALT"];};
 	};	
 }forEach VOX_GRID;
 
@@ -738,7 +738,7 @@ private _locations = nearestLocations [getPosATL player, ["Hill","NameCityCapita
 	if (isNull _naval == false) then {
 		if (_type == "CIV") then {_cell set [3, "NAV"]};
 		if (_type == "MIL") then {_cell set [3, "NAV"]};
-		if (_type == "AIR") then {_cell set [3, "NAVAIR"];};
+		if (_type == "AIR") then {_cell set [3, "ALT"];};
 	};	
 }forEach VOX_GRID;
 
@@ -769,3 +769,878 @@ VOX_FNC_AICMD = {
 		_pos call VOX_FNC_ORDER;		
 	}
 };
+
+/// count markers and debug connections
+if (VOX_DEBUG) then {
+	private _naval = [];
+	{
+		private _pos = _x select 0;
+		private _seeds = _x select 2;
+		private _type = _x select 3;
+		private _posX = _pos select 0;
+		private _posY = _pos select 1;
+		
+		if (_type in ["NAV","ALT"]) then {
+			_naval pushback _pos;
+		};
+		
+		{
+			private _posX1 = _x select 0;
+			private _posY1 = _x select 1;
+			private _plus = _posX + _posY + _posX1 + _posY1;
+			private _name = format ["VOX_%1", _plus];
+			private _marker = createMarker [_name, _pos];
+			private _polyline = [_posX, _posY, _posX1, _posY1];
+			_marker setMarkerShape "Polyline";
+			_marker setMarkerPolyline _polyline;
+			_marker setMarkerAlpha 0.25;
+			
+			if (false) then {
+				private _posC = [(_posX + _posX1)/2, (_posY + _posY1)/2];
+				private _nameC = format ["VOX_%1", random 10];
+				private _markerC = createMarker [_nameC, _posC];
+				_markerC setMarkerType "mil_dot";
+					private _distance = round (_pos distance [_posX1, _posY1]);
+				_markerC setMarkerText (str _distance);
+				if (_distance < 1500) then {_markerC setMarkerColor "ColorGREEN"};
+				if (_distance > 3000) then {_markerC setMarkerColor "ColorRED"};
+			};
+		}forEach _seeds;
+	}forEach VOX_GRID;
+	
+	/// draw naval connections
+	{
+		private _pos1 = _x;
+		private _posX1 = _pos1 select 0;
+		private _posY1 = _pos1 select 1;
+		{
+			private _pos2 = _x;
+			private _posX2 = _pos2 select 0;
+			private _posY2 = _pos2 select 1;
+			if (_pos1 distance _pos2 < 5000) then {
+				private _name = _posX1 + _posX2 + _posY1 + _posX2;
+				private _marker = createMarker [format ["NAV_%1", _name], _pos2];
+				_marker setMarkerShape "Polyline";
+				_marker setMarkerPolyline [_posX1, _posY1, _posX2, _posY2];
+				_marker setMarkerColor "#(0,0.75,0.75,1)";
+				_marker setMarkerAlpha 0.1;
+			};
+		}forEach _naval;
+	}forEach _naval;	
+};
+
+VOX_FNC_AICMD = {
+	private _side = _this;
+	
+	/// ai "delay
+	sleep 1;
+	
+	_side call VOX_FNC_SELECTABLE;
+	/// [[_seed1],[_seed2]]
+	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	/// ai "delay"
+	sleep random 1;
+	
+	private _sideCol = "ColorBLUFOR";
+	if (_side == east) then {_sideCol = "ColorOPFOR"};
+	private _attack = VOX_LOC_ORDERS select {_x select 1 != _sideCol};
+	private _defend = VOX_LOC_ORDERS select {_x select 1 == _sideCol};
+	private _seed = VOX_LOC_SELECTED;
+	private _unit = _seed select 4;
+	private _morale = _seed select 5;
+	
+	if (_unit in ["b_support", "o_support"]) then {_morale = 0};
+	private _isSup = _unit in ["b_support", "o_support"];
+	private _isArt = _unit in ["b_art", "o_art"];
+	private _isAir = _unit in ["b_plane", "o_plane"];
+	private _strike = if (_isArt or _isPlane && ) then {};
+	
+	private _done = false;
+	if (count _attack > 0 && _morale == 1) then {
+		private _pos = (_attack select floor random count _attack) select 0;
+		_pos call VOX_FNC_ORDER;
+		_done = true;
+	};
+
+	if ((_morale < 1 or count _attack == 0) && _isSup == false) then {
+		_side call VOX_FNC_AICMD;
+		if (VOX_DEBUG) then {systemchat ("AI NORMAL SKIP: " + str _side)};
+		_done = true;
+	};
+	
+	if (_isSup && count _defend > 0) then {
+		private _pos = (_defend select floor random count _defend) select 0;
+		_pos call VOX_FNC_ORDER;
+		_done = true;
+	};
+	
+	if (_isSup && count _defend == 0) then {
+		_side call VOX_FNC_AICMD;
+		if (VOX_DEBUG) then {systemchat ("AI SUPPORT SKIP: " + str _side)};
+		_done = true;		
+	};	
+	
+	/// switch to player turn if something strange happens
+	if (_done == false) then {
+		private _turn = east;
+		if (VOX_TURN == east) then {_turn = west};
+		
+		publicVariable "VOX_TURN";
+		
+		/// strategic update
+		remoteExec ["VOX_FNC_UPDATE", 0];
+		systemchat "AI TURN SKIPPED";
+	};
+};
+
+VOX_FNC_STRATCMD = {
+	private _side = _this;
+	
+	/// ai "delay
+	sleep 1;
+	
+	_side call VOX_FNC_SELECTABLE;
+	/// [[_seed1],[_seed2]]
+	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	private _sidCol = "ColorBLUFOR";
+	private _enyCol = "ColorOPFOR";
+	if (_side == east) then {
+		_sidCol = "ColorOPFOR";
+		_enyCol = "ColorBLUFOR";
+	};
+	
+	private _seed = VOX_LOC_SELECTED;
+	private _unit = _seed select 4;
+	private _morale = _seed select 5;
+	
+	private _attacks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 != "hd_dot"};
+	private _recons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK"};
+	private _flanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 == "hd_dot"};
+	private _retreats = VOX_LOC_ORDERS select {_x select 1 == _sidCol};
+	private _HVTargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 in ["b_support","b_art","b_plane","o_support","o_art","o_plane"]};
+	
+	private _isArm =  _unit in ["b_armor", "b_mech_inf", "o_armor", "o_mech_inf"];
+	private _isRec = _unit in ["b_recon", "o_recon"];
+	
+	private _isSup = _unit in ["b_support", "o_support","b_art", "o_art", "b_plane", "o_plane"];
+	
+	private _isInf = !(_isArm or _isRec or _isSup);
+	private _skip = false;
+	
+	if (_isInf) then {
+		private _moves = _recons;
+		///if (count _moves == 0) then {_moves = _attacks};
+		
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isArm) then {
+		private _moves = _attacks;
+		if (count _moves == 0) then {_moves = _recons};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isRec) then {
+		private _moves = _HVTargets;
+		if (count _moves == 0) then {_moves = _flanks};
+		
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isSup) then {
+		_skip = true;	
+	};
+
+	if (VOX_CMD_SKIPS > (count VOX_LOC_SELECTABLE)) then {
+		if (count VOX_LOC_ORDERS > 0) then {
+			_moves = _recons + _flanks + _retreats + _attacks;
+		
+			/// forced attack if high morale
+			if (_morale > 0.5 && count _attacks > 0) then {_moves = _attacks};
+			
+			/// forced retreat if low morale
+			if (_morale <= 0.5 && count _retreats > 0) then {_moves = _retreats};	
+			
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+			_skip = false;
+		} else {_skip = true};
+	};
+	
+	/// switch side if there's no valid orders
+	if (VOX_CMD_SKIPS > ((count VOX_LOC_SELECTABLE) * 2)) then {
+		private _turn = east;
+		if (VOX_TURN == east) then {_turn = west};
+		
+		VOX_MOTOSKIP = 1;
+		VOX_TURN = _turn;
+		publicVariable "VOX_TURN";
+		
+		/// strategic update
+		remoteExec ["VOX_FNC_UPDATE", 0];
+		_skip = false;
+	};
+	
+	if (_skip) then {
+		VOX_CMD_SKIPS = VOX_CMD_SKIPS + 1;
+		_side call VOX_FNC_STRATCMD;
+		if (VOX_DEBUG) then {
+			hint ("CMD skip: " + str VOX_CMD_SKIPS);
+		};
+	};
+};
+
+VOX_FNC_STRATCMD = {
+	private _side = _this;
+	
+	/// ai "delay
+	sleep 1;
+	
+	_side call VOX_FNC_SELECTABLE;
+	/// [[_seed1],[_seed2]]
+	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	private _sidCol = "ColorBLUFOR";
+	private _enyCol = "ColorOPFOR";
+	if (_side == east) then {
+		_sidCol = "ColorOPFOR";
+		_enyCol = "ColorBLUFOR";
+	};
+	
+	private _seed = VOX_LOC_SELECTED;
+	private _unit = _seed select 4;
+	private _morale = _seed select 5;
+	
+	private _attacks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 != "hd_dot"};
+	private _recons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK"};
+	private _flanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 == "hd_dot"};
+	private _retreats = VOX_LOC_ORDERS select {_x select 1 == _sidCol};
+	private _HVTargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 in ["b_support","b_art","b_plane","o_support","o_art","o_plane"]};
+	
+	/// sort based on distance to center
+	private _att = [_attacks, [], {(_x select 0) distance VOX_CENTER}, "ASCEND"] call BIS_fnc_sortBy;
+	private _rec = [_recons, [], {(_x select 0) distance VOX_CENTER}, "ASCEND"] call BIS_fnc_sortBy;
+	private _fla = [_flanks, [], {(_x select 0) distance VOX_CENTER}, "ASCEND"] call BIS_fnc_sortBy;
+	private _ret = [_retreats, [], {(_x select 0) distance VOX_CENTER}, "ASCEND"] call BIS_fnc_sortBy;
+	private _hvt = [_HVTargets, [], {(_x select 0) distance VOX_CENTER}, "ASCEND"] call BIS_fnc_sortBy;
+	
+	private _isArm =  _unit in ["b_armor", "b_mech_inf", "o_armor", "o_mech_inf"];
+	private _isRec = _unit in ["b_recon", "o_recon"];
+	
+	private _isSup = _unit in ["b_support", "o_support","b_art", "o_art", "b_plane", "o_plane"];
+	
+	private _isInf = !(_isArm or _isRec or _isSup);
+	private _skip = false;
+	
+	if (_isInf) then {
+		private _moves = _rec;
+		
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = _moves select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isArm) then {
+		private _moves = _att;
+		if (count _moves == 0) then {_moves = _rec};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = _moves select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isRec) then {
+		private _moves = _hvt;
+		if (count _moves == 0) then {_moves = _fla};
+		
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = _moves select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isSup) then {
+		_skip = true;	
+	};
+
+	if (VOX_CMD_SKIPS > (count VOX_LOC_SELECTABLE)) then {
+		if (count VOX_LOC_ORDERS > 0) then {
+			_moves = _rec + _fla + _ret + _att;
+		
+			/// forced attack if high morale
+			if (_morale > 0.5 && count _att > 0) then {_moves = _att};
+			
+			/// forced retreat if low morale
+			if (_morale <= 0.5 && count _retreats > 0) then {_moves = _ret};	
+			
+			private _pos = _moves select 0;
+			_pos call VOX_FNC_ORDER;
+			_skip = false;
+		} else {_skip = true};
+	};
+	
+	/// switch side if there's no valid orders
+	if (VOX_CMD_SKIPS > ((count VOX_LOC_SELECTABLE) * 2)) then {
+		private _turn = east;
+		if (VOX_TURN == east) then {_turn = west};
+		
+		VOX_MOTOSKIP = 1;
+		VOX_TURN = _turn;
+		publicVariable "VOX_TURN";
+		
+		/// strategic update
+		remoteExec ["VOX_FNC_UPDATE", 0];
+		_skip = false;
+	};
+	
+	if (_skip) then {
+		VOX_CMD_SKIPS = VOX_CMD_SKIPS + 1;
+		_side call VOX_FNC_STRATCMD;
+		if (VOX_DEBUG) then {
+			hint ("CMD skip: " + str VOX_CMD_SKIPS);
+		};
+	};
+};
+
+VOX_FNC_STRATCMD = {
+	private _side = _this;
+	
+	sleep 0.1;
+	
+	_side call VOX_FNC_SELECTABLE;
+	/// [[_seed1],[_seed2]]
+	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	private _sidCol = "ColorBLUFOR";
+	private _enyCol = "ColorOPFOR";
+	if (_side == east) then {
+		_sidCol = "ColorOPFOR";
+		_enyCol = "ColorBLUFOR";
+	};
+	
+	private _seed = VOX_LOC_SELECTED;
+	private _unit = _seed select 4;
+	private _morale = _seed select 5;
+	
+	private _attacks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 != "hd_dot"};
+	private _recons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK"};
+	private _flanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 == "hd_dot"};
+	private _retreats = VOX_LOC_ORDERS select {_x select 1 == _sidCol};
+	private _HVTargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 in ["b_support","b_art","b_plane","o_support","o_art","o_plane"]};
+	
+	private _isArm =  _unit in ["b_armor", "b_mech_inf", "o_armor", "o_mech_inf"];
+	private _isRec = _unit in ["b_recon", "b_motor_inf", "b_air", "o_recon", "o_motor_inf", "o_air"];
+	private _isSup = _unit in ["b_support", "o_support","b_art", "o_art", "b_plane", "o_plane"];
+	
+	private _isInf = !(_isArm or _isRec or _isSup);
+	private _skip = false;
+	
+	if (_isInf) then {
+		private _moves = _recons + _flanks;
+		
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isArm) then {
+		private _moves = _attacks;
+		if (count _moves == 0) then {_moves = _recons + _flanks};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isRec) then {
+		private _moves = _HVTargets;
+		if (count _moves == 0) then {_moves = _recons + _flanks};
+		
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isSup) then {
+		_skip = true;	
+	};
+
+	if (VOX_CMD_SKIPS > (count VOX_LOC_SELECTABLE)) then {
+		if (count VOX_LOC_ORDERS > 0) then {
+			_moves = _recons + _flanks + _retreats + _attacks;
+		
+			/// forced attack if high morale
+			if (_morale > 0.5 && count _attacks > 0) then {_moves = _attacks};
+			
+			/// forced retreat if low morale
+			if (_morale <= 0.5 && count _retreats > 0) then {_moves = _retreats};	
+			
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+			_skip = false;
+		} else {_skip = true};
+	};
+	
+	/// switch side if there's no valid orders
+	if (VOX_CMD_SKIPS > ((count VOX_LOC_SELECTABLE) * 2)) then {
+		private _turn = east;
+		if (VOX_TURN == east) then {_turn = west};
+		
+		VOX_MOTOSKIP = 1;
+		VOX_TURN = _turn;
+		publicVariable "VOX_TURN";
+		
+		/// strategic update
+		remoteExec ["VOX_FNC_UPDATE", 0];
+		_skip = false;
+	};
+	
+	if (_skip) then {
+		VOX_CMD_SKIPS = VOX_CMD_SKIPS + 1;
+		_side call VOX_FNC_STRATCMD;
+		if (VOX_DEBUG) then {
+			hint ("CMD skip: " + str VOX_CMD_SKIPS);
+		};
+	};
+}
+
+VOX_FNC_CMDTYPE = {
+	private _unit = _this;
+	
+	private _type = "INF";
+	if (_unit in ["b_armor", "b_mech_inf", "o_armor", "o_mech_inf"]) then {_type = "MEC"};
+	if (_unit in ["b_recon" "b_air", "o_recon", "o_air"]) then {_type = "REC"};
+	if (_unit in ["b_art", "o_art", "b_plane", "o_plane"]) then {_type = "SUP"};
+	if (_unit in ["b_support", "o_support"]) then {_type = "LOG"};
+	
+	_type
+};
+
+VOX_FNC_CMDWEIGHTS = {};
+
+VOX_FNC_STRATCMD = {
+	private _side = _this;
+	private _bestMove = {};
+	
+	private _conquest = 0; /// conquest need for side
+	private _destruction = 0; /// destruction need for side
+	
+	private _sidCol = "ColorBLUFOR";
+	private _enyCol = "ColorOPFOR";
+	
+	if (_side == east) then {
+		private _sidCol = "ColorBLUFOR";
+		private _enyCol = "ColorOPFOR";	
+	};
+	
+	_side call VOX_FNC_SELECTABLE;
+	
+	{
+		private _pos = _x select 0;
+		private _unit = _x select 4;
+		private _morale = _x select 5;
+		
+		VOX_LOC_SELECTED = _x;
+		_side call VOX_FNC_ORDERS;
+		
+		private _destruction = VOX_LOC_ORDERS select {_x select 4 != "hd_dot"};
+		private _conquest = VOX_LOC_ORDERS select {_x select 4 == "hd_dot"};
+		_unit call VOX_FNC_CMDTYPE;
+		
+		/// order value:
+		/// 
+		
+		///_destruction: enemy occupied cells
+		/// +1 if NAV
+		/// +1 if AIR
+		/// +2 if ALT
+		
+		/// +1 if "MEC"
+		/// +1 if mor > 0.5
+		/// +1 if HVT
+		
+		/// -1 if "REC"
+		/// -2 if "ART"
+		/// -4 if "SUP"
+		/// points * cellval = weight
+		
+		///_conquest: unoccupied cells
+		/// +1 if NAV
+		/// +1 if AIR
+		/// +2 if ALT
+		/// +1 if colorBLACK
+		
+		/// +2 if rec
+		/// +1 if INF
+		
+		/// -2 if "ART"
+		/// -3 if "SUP"
+		/// points * cellval = weight
+	}forEach VOX_SELECTABLE;
+};
+
+VOX_FNC_STRATCMD = {
+	private _side = _this;
+	
+	sleep 0.5;
+	
+	_side call VOX_FNC_SELECTABLE;
+	/// [[_seed1],[_seed2]]
+	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	private _sidCol = "ColorBLUFOR";
+	private _enyCol = "ColorOPFOR";
+	if (_side == east) then {
+		_sidCol = "ColorOPFOR";
+		_enyCol = "ColorBLUFOR";
+	};
+	
+	private _seed = VOX_LOC_SELECTED;
+	private _unit = _seed select 4;
+	private _morale = _seed select 5;
+	
+	private _recons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK"};
+	private _keyrecons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK" && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _flanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 == "hd_dot"};
+	private _keyflanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _keyroutes = VOX_LOC_ORDERS select {_x select 1 == _sidCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _retreats = VOX_LOC_ORDERS select {_x select 1 == _sidCol};
+	
+	private _attacks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 != "hd_dot"};	
+	private _hvtargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 in ["b_support","b_art","b_plane","o_support","o_art","o_plane"]};
+	private _keytargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _weaktargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 5 < 0.5};
+	
+	private _isArm =  _unit in ["b_armor", "b_mech_inf", "o_armor", "o_mech_inf"];
+	private _isRec = _unit in ["b_recon", "b_motor_inf", "b_air", "o_recon", "o_motor_inf", "o_air"];
+	private _isSup = _unit in ["b_support", "o_support","b_art", "o_art", "b_plane", "o_plane"];
+	
+	private _isInf = !(_isArm or _isRec or _isSup);
+	private _skip = false;
+	
+	if (_isArm) then {
+		private _moves = _attacks;
+		if (count _moves == 0) then {_moves = _keyrecons};
+		if (count _moves == 0) then {_moves = _recons};
+		if (count _moves == 0) then {_moves = _keyflanks};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isInf) then {
+		private _moves = _keyrecons;
+		if (count _moves == 0) then {_moves = _keyflanks};
+		if (count _moves == 0) then {_moves = _keytargets};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};	
+	
+	if (_isRec) then {
+		private _moves = _hvtargets;
+		if (count _moves == 0) then {_moves = _weaktargets};	
+		if (count _moves == 0) then {_moves = _recons + _flanks};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isSup) then {
+		_skip = true;	
+	};
+
+	if (VOX_CMD_SKIPS > (count VOX_LOC_SELECTABLE)) then {
+		if (count VOX_LOC_ORDERS > 0) then {
+			private _pos = (VOX_LOC_ORDERS select floor random count VOX_LOC_ORDERS) select 0;
+			_pos call VOX_FNC_ORDER;
+			_skip = false;
+		} else {_skip = true};
+	};
+	
+	/// switch side if there's no valid orders
+	if (VOX_CMD_SKIPS > ((count VOX_LOC_SELECTABLE) * 2)) then {
+		private _turn = east;
+		if (VOX_TURN == east) then {_turn = west};
+		
+		VOX_MOTOSKIP = 1;
+		VOX_TURN = _turn;
+		publicVariable "VOX_TURN";
+		
+		/// strategic update
+		remoteExec ["VOX_FNC_UPDATE", 0];
+		_skip = false;
+	};
+	
+	if (_skip) then {
+		VOX_CMD_SKIPS = VOX_CMD_SKIPS + 1;
+		_side call VOX_FNC_STRATCMD;
+		if (VOX_DEBUG) then {
+			hint ("CMD skip: " + str VOX_CMD_SKIPS);
+		};
+	};
+}
+
+VOX_FNC_STRATCMD = {
+	private _side = _this;
+	
+	_side call VOX_FNC_SELECTABLE;
+	/// [[_seed1],[_seed2]]
+	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	private _sidCol = "ColorBLUFOR";
+	private _enyCol = "ColorOPFOR";
+	if (_side == east) then {
+		_sidCol = "ColorOPFOR";
+		_enyCol = "ColorBLUFOR";
+	};
+	
+	private _seed = VOX_LOC_SELECTED;
+	private _unit = _seed select 4;
+	private _morale = _seed select 5;
+	
+	private _recons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK"};
+	private _keyrecons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK" && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _flanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 == "hd_dot"};
+	private _keyflanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _keyroutes = VOX_LOC_ORDERS select {_x select 1 == _sidCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _retreats = VOX_LOC_ORDERS select {_x select 1 == _sidCol};
+	
+	private _attacks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 != "hd_dot"};	
+	private _hvtargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 in ["b_support","b_art","b_plane","o_support","o_art","o_plane"]};
+	private _keytargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _weaktargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 5 < 0.5};
+	
+	private _isArm =  _unit in ["b_armor", "b_mech_inf", "o_armor", "o_mech_inf"];
+	private _isRec = _unit in ["b_recon", "b_motor_inf", "b_air", "o_recon", "o_motor_inf", "o_air"];
+	private _isSup = _unit in ["b_support", "o_support","b_art", "o_art", "b_plane", "o_plane"];
+	
+	private _isInf = !(_isArm or _isRec or _isSup);
+	private _skip = false;
+	
+	if (_isArm) then {
+		private _moves = _attacks;
+		if (count _moves == 0) then {_moves = _keyrecons};
+		if (count _moves == 0) then {_moves = _recons};
+		if (count _moves == 0) then {_moves = _keyflanks};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isInf) then {
+		private _moves = _keyrecons;
+		if (count _moves == 0) then {_moves = _recons};
+		if (count _moves == 0) then {_moves = _keyflanks};
+		if (count _moves == 0) then {_moves = _keytargets};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};	
+	
+	if (_isRec) then {
+		private _moves = _hvtargets;
+		if (count _moves == 0) then {_moves = _weaktargets};	
+		if (count _moves == 0) then {_moves = _recons + _flanks};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isSup) then {
+		_skip = true;	
+	};
+
+	if (VOX_CMD_SKIPS > (count VOX_LOC_SELECTABLE)) then {
+		if (count VOX_LOC_ORDERS > 0) then {
+			private _pos = (VOX_LOC_ORDERS select floor random count VOX_LOC_ORDERS) select 0;
+			_pos call VOX_FNC_ORDER;
+			_skip = false;
+		} else {_skip = true};
+	};
+	
+	/// switch side if there's no valid orders
+	if (VOX_CMD_SKIPS > ((count VOX_LOC_SELECTABLE) * 2)) then {
+		private _turn = east;
+		if (VOX_TURN == east) then {_turn = west};
+		
+		VOX_MOTOSKIP = 1;
+		VOX_TURN = _turn;
+		publicVariable "VOX_TURN";
+		
+		/// strategic update
+		remoteExec ["VOX_FNC_UPDATE", 0];
+		_skip = false;
+	};
+	
+	if (_skip) then {
+		VOX_CMD_SKIPS = VOX_CMD_SKIPS + 1;
+		_side call VOX_FNC_STRATCMD;
+		if (VOX_DEBUG) then {
+			hint ("CMD skip: " + str VOX_CMD_SKIPS);
+		};
+	};
+};
+
+VOX_FNC_STRATCMD = {
+	private _side = _this;
+	sleep 1;
+	
+	_side call VOX_FNC_SELECTABLE;
+	/// [[_seed1],[_seed2]]
+	private _select = VOX_LOC_SELECTABLE select floor random count VOX_LOC_SELECTABLE;
+	[_select select 0, _side] call VOX_FNC_SELECT;
+	
+	private _sidCol = "ColorBLUFOR";
+	private _enyCol = "ColorOPFOR";
+	if (_side == east) then {
+		_sidCol = "ColorOPFOR";
+		_enyCol = "ColorBLUFOR";
+	};
+	
+	private _seed = VOX_LOC_SELECTED;
+	private _unit = _seed select 4;
+	private _morale = _seed select 5;
+	
+	/// weighted system
+	/// _ordWeight = (_enyVAL - _bluVAL) + _objVAL
+
+	/// _enyVAL: isHVT = +2, _isREC = +1, _mor < 50 = +1, isMEC = -1
+	/// _bluVAL: isHVT = +2, _isREC = +1, _mor < 50 = +1, isMEC = -1
+	/// _objVal: _isKEY = +1, _isCIV = +1, isBluLog (blulog < 5000) + 1, isEnyLog +1, isEny = -1
+
+	/// moto example: 	_enyVal = 0 (nobody)	
+	/// 				_bluVAl = 1
+	/// 				_objVal = 2 (CIV,KEY)
+	///					_ordWgt = (0 - 1) + 2 = 1 -> proceed
+	
+	/// moto example2: 	_enyVal = 2 (isHVT)	
+	/// 				_bluVAl = 1
+	/// 				_objVal = 0 (normal cell)
+	///					_ordWgt = (2 - 1) + 0 = 1 -> proceed
+	
+	/// mech example:
+	///		_enyVal = -1 (mech)
+	///		_bluVal = -1 
+	///		_objVal = 1 (isKey +1, isEny -1, isEnyLog +1);
+	/// 	_total: (0) + 1 = 1 -> proceed
+	
+	private _recons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK"};
+	private _keyrecons = VOX_LOC_ORDERS select {_x select 1 == "colorBLACK" && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _flanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 == "hd_dot"};
+	private _keyflanks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _keyroutes = VOX_LOC_ORDERS select {_x select 1 == _sidCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _retreats = VOX_LOC_ORDERS select {_x select 1 == _sidCol};
+	
+	private _attacks = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 != "hd_dot"};	
+	private _hvtargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 in ["b_support","b_art","b_plane","o_support","o_art","o_plane"]};
+	private _keytargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 3 in ["NAV", "AIR", "ALT"]};
+	private _weaktargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 5 < 0.5};
+	private _rectargets = VOX_LOC_ORDERS select {_x select 1 == _enyCol && _x select 4 in ["b_recon", "b_motor_inf", "b_air", "o_recon", "o_motor_inf", "o_air"]};
+	
+	private _isArm =  _unit in ["b_armor", "b_mech_inf", "o_armor", "o_mech_inf"];
+	private _isRec = _unit in ["b_recon", "b_motor_inf", "b_air", "o_recon", "o_motor_inf", "o_air"];
+	private _isSup = _unit in ["b_support", "o_support","b_art", "o_art", "b_plane", "o_plane"];
+	
+	private _isInf = !(_isArm or _isRec or _isSup);
+	private _skip = false;
+	
+	if (_isArm) then {
+		private _moves = _attacks;
+		if (count _moves == 0) then {_moves = _keyrecons};
+		if (count _moves == 0) then {_moves = _recons};
+		if (count _moves == 0) then {_moves = _keyflanks};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isInf) then {
+		private _moves = _keyrecons;
+		if (count _moves == 0) then {_moves = _weaktargets};
+		if (count _moves == 0) then {_moves = _rectargets};
+		if (count _moves == 0) then {_moves = _recons};
+		if (count _moves == 0) then {_moves = _keyflanks};
+		if (count _moves == 0) then {_moves = _keytargets};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};	
+	
+	if (_isRec) then {
+		private _moves = _hvtargets;
+		if (count _moves == 0) then {_moves = _weaktargets};
+		if (count _moves == 0) then {_moves = _recons + _flanks};
+		if (count _moves != 0 && _morale > 0.5) then {
+			private _pos = (_moves select floor random count _moves) select 0;
+			_pos call VOX_FNC_ORDER;
+		} else {_skip = true};
+	};
+	
+	if (_isSup) then {
+		_skip = true;	
+	};
+
+	if (VOX_CMD_SKIPS > (count VOX_LOC_SELECTABLE)) then {
+		if (count VOX_LOC_ORDERS > 0) then {
+			private _pos = (VOX_LOC_ORDERS select floor random count VOX_LOC_ORDERS) select 0;
+			_pos call VOX_FNC_ORDER;
+			_skip = false;
+		} else {_skip = true};
+	};
+	
+/// 	switch side if there's no valid orders
+///	if (VOX_CMD_SKIPS > ((count VOX_LOC_SELECTABLE) * 2)) then {
+///		private _turn = east;
+///		if (VOX_TURN == east) then {_turn = west};
+		
+///		VOX_MOTOSKIP = 1;
+///		VOX_TURN = _turn;
+///		publicVariable "VOX_TURN";
+		
+		/// strategic update
+///		remoteExec ["VOX_FNC_UPDATE", 0];
+///		_skip = false;
+///	};
+	
+	if (_skip) then {
+		VOX_CMD_SKIPS = VOX_CMD_SKIPS + 1;
+		if (VOX_DEBUG) then {
+			systemChat ("CMD skip: " + str VOX_CMD_SKIPS);
+		};
+		_side call VOX_FNC_STRATCMD;
+	};
+};
+
+
+/// attack value = _enyVal (_hvt + _mor) + _objVal (_key + _pos) + _forVal (_hvt + _mor)
+/// recon value = _col + _pos + _rec
+/// defend value = _hvt + _pos + _key

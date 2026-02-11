@@ -4,11 +4,18 @@ waitUntil {!isNil "VOX_DEFENDER"};
 private _posA = VOX_ATTACKER select 0;
 private _posB = VOX_DEFENDER select 0;
 private _posC = [(((_posA select 0) + (_posB select 0)) / 2),(((_posA select 1) + (_posB select 1)) / 2)];
-mapAnimAdd [1, 0.2, _posC];
+private _dist = (_posA distance _posB) / worldsize;
+mapAnimAdd [1, _dist, _posC];
 mapAnimCommit;
 
 /// radio effect for briefing;
+private _soundID = 0;
+private _atkunit = VOX_ATTACKER select 4;
+if (_atkunit in ["b_air","o_air"]) then {_soundID = 1};
+if (_atkunit in ["b_art","o_art"]) then {_soundID = 2};
+if (_atkunit in ["b_plane","o_plane"]) then {_soundID = 3};
 0 call VOX_FNC_RADIO;
+_soundID call VOX_FNC_SFX;
 
 VOX_FNC_ENDBRIEFING = {
 	if (isServer) then {
