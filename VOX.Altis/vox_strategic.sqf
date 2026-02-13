@@ -176,6 +176,8 @@ if (isServer) then {
 	VOX_MOTOSKIP = 1;
 };
 
+sleep 1;
+
 /// start strategic phase
 if (isServer) then {
 	remoteExec ["VOX_FNC_UPDATE", 0];

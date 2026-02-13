@@ -112,7 +112,7 @@ VOX_FNC_STRATCMD = {
 		
 		[_pos, _side] call VOX_FNC_SELECT;
 		{
-			sleep 2;			
+			sleep 0.1;			
 			
 			private _pos2 = _x select 0;
 			private _color2 = _x select 1;

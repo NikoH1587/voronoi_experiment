@@ -129,8 +129,8 @@ VOX_FNC_DRAWMARKERS = {
 		private _seen = false;
 		/// also if unit was previously engaged
 		if (_morale < 1) then {_reconed = true};
-		private _recon = ["o_recon", "o_air"];
-		if (_side == east) then {_recon = ["b_recon", "b_air"]};
+		private _recon = ["o_recon"];
+		if (_side == east) then {_recon = ["b_recon"]};
 		{
 			private _unit2 = _x select 4;
 			private _color2 = _x select 1;
@@ -184,7 +184,7 @@ VOX_FNC_UPDATE = {
 			true;
 		};
 	} else {
-		onMapSingleClick {true};
+		onMapSingleClick "";
 	};
 	
 	if (isServer && isPlayer CMD_WEST == false && VOX_TURN == west) then {west spawn {call VOX_FNC_STRATCMD}};
