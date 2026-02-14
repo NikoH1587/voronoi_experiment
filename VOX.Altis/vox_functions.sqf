@@ -181,7 +181,7 @@ VOX_FNC_UPDATE = {
 			if (VOX_LOC_MODE == "ORDER") then {
 				_pos spawn VOX_FNC_ORDER;
 			};
-			true;
+			false;
 		};
 	} else {
 		onMapSingleClick "";
