@@ -18,7 +18,7 @@ waitUntil {scriptDone _functions};
 
 if (isServer) then {
 	[] spawn {
-		///private _custom= execVM "vox_custom.sqf";
+		///private _custom=  execVM "vox_custom.sqf";
 		///waitUntil {scriptDone _custom};
 		private _default = execVM "vox_default.sqf";
 		waitUntil {scriptDone _default};

@@ -260,33 +260,72 @@ VOX_FNC_MOVE = {
 };
 
 VOX_FNC_DRAWOBJECTIVES = {
+	private _centerA = VOX_ATTACKER select 0;
 	private _cellsA = VOX_ATTACKER select 6;
 	private _colorA = VOX_ATTACKER select 1;
+	
+	private _centerD = VOX_DEFENDER select 0;
 	private _cellsD = VOX_DEFENDER select 6;
 	private _colorD = VOX_DEFENDER select 1;
+	
+	private _dirAD = _centerD vectorDiff _centerA;
+	private _dirDA = _centerA vectorDiff _centerD;
+	
+	private _fnc_isFront = {
+		private _cellPos = _this select 0;
+		private _center = _this select 1;
+		private _vector = _this select 2;
+		
+		private _cellVec = _cellPos vectorDiff _center;
+		(_cellVec vectorDotProduct _vector) > 0
+	};
 	
 	{
 		private _row = _x select 0;
 		private _col = _X select 1;
 		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
-		private _name = "OBJA_" + (str _forEachIndex);
-		private _marker = createMarker [_name, _pos];
-		_marker setMarkerShape "RECTANGLE";
-		_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
-		_marker setMarkerAlpha 0.5;
-		_marker setMarkerColor _colorA;
+		
+		if ([_pos, _centerA, _dirAD] call _fnc_isFront) then {
+			private _name = "OBJA_" + (str _forEachIndex);
+			private _marker = createMarker [_name, _pos];
+			_marker setMarkerShape "RECTANGLE";
+			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+			_marker setMarkerAlpha 0.5;
+			_marker setMarkerColor _colorA;
+			
+			{
+				private _row2 = _x select 0;
+				private _col2 = _X select 1;
+				_pos2 = [_col2 * VOX_SIZE, _row2 * VOX_SIZE];
+				if (_pos2 distance _pos < VOX_SIZE*1.4) then {
+					_marker setMarkerColor "ColorBLACK";
+				};
+			}forEach _cellsD;
+		};
 	}forEach _cellsA;
 	
 	{
 		private _row = _x select 0;
 		private _col = _X select 1;
 		_pos = [_col * VOX_SIZE, _row * VOX_SIZE];
-		private _name = "OBJD_" + (str _forEachIndex);
-		private _marker = createMarker [_name, _pos];
-		_marker setMarkerShape "RECTANGLE";
-		_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
-		_marker setMarkerAlpha 0.5;
-		_marker setMarkerColor _colorD;
+		
+		if ([_pos, _centerD, _dirDA] call _fnc_isFront) then {		
+			private _name = "OBJD_" + (str _forEachIndex);
+			private _marker = createMarker [_name, _pos];
+			_marker setMarkerShape "RECTANGLE";
+			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+			_marker setMarkerAlpha 0.5;
+			_marker setMarkerColor _colorD;
+			
+			{
+				private _row2 = _x select 0;
+				private _col2 = _X select 1;
+				_pos2 = [_col2 * VOX_SIZE, _row2 * VOX_SIZE];
+				if (_pos2 distance _pos < VOX_SIZE*1.4) then {
+					_marker setMarkerColor "ColorBLACK";
+				};
+			}forEach _cellsA;
+		};
 	}forEach _cellsD;
 };
 

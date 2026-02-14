@@ -23,7 +23,7 @@ private _fnc_getCfg = {
 };
 
 /// spawns group from vehicles list
-private _fnc_spawnGroup = {
+VOX_FNC_SPAWNGROUP = {
 	/// [_pos, _vehicles, _group, _morale, _supplies, _icon, _name]
 	private _pos = _this select 0;
 	private _vehs = _this select 1;
@@ -58,12 +58,12 @@ private _fnc_spawnGroup = {
 		if (_color == "ColorOPFOR") then {_side = east};		
 		
 		private _config = _unit call _fnc_getCfg;
-		private _command = false;
+		private _command = true;
 		
 		if !(_x in [VOX_ATTACKER, VOX_DEFENDER]) then {
 			/// prevent spawning cmd group, select random to spawn 1x of
-			_config = [_config select ceil random ((count _config) - 1)];
-			_command = true;
+			_config = [_config select floor random count _config];
+			_command = false;
 		};
 		 
 		{
@@ -71,10 +71,16 @@ private _fnc_spawnGroup = {
 			private _name = _x select 1;
 			private _toSpawn = _x select 2;
 			
-			private _cell = _cells select floor random count _cells;
-			private _row = _cell select 0;
-			private _col = _cell select 1;
-			private _pos = [_col * VOX_SIZE, _row * VOX_SIZE];	
+			private _markers = allMapMarkers select {markerColor _x == _color};
+			private _cell = _markers select floor random count _markers;
+			private _pos = getMarkerPos _cell;
+			
+			if (_command == false) then {
+				private _cell = _cells select floor random count _cells;
+				private _row = _cell select 0;
+				private _col = _cell select 1;
+				private _pos = [_col * VOX_SIZE, _row * VOX_SIZE];			
+			};
 			
 			private _isVehicle = isClass (configFile >> "CfgVehicles" >> (_toSpawn select 0));
 			private _isGroup = false;
@@ -101,7 +107,7 @@ private _fnc_spawnGroup = {
 			if (_isGroup or _isVehicle) then {
 				private _group = createGroup [_side, true];
 				if (_forEachIndex == 0 && _command) then {_group setGroupId ["Command Group"]};
-				[_pos, _vehicles, _group, _morale, _supplies, _icon, _name] call _fnc_spawnGroup;
+				[_pos, _vehicles, _group, _morale, _supplies, _icon, _name] call VOX_FNC_SPAWNGROUP;
 			}; 
 		}forEach _config;
 	};
