@@ -250,11 +250,8 @@ VOX_FNC_MOVE = {
 		VOX_DEFENDER = _new;
 		publicVariable "VOX_ATTACKER";
 		publicVariable "VOX_DEFENDER";
-		/// remoteExec ["VOX_FNC_CLEARMARKERS", 0];
 		0 call VOX_FNC_CLEARGRID;
 		0 call VOX_FNC_DRAWOBJECTIVES;
-		///0 call VOX_FNC_SUPPORTS;
-		///0 call VOX_FNC_DRAWOBJECTIVES;
 		["vox_briefing.sqf"] remoteExec ["execVM"];
 	};
 };

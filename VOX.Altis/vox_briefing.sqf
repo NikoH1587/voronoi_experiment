@@ -46,7 +46,7 @@ VOX_FNC_ENDBRIEFING = {
 
 			_info lbAdd "TACTICAL BRIEFING:";
 			_info lbAdd "";
-			_info lbAdd "Available supports can be accessed with (8 -> 0)";
+			_info lbAdd "Available supports can be accessed with (F2 -> 5 -> 1)";
 			_info lbAdd "'CMD' leader has High Command Module (Ctrl+Space)";
 			
 			/// Start button text
