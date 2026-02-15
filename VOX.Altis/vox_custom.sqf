@@ -4,8 +4,7 @@ VOX_PHASE = "CUSTOM";
 VOX_FACTIONS = [];
 
 /// contains cfgGroups and CfgVehicles entires
-VOX_CONFIG = [[["\A3\ui_f\data\map\markers\nato\b_mortar.paa","NATO Mortar Team",["West","BLU_F","Support","BUS_Support_Mort"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Weapons Squad",["West","BLU_F","Infantry","BUS_InfSquad_Weapons"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Weapons Squad",["West","BLU_F","Infantry","BUS_InfSquad_Weapons"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Rifle Squad",["West","BLU_F","Infantry","BUS_InfSquad"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Rifle Squad",["West","BLU_F","Infantry","BUS_InfSquad"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Rifle Squad",["West","BLU_F","Infantry","BUS_InfSquad"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Rifle Squad",["West","BLU_F","Infantry","BUS_InfSquad"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Rifle Squad",["West","BLU_F","Infantry","BUS_InfSquad"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Rifle Squad",["West","BLU_F","Infantry","BUS_InfSquad"]]],[["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Mortar Team",["West","BLU_F","Motorized","BUS_MotInf_MortTeam"]],["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Team",["West","BLU_F","Motorized","BUS_MotInf_Team"]],["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Team",["West","BLU_F","Motorized","BUS_MotInf_Team"]],["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Team",["West","BLU_F","Motorized","BUS_MotInf_Team"]],["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Team",["West","BLU_F","Motorized","BUS_MotInf_Team"]],["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Reinforcements",["West","BLU_F","Motorized","BUS_MotInf_Reinforce"]],["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Reinforcements",["West","BLU_F","Motorized","BUS_MotInf_Reinforce"]],["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Anti-armor Team",["West","BLU_F","Motorized","BUS_MotInf_AT"]],["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Anti-armor Team",["West","BLU_F","Motorized","BUS_MotInf_AT"]]],[["\A3\armor_f_gamma\MBT_01\Data\UI\Slammer_M2A1_Base_ca.paa","M2A4 Slammer UP",["B_MBT_01_TUSK_F"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Anti-armor Squad",["West","BLU_F","Mechanized","BUS_MechInf_AT"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Anti-armor Squad",["West","BLU_F","Mechanized","BUS_MechInf_AT"]]],[["\A3\armor_f_beta\APC_Tracked_01\Data\UI\APC_Tracked_01_CRV_ca.paa","CRV-6e Bobcat",["B_APC_Tracked_01_CRV_F"]],["\A3\armor_f_gamma\MBT_01\Data\UI\Slammer_M2A1_Base_ca.paa","M2A1 Slammer",["B_MBT_01_cannon_F"]],["\A3\armor_f_gamma\MBT_01\Data\UI\Slammer_M2A1_Base_ca.paa","M2A1 Slammer",["B_MBT_01_cannon_F"]],["\A3\armor_f_gamma\MBT_01\Data\UI\Slammer_M2A1_Base_ca.paa","M2A1 Slammer",["B_MBT_01_cannon_F"]],["\A3\armor_f_gamma\MBT_01\Data\UI\Slammer_M2A1_Base_ca.paa","M2A1 Slammer",["B_MBT_01_cannon_F"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Anti-armor Squad",["West","BLU_F","Mechanized","BUS_MechInf_AT"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Anti-armor Squad",["West","BLU_F","Mechanized","BUS_MechInf_AT"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Anti-armor Squad",["West","BLU_F","Mechanized","BUS_MechInf_AT"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Anti-armor Squad",["West","BLU_F","Mechanized","BUS_MechInf_AT"]]],[["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon UAV Team",["West","BLU_F","SpecOps","BUS_ReconTeam_UAV"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Team",["West","BLU_F","Infantry","BUS_ReconTeam"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Team",["West","BLU_F","Infantry","BUS_ReconTeam"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Team",["West","BLU_F","Infantry","BUS_ReconTeam"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Team",["West","BLU_F","Infantry","BUS_ReconTeam"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Sniper Team",["West","BLU_F","Infantry","BUS_SniperTeam"]],["\A3\Soft_F_Exp\LSV_01\Data\UI\LSV_01_base_CA.paa","Prowler (HMG)",["B_LSV_01_armed_F"]],["\A3\Soft_F_Exp\LSV_01\Data\UI\LSV_01_base_CA.paa","Prowler (AT)",["B_LSV_01_AT_F"]],["\A3\Air_F\Heli_Light_01\Data\UI\Heli_Light_01_CA.paa","MH-9 Hummingbird",["B_Heli_Light_01_F"]]],[["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Squad",["West","BLU_F","Infantry","BUS_ReconSquad"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Squad",["West","BLU_F","Infantry","BUS_ReconSquad"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Squad",["West","BLU_F","Infantry","BUS_ReconSquad"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Squad",["West","BLU_F","Infantry","BUS_ReconSquad"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Squad",["West","BLU_F","Infantry","BUS_ReconSquad"]],["\A3\ui_f\data\map\markers\nato\b_recon.paa","NATO Recon Squad",["West","BLU_F","Infantry","BUS_ReconSquad"]],["A3\Air_F\Heli_Light_01\Data\UI\Heli_Light_01_armed_CA.paa","AH-9 Pawnee",["B_Heli_Light_01_dynamicLoadout_F"]],["\A3\Air_F_Beta\Heli_Transport_01\Data\UI\Heli_Transport_01_base_CA.paa","UH-80 Ghost Hawk",["B_Heli_Transport_01_F"]],["\A3\Air_F_Heli\Heli_Transport_03\Data\UI\Heli_Transport_03_base_CA.paa","CH-67 Huron",["B_Heli_Transport_03_F"]]],[["\A3\ui_f\data\map\markers\nato\b_mortar.paa","NATO Mortar Team",["West","BLU_F","Support","BUS_Support_Mort"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_mech_inf.paa","NATO Mechanized Rifle Squad",["West","BLU_F","Mechanized","BUS_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Diver Team (Boat)",["West","BLU_F","SpecOps","BUS_DiverTeam_Boat"]],["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Diver Team (Boat)",["West","BLU_F","SpecOps","BUS_DiverTeam_Boat"]],["\A3\boat_f\Boat_Armed_01\data\ui\Boat_Armed_01_minigun.paa","Speedboat Minigun",["B_Boat_Armed_01_minigun_F"]],["\A3\boat_f\Boat_Armed_01\data\ui\Boat_Armed_01_minigun.paa","Speedboat Minigun",["B_Boat_Armed_01_minigun_F"]]],[["\A3\ui_f\data\map\markers\nato\b_motor_inf.paa","NATO Motorized Air-defense Team",["West","BLU_F","Motorized","BUS_MotInf_AA"]],["\a3\soft_f_gamma\Truck_01\Data\UI\Truck_01_box_F_CA.paa","HEMTT Repair",["B_Truck_01_Repair_F"]],["\a3\soft_f_gamma\Truck_01\Data\UI\Truck_01_Ammo_CA.paa","HEMTT Ammo",["B_Truck_01_ammo_F"]],["\a3\soft_f_gamma\Truck_01\Data\UI\Truck_01_Fuel_CA.paa","HEMTT Fuel",["B_Truck_01_fuel_F"]]],[["\A3\armor_f_beta\APC_Tracked_01\Data\UI\APC_Tracked_01_AA_ca.paa","IFV-6a Cheetah",["B_APC_Tracked_01_AA_F"]],["\A3\Armor_F_Gamma\MBT_01\Data\UI\Slammer_Scorcher_M4_Base_ca.paa","M4 Scorcher",["B_MBT_01_arty_F"]],["\A3\Armor_F_Gamma\MBT_01\Data\UI\Slammer_Scorcher_M4_Base_ca.paa","M4 Scorcher",["B_MBT_01_arty_F"]],["\A3\Armor_F_Gamma\MBT_01\Data\UI\Slammer_MLRS_Base_ca.paa","M5 Sandstorm MLRS",["B_MBT_01_mlrs_F"]]],[["\A3\ui_f\data\map\markers\nato\b_inf.paa","NATO Air-defense Team",["West","BLU_F","Infantry","BUS_InfTeam_AA"]],["\A3\Air_F_Beta\Heli_Attack_01\Data\UI\Heli_Attack_01_CA.paa","AH-99 Blackfoot",["B_Heli_Attack_01_dynamicLoadout_F"]],["\A3\Air_F_EPC\Plane_CAS_01\Data\UI\Plane_CAS_01_CA.paa","A-164 Wipeout (CAS)",["B_Plane_CAS_01_dynamicLoadout_F"]],["\A3\Air_F_Jets\Plane_Fighter_01\Data\UI\Fighter01_picture_ca.paa","F/A-181 Black Wasp II",["B_Plane_Fighter_01_F"]]],[["\A3\ui_f\data\map\markers\nato\o_mortar.paa","CSAT Mortar Team",["East","OPF_F","Support","OI_support_Mort"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Weapons Squad",["East","OPF_F","Infantry","OIA_InfSquad_Weapons"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Weapons Squad",["East","OPF_F","Infantry","OIA_InfSquad_Weapons"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Rifle Squad",["East","OPF_F","Infantry","OIA_InfSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Rifle Squad",["East","OPF_F","Infantry","OIA_InfSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Rifle Squad",["East","OPF_F","Infantry","OIA_InfSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Rifle Squad",["East","OPF_F","Infantry","OIA_InfSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Rifle Squad",["East","OPF_F","Infantry","OIA_InfSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Rifle Squad",["East","OPF_F","Infantry","OIA_InfSquad"]]],[["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Mortar Team",["East","OPF_F","Motorized_MTP","OIA_MotInf_MortTeam"]],["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Team",["East","OPF_F","Motorized_MTP","OIA_MotInf_Team"]],["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Team",["East","OPF_F","Motorized_MTP","OIA_MotInf_Team"]],["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Team",["East","OPF_F","Motorized_MTP","OIA_MotInf_Team"]],["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Team",["East","OPF_F","Motorized_MTP","OIA_MotInf_Team"]],["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Reinforcements",["East","OPF_F","Motorized_MTP","OIA_MotInf_Reinforce"]],["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Reinforcements",["East","OPF_F","Motorized_MTP","OIA_MotInf_Reinforce"]],["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Anti-armor Team",["East","OPF_F","Motorized_MTP","OIA_MotInf_AT"]],["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Anti-armor Team",["East","OPF_F","Motorized_MTP","OIA_MotInf_AT"]]],[["\a3\Armor_F_Decade\MBT_02\Data\UI\MBT_02_RailGun_ca.paa","T-100X Futura",["O_MBT_02_railgun_F"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Anti-armor Squad",["East","OPF_F","Mechanized","OIA_MechInf_AT"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Anti-armor Squad",["East","OPF_F","Mechanized","OIA_MechInf_AT"]]],[["\A3\armor_f_gamma\MBT_02\Data\UI\MBT_02_Base_ca.paa","T-100 Varsuk",["O_MBT_02_cannon_F"]],["\A3\armor_f_gamma\MBT_02\Data\UI\MBT_02_Base_ca.paa","T-100 Varsuk",["O_MBT_02_cannon_F"]],["\A3\armor_f_gamma\MBT_02\Data\UI\MBT_02_Base_ca.paa","T-100 Varsuk",["O_MBT_02_cannon_F"]],["\A3\armor_f_gamma\MBT_02\Data\UI\MBT_02_Base_ca.paa","T-100 Varsuk",["O_MBT_02_cannon_F"]],["\A3\armor_f_gamma\MBT_02\Data\UI\MBT_02_Base_ca.paa","T-100 Varsuk",["O_MBT_02_cannon_F"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Anti-armor Squad",["East","OPF_F","Mechanized","OIA_MechInf_AT"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Anti-armor Squad",["East","OPF_F","Mechanized","OIA_MechInf_AT"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Anti-armor Squad",["East","OPF_F","Mechanized","OIA_MechInf_AT"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Anti-armor Squad",["East","OPF_F","Mechanized","OIA_MechInf_AT"]]],[["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Recon UAV Team",["East","OPF_F","SpecOps","OI_ReconTeam_UAV"]],["\A3\ui_f\data\map\markers\nato\o_recon.paa","CSAT Recon Team",["East","OPF_F","Infantry","OI_reconTeam"]],["\A3\ui_f\data\map\markers\nato\o_recon.paa","CSAT Recon Team",["East","OPF_F","Infantry","OI_reconTeam"]],["\A3\ui_f\data\map\markers\nato\o_recon.paa","CSAT Recon Team",["East","OPF_F","Infantry","OI_reconTeam"]],["\A3\ui_f\data\map\markers\nato\o_recon.paa","CSAT Recon Team",["East","OPF_F","Infantry","OI_reconTeam"]],["\A3\ui_f\data\map\markers\nato\o_recon.paa","CSAT Sniper Team",["East","OPF_F","Infantry","OI_SniperTeam"]],["\A3\Soft_F_Exp\LSV_02\Data\UI\LSV_02_base_CA.paa","Qilin (Minigun)",["O_LSV_02_armed_F"]],["\A3\Soft_F_Exp\LSV_02\Data\UI\LSV_02_base_CA.paa","Qilin (AT)",["O_LSV_02_AT_F"]],["\A3\Air_F\Heli_Light_02\Data\UI\Heli_Light_02_CA.paa","PO-30 Orca (Unarmed)",["O_Heli_Light_02_unarmed_F"]]],[["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Guard Squad",["East","OPF_F","UInfantry","OIA_GuardSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Guard Squad",["East","OPF_F","UInfantry","OIA_GuardSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Guard Squad",["East","OPF_F","UInfantry","OIA_GuardSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Guard Squad",["East","OPF_F","UInfantry","OIA_GuardSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Guard Squad",["East","OPF_F","UInfantry","OIA_GuardSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Guard Squad",["East","OPF_F","UInfantry","OIA_GuardSquad"]],["\A3\Air_F\Heli_Light_02\Data\UI\Heli_Light_02_rockets_CA.paa","PO-30 Orca",["O_Heli_Light_02_dynamicLoadout_F"]],["\A3\Air_F\Heli_Light_02\Data\UI\Heli_Light_02_rockets_CA.paa","PO-30 Orca",["O_Heli_Light_02_dynamicLoadout_F"]],["\A3\Air_F\Heli_Light_02\Data\UI\Heli_Light_02_rockets_CA.paa","PO-30 Orca",["O_Heli_Light_02_dynamicLoadout_F"]]],[["\A3\ui_f\data\map\markers\nato\o_mortar.paa","CSAT Mortar Team",["East","OPF_F","Support","OI_support_Mort"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_mech_inf.paa","CSAT Mechanized Rifle Squad",["East","OPF_F","Mechanized","OIA_MechInfSquad"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Diver Team (Boat)",["East","OPF_F","SpecOps","OI_diverTeam_Boat"]],["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Diver Team (Boat)",["East","OPF_F","SpecOps","OI_diverTeam_Boat"]],["\A3\boat_f\Boat_Armed_01\data\ui\Boat_Armed_01_base.paa","Speedboat HMG",["O_Boat_Armed_01_hmg_F"]],["\A3\boat_f\Boat_Armed_01\data\ui\Boat_Armed_01_base.paa","Speedboat HMG",["O_Boat_Armed_01_hmg_F"]]],[["\A3\ui_f\data\map\markers\nato\o_motor_inf.paa","CSAT Motorized Air-defense Team",["East","OPF_F","Motorized_MTP","OIA_MotInf_AA"]],["\A3\Soft_F_EPC\Truck_03\Data\UI\truck_03_ammo_CA.paa","Tempest Repair",["O_Truck_03_repair_F"]],["\A3\Soft_F_EPC\Truck_03\Data\UI\truck_03_box_CA.paa","Tempest Ammo",["O_Truck_03_ammo_F"]],["\A3\Soft_F_EPC\Truck_03\Data\UI\truck_03_fuel_CA.paa","Tempest Fuel",["O_Truck_03_fuel_F"]]],[["\A3\armor_f_beta\APC_Tracked_02\Data\UI\APC_Tracked_02_aa_ca.paa","ZSU-39 Tigris",["O_APC_Tracked_02_AA_F"]],["\A3\armor_f_gamma\MBT_02\Data\ui\MBT_02_Arty_ca.paa","2S9 Sochor",["O_MBT_02_arty_F"]],["\A3\armor_f_gamma\MBT_02\Data\ui\MBT_02_Arty_ca.paa","2S9 Sochor",["O_MBT_02_arty_F"]],["\A3\armor_f_gamma\MBT_02\Data\ui\MBT_02_Arty_ca.paa","2S9 Sochor",["O_MBT_02_arty_F"]]],[["\A3\ui_f\data\map\markers\nato\o_inf.paa","CSAT Air-defense Team",["East","OPF_F","Infantry","OIA_InfTeam_AA"]],["\A3\Air_F_Beta\Heli_Attack_02\Data\UI\Heli_Attack_02_CA.paa","Mi-48 Kajman",["O_Heli_Attack_02_dynamicLoadout_F"]],["\A3\Air_F_EPC\Plane_CAS_02\Data\UI\Plane_cas_02_F.paa","To-199 Neophron (CAS)",["O_Plane_CAS_02_dynamicLoadout_F"]],["A3\Air_F_Jets\Plane_Fighter_02\Data\UI\Fighter02_picture_ca.paa","To-201 Shikra",["O_Plane_Fighter_02_F"]]]];
-
+VOX_CONFIG = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 /// ["b_inf","b_motor_inf"]
 VOX_CFG_WEST = [];
 VOX_CFG_EAST = [];
@@ -47,8 +46,15 @@ private _configs = (configFile >> "CfgFactionClasses") call BIS_fnc_getCfgSubCla
 	private _name = getText (_cfg >> "displayName");
 	private _icon = getText (_cfg >> "icon");
 	private _side = getNumber (_cfg >> "side");
+	
+	private _mod = "";
+	private _dlc = (configFile >> "CfgMods" >> configSourceMod _cfg);
+	if (isClass _dlc) then {
+		_mod = getText (_dlc >> "logo");
+	};
+	
 	if (_side in [0, 1, 2]) then {
-		VOX_FACTIONS pushBack [_icon, _name, _x];
+		VOX_FACTIONS pushBack [_icon, _name, _x, _mod];
 	};
 }forEach _configs;
 
@@ -75,8 +81,14 @@ VOX_FNC_FACTION = {
 					private _icon = getText (_x >> "icon");
 					private _name = getText (_x >> "name");
 					
+					private _mod = "";
+					private _dlc = (configFile >> "CfgMods" >> configSourceMod _x);
+					if (isClass _dlc) then {
+						_mod = getText (_dlc >> "logo");
+					};
+					
 					if (_fact == _faction) then {
-						VOX_FACTION pushback [_icon, _facname + " " + _name, [_fac, _cat, _grp, _unit]];
+						VOX_FACTION pushback [_icon, _facname + " " + _name, [_fac, _cat, _grp, _unit], _mod];
 					};
 				}forEach _grps;
 			}forEach _cats;
@@ -94,8 +106,14 @@ VOX_FNC_FACTION = {
 			private _txt = getText (_x >> "displayName");
 			private _cfg = configName _x;
 
+			private _mod = "";
+			private _dlc = (configFile >> "CfgMods" >> configSourceMod _x);
+			if (isClass _dlc) then {
+				_mod = getText (_dlc >> "logo");
+			};
+
 			if (_man == 0 && _fac == _faction) then {
-				VOX_FACTION pushback [_pic, _txt, [_cfg]];
+				VOX_FACTION pushback [_pic, _txt, [_cfg], _mod];
 			};
 		};
 	} forEach ("true" configClasses (configFile >> "CfgVehicles"));	
@@ -109,9 +127,11 @@ VOX_FNC_FACTION = {
 		private _icon = _x select 0;
 		private _name = _x select 1;
 		private _cfg = _x select 2;
+		private _mod = _x select 3;
 				
 		private _added = _cfg_list lbAdd _name;
 		_cfg_list lbSetPicture [_added, _icon];
+		_cfg_list lbSetPictureRight [_added, _mod];
 				
 	}forEach VOX_FACTION;
 	_cfg_list lbSetCurSel -1;
@@ -134,17 +154,14 @@ VOX_FNC_FORMATION = {
 		private _icon = _x select 0;
 		private _name = _x select 1;
 		private _cfg = _x select 2;
+		private _mod = _x select 3;
 		
 		/// add to list
 		private _added = _for_list lbAdd "";
 		_for_list lbSetPicture [_added, _icon];
-		if (_added == 0) then {
-			private _text = "CMD" + ". " + _name;
-			_for_list lbSetText [_added, _text];
-		} else {
-			private _text = (str _added) + ". " +_name;
-			_for_list lbSetText [_added, _text];
-		};
+		_for_list lbSetPictureRight [_added, _mod];
+		private _text = (str (_added + 1)) + ". " +_name;
+		_for_list lbSetText [_added, _text];
 	}forEach _for_cfg
 };
 
@@ -176,17 +193,14 @@ VOX_FNC_ADDCFG = {
 	private _icon = _cfg_sel select 0;
 	private _name = _cfg_sel select 1;
 	private _cfg = _cfg_sel select 2;
+	private _mod = _cfg_sel select 3;
 
 	/// add to list
 	private _added = _for_list lbAdd "";
 	_for_list lbSetPicture [_added, _icon];
-	if (_added == 0) then {
-		private _text = "CMD" + ". " + _name;
-		_for_list lbSetText [_added, _text];
-	} else {
-		private _text = (str _added) + ". " +_name;
-		_for_list lbSetText [_added, _text];	
-	};
+	_for_list lbSetPictureRight [_added, _mod];
+	_text = (str (_added + 1)) + ". " +_name;
+	_for_list lbSetText [_added, _text];
 	
 	/// add to config
 	_for_cfg pushback _cfg_sel;
@@ -215,17 +229,14 @@ VOX_FNC_DELCFG = {
 		private _icon = _x select 0;
 		private _name = _x select 1;
 		private _cfg = _x select 2;
+		private _mod = _x select 3;
 		
 		/// add to list
 		private _added = _for_list lbAdd "";
 		_for_list lbSetPicture [_added, _icon];
-		if (_added == 0) then {
-			private _text = "CMD" + ". " + _name;
-			_for_list lbSetText [_added, _text];
-		} else {
-			private _text = (str _added) + ". " +_name;
-			_for_list lbSetText [_added, _text];
-		};
+		_for_list lbSetPictureRight [_added, _mod];
+		private _text = (str (_added + 1)) + ". " +_name;
+		_for_list lbSetText [_added, _text];
 	}forEach _for_cfg;
 	
 	_for_list lbSetCurSel -1;
@@ -354,9 +365,11 @@ VOX_FNC_START = {
 				private _icon = _x select 0;
 				private _name = _x select 1;
 				private _cfg = _x select 2;
+				private _mod = _x select 3;
 				
 				private _added = _factions lbAdd _name;
 				_factions lbSetPicture [_added, _icon];
+				_factions lbSetPictureRight [_added, _mod];
 				
 			}forEach VOX_FACTIONS;
 			_factions lbSetCurSel 0;

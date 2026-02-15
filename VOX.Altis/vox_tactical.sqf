@@ -43,7 +43,8 @@ VOX_FNC_CLASSIFY = {
 			private _art = getNumber (_entry >> "artilleryScanner") == 1 && !_sta;
 			private _mor = getNumber (_entry >> "artilleryScanner") == 1 && _sta;
 			private _aaa = toLower getText (_entry >> "editorSubcategory") == "anti-air";
-			
+			private _pad = toLower getText (_entry >> "displayName") == "missile specialist (aa)";
+
 			private _car = toLower getText (_entry >> "simulation") == "carx";
 			private _apc = toLower getText (_entry >> "simulation") == "carx" && _inf;
 			private _ifv = toLower getText (_entry >> "simulation") == "tankx" && _inf && !_sta;
@@ -62,7 +63,7 @@ VOX_FNC_CLASSIFY = {
 			if (_car) then {_icon = "unknown"};
 			if (_apc) then {_icon = "motor_inf"};
 			
-			if (_aaa) then {_icon = "antiair"};
+			if (_aaa or _pad) then {_icon = "antiair"};
 			if (_art) then {_icon = "art"};
 			if (_mor) then {_icon = "mortar"};
 			if (_sta) then {_icon = "installation"};
@@ -95,7 +96,6 @@ VOX_FNC_SPAWNGROUP = {
 	
 	private _icon = [side _grp, _vehs] call VOX_FNC_CLASSIFY;
 	
-	/// TODO: add check if vehicle is a boat
 	private _pos = [_pos, 0, VOX_SIZE / 2, 5, 0, 0, 0, [], _pos] call BIS_fnc_findSafePos;
 	{
 		if (random 1 <= _morale) then {
@@ -107,6 +107,9 @@ VOX_FNC_SPAWNGROUP = {
 	}forEach _vehs;
 	
 	_grp setVariable ["MARTA_customIcon", [_icon]];
+	
+	/// set initial waypoint position
+    [_grp, 0] setWPPos (getPos leader _grp);
 	
 	/// put dismounts in vehicle
 	{
@@ -141,7 +144,6 @@ VOX_FNC_SPAWNGROUP = {
 		private _command = true;
 		
 		if !(_x in [VOX_ATTACKER, VOX_DEFENDER]) then {
-			/// prevent spawning cmd group, select random to spawn 1x of
 			_config = [_config select floor random count _config];
 			_command = false;
 		};
@@ -190,7 +192,6 @@ VOX_FNC_SPAWNGROUP = {
 			// [_pos2, random 360, _x, _group] call BIS_fnc_spawnVehicle;
 			if (_isGroup or _isVehicle) then {
 				private _group = createGroup [_side, true];
-				if (_forEachIndex == 0 && _command) then {_group setGroupId ["Command Group"]};
 				[_pos, _vehicles, _group, _morale, _dir] call VOX_FNC_SPAWNGROUP;
 			}; 
 		}forEach _config;
