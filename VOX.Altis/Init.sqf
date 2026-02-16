@@ -46,16 +46,5 @@ addMissionEventHandler ["TeamSwitch", {
 			_martaGRP, 
 			"setGroupIconsVisible [true, false];" 
 		];
-		
-		/// re-sync HCM, breaks on teamswitch
-		private _martaicon = (group _newUnit) getVariable "MARTA_customIcon";
-		private _martaicon = _martaicon select 0;
-		private _isLeader = leader _newUnit == _newUnit;
-		if (_isLeader && _martaicon == "b_hq") then {
-			systemChat "Access High-Command module with ctrl+space";
-		};
-		if (_isLeader && _martaicon == "o_hq") then {
-			systemChat "Access High-Command module with ctrl+space";
-		};
 	};
 }];

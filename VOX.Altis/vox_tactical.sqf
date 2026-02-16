@@ -109,21 +109,20 @@ VOX_FNC_SYNCHRONIZE = {
 	};
 	
 	private _fnc_support = {
+		_vehicle  lockDriver true;
 		private _wp = _grp addWaypoint [getPos _vehicle, 0];
 		_wp setWaypointType "SUPPORT";
 		private _vehType = typeOf _vehicle;
 		private _cfgName = getText (configFile >> "CfgVehicles" >> _vehType >> "displayName");
-		private _message = format ["%1 ready for support requests (F5 -> Call support)", _cfgName];
+		private _message = format ["%1 ready for support requests (F2 -> 5 -> 1)", _cfgName];
 		_leader sideChat _message;
 		
 		/// fix supports dismounting
-		/// TODO: doesn't work, needs more work
 		[_leader, _vehicle] spawn {
 			sleep 10;
-			(_this select 1) lock true;
-			(_this select 0) moveInDriver (_this select 1);
-			sleep 1;
-			(_this select 1) lock false;
+			(_this select 1) lockDriver false;
+			[(_this select 0)] allowGetIn true;
+			[(_this select 0)] orderGetIn true;
 		};
 	};
 	
