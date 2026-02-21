@@ -14,7 +14,7 @@ VOX_FNC_STRATCMD = {
 	_mec = ["b_armor", "b_mech_inf", "o_armor", "o_mech_inf"];
 	_inf = ["b_inf", "b_motor_inf", "b_naval", "o_inf", "o_motor_inf", "o_naval"];
 	_rec = ["b_recon", "b_air", "o_recon", "o_air"];
-	_hvt = ["b_hq", "o_hq","b_art", "o_art", "b_plane", "o_plane"];	
+	_hvt = ["b_support", "o_support","b_art", "o_art", "b_plane", "o_plane"];	
 	_key = ["NAV", "AIR", "ALT"];
 	
 	_fnc_nearEny = {

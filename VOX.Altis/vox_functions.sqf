@@ -299,6 +299,15 @@ VOX_FNC_DRAWOBJECTIVES = {
 				};
 			}forEach _cellsD;
 		};
+		
+		if !([_pos, _centerA, _dirAD] call _fnc_isFront) then {
+			private _name = "RSPA_" + (str _forEachIndex);
+			private _marker = createMarker [_name, _pos];
+			_marker setMarkerShape "RECTANGLE";
+			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+			_marker setMarkerAlpha 0.25;
+			_marker setMarkerColor _colorA;
+		};
 	}forEach _cellsA;
 	
 	{
@@ -322,6 +331,15 @@ VOX_FNC_DRAWOBJECTIVES = {
 					_marker setMarkerColor "ColorBLACK";
 				};
 			}forEach _cellsA;
+		};
+		
+		if !([_pos, _centerD, _dirDA] call _fnc_isFront) then {
+			private _name = "RSPD_" + (str _forEachIndex);
+			private _marker = createMarker [_name, _pos];
+			_marker setMarkerShape "RECTANGLE";
+			_marker setMarkerSize [VOX_SIZE / 2, VOX_SIZE / 2];
+			_marker setMarkerAlpha 0.25;
+			_marker setMarkerColor _colorD;
 		};
 	}forEach _cellsD;
 };

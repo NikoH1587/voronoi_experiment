@@ -54,7 +54,8 @@ for "_col" from 0 to round(worldSize / VOX_SIZE) do {
 		private _isWater = (surfaceIsWater _pos);
 		private _isWoods = ((_pos nearRoads (VOX_SIZE * 0.7)) isEqualTo []);
 		private _notAO = (_pos distance VOX_CENTER > (_maxDist + (VOX_SIZE*2)));
-		if (_isWoods or _notAO) then {continue}; /// skip water and wasteland
+		if (_isWater or _notAO) then {continue}; /// skip water
+		///if (_isWoods or _notAO) then {continue}; /// skip water and wasteland
 		private _nearest = _pos call _fnc_nearest;
 		
 		(_nearest select 6) pushback [_row, _col];
